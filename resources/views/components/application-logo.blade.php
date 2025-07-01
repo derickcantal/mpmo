@@ -1,3 +1,1 @@
-<svg viewBox="0 0 316 316" xmlns="http://www.w3.org/2000/svg" {{ $attributes }}>
-    
-</svg>
+<img width="80" height="80" class="rounded-sm mt-4" src="{{ asset("storage/img/logo.jpeg") }}" alt="logo" />
