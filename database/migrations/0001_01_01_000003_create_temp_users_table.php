@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('accesstype');
             $table->dateTime('timerecorded');
             $table->string('created_by');
-            $table->string('updated_by');
+            $table->string('updated_by')->nullable();
             $table->integer('mod');
             $table->string('copied')->nullable();
             $table->string('status');
