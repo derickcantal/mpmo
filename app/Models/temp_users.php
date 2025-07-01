@@ -11,7 +11,7 @@ class temp_users extends Model
     use HasFactory, Notifiable;
 
     protected $connection = 'mysql';
-    protected $table = 'collective-base.temp_users';  
+    protected $table = 'mpmo.temp_users';  
     protected $primaryKey = 'userid';
 
     protected $dates = [
@@ -36,6 +36,9 @@ class temp_users extends Model
         'lastname',
         'trxaddress',
         'usdtaddress',
+        'trxbal', 
+        'usdtbal',
+        'totalbal', 
         'birthdate',
         'email',
         'mobile_primary',

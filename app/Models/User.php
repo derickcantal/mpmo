@@ -14,7 +14,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $connection = 'mysql';
-    protected $table = 'collective-base.users';  
+    protected $table = 'mpmo.users';  
     protected $primaryKey = 'userid';
 
     protected $dates = [
@@ -39,6 +39,9 @@ class User extends Authenticatable
         'lastname',
         'trxaddress',
         'usdtaddress',
+        'trxbal', 
+        'usdtbal',
+        'totalbal',
         'birthdate',
         'email',
         'mobile_primary',

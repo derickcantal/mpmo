@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('trxaddress')->nullable();
             $table->string('usdtaddress')->nullable();
+            $table->decimal('trxbal', $precision = 8, $scale = 2);
+            $table->decimal('usdtbal', $precision = 8, $scale = 2);
+            $table->decimal('totalbal', $precision = 8, $scale = 2);
             $table->date('birthdate')->nullable();
             $table->string('email')->unique();
             $table->string('mobile_primary')->nullable();
