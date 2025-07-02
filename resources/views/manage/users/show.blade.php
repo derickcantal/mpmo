@@ -19,8 +19,8 @@
                     </div>
                     <!-- Modal body -->
                         <div class="grid gap-4 mb-4 grid-cols-2">
+                            <!-- username -->
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- username -->
                                 <div class="form-group">
                                     <x-input-label for="username" :value="__('Username')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -28,8 +28,8 @@
                                     </h5>
                                 </div>
                             </div>
+                            <!-- Email Address -->
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- Email Address -->
                                 <div class="form-group">
                                     <x-input-label for="email" :value="__('Email')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -37,9 +37,8 @@
                                     </h5>
                                 </div>
                             </div>
-                           
+                            <!-- firstname -->
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- firstname -->
                                 <div class="form-group">
                                     <x-input-label for="firstname" :value="__('First Name')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -47,8 +46,8 @@
                                     </h5>
                                 </div>
                             </div>
+                            <!-- middlename -->
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- middlename -->
                                 <div class="form-group">
                                     <x-input-label for="middlename" :value="__('Middle Name')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -56,8 +55,8 @@
                                     </h5>
                                 </div>
                             </div>
+                            <!-- lastname -->
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                    <!-- lastname -->
                                 <div class="form-group">
                                     <x-input-label for="lastname" :value="__('Last Name')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -65,8 +64,8 @@
                                     </h5>
                                 </div>
                             </div>
+                            <!-- birthdate -->
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- birthdate -->
                                 <div class="form-group">
                                     <x-input-label for="birthdate" :value="__('Birth Date')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -74,20 +73,10 @@
                                     </h5>
                                 </div>
                             </div>
+                            <!-- accesstype -->
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- branchname -->
-                                <div class="form-group">
-                                    <x-input-label for="branchname" :value="__('Branch Name')" />
-                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $user->branchname }}
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- accesstype -->
                                 <div class="form-group">
                                     <x-input-label for="accesstype" :value="__('Access Type')" />
-                                    <!-- <x-text-input id="accesstype" class="block mt-1 w-full" type="text" name="accesstype" :value="old('accesstype')" required autofocus autocomplete="off" /> -->
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
                                         {{ $user->accesstype }}
                                     </h5>

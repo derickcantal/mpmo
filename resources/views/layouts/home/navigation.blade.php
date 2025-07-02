@@ -11,8 +11,12 @@
                         Manage</a>
                 </li>
                 <li>
-                    <a href="#" class="text-gray-900 dark:text-white hover:underline">
+                    <a href="{{ route('managetempusers.index') }}" class="text-gray-900 dark:text-white hover:underline">
                         Temporary Users</a>
+                </li>
+                <li>
+                    <a href="#" class="text-gray-900 dark:text-white hover:underline">
+                        My Money</a>
                 </li>
                 <li>
                     <a href="#" class="text-gray-900 dark:text-white hover:underline">

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('trxaddress')->nullable();
             $table->string('usdtaddress')->nullable();
+            $table->decimal('mpmobal', $precision = 8, $scale = 2);
             $table->decimal('trxbal', $precision = 8, $scale = 2);
             $table->decimal('usdtbal', $precision = 8, $scale = 2);
             $table->decimal('totalbal', $precision = 8, $scale = 2);
@@ -39,6 +40,7 @@ return new class extends Migration
             $table->string('updated_by')->nullable();
             $table->integer('mod');
             $table->string('copied')->nullable();
+            $table->string('walletstatus');
             $table->string('status');
         });
 

@@ -34,6 +34,7 @@ class temp_users extends Model
         'firstname',
         'middlename',
         'lastname',
+        'mpmobal',
         'trxaddress',
         'usdtaddress',
         'trxbal', 
@@ -52,6 +53,7 @@ class temp_users extends Model
         'updated_by',
         'mod',
         'copied',
+        'walletstatus',
         'status',
     ];
 

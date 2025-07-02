@@ -92,19 +92,6 @@
                                 </div>
                             </div>
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- branchname -->
-                                <div class="form-group">
-                                    <x-input-label for="branchname" :value="__('Branch Name')" />
-                                    <!-- <x-text-input id="branchname" class="block mt-1 w-full" type="text" name="branchname" :value="old('branchname')" required autofocus autocomplete="off" /> -->
-                                    <select id="branchname" name="branchname" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('branchname')">
-                                        @foreach($branch as $branches)    
-                                            <option value = "{{ $branches->branchname}}">{{ $branches->branchname}}</option>
-                                        @endforeach
-                                    </select>
-                                    <x-input-error :messages="$errors->get('branchname')" class="mt-2" />
-                                </div>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1 p-4">
                                 <!-- accesstype -->
                                 <div class="form-group">
                                     <x-input-label for="accesstype" :value="__('Access Type')" />
@@ -114,8 +101,7 @@
                                         <option value ="Administrator">Administrator</option>
                                         <option value ="Supervisor">Supervisor</option>
                                         @endif
-                                        <option value ="Cashier">Cashier</option>
-                                        <option value ="Crew">Crew</option>
+                                        <option value ="Member">Member</option>
                                     </select>
                                     <x-input-error :messages="$errors->get('accesstype')" class="mt-2" />
                                 </div>

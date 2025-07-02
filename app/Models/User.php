@@ -37,6 +37,7 @@ class User extends Authenticatable
         'firstname',
         'middlename',
         'lastname',
+        'mpmobal',
         'trxaddress',
         'usdtaddress',
         'trxbal', 
@@ -55,6 +56,7 @@ class User extends Authenticatable
         'updated_by',
         'mod',
         'copied',
+        'walletstatus',
         'status',
     ];
 

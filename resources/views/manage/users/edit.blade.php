@@ -126,43 +126,6 @@
                                     <x-input-error :messages="$errors->get('birthdate')" class="mt-2" />
                                 </div>
                             </div>
-                            <!-- branchname -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                @php
-                                    $op1_b = '';
-                                    $op2_b = '';
-                                    $op3_b = '';
-                                    $op4_b = '';
-                                    $op5_b = '';
-                                    $op6_b = '';
-                                    if ($user->branchname == 'CB Main'):
-                                        $op1_b = 'selected = "selected"';
-                                    elseif ($user->branchname == 'CB Annex'):
-                                        $op2_b = 'selected = "selected"';
-                                    elseif ($user->branchname == 'CB Complex'):
-                                        $op3_b = 'selected = "selected"';
-                                    elseif ($user->branchname == 'CB Plus 1'):
-                                        $op4_b = 'selected = "selected"';
-                                    elseif ($user->branchname == 'CB Plus 2'):
-                                        $op5_b = 'selected = "selected"';  
-                                    elseif ($user->branchname == 'CB Plus 3'):
-                                        $op6_b = 'selected = "selected"'; 
-                                    endif;
-                                @endphp
-                                <div class="form-group">
-                                    <x-input-label for="branchname" :value="__('Branch Name')" />
-                                    <!-- <x-text-input id="branchname" class="block mt-1 w-full" type="text" name="branchname" :value="old('branchname')" required autofocus autocomplete="off" /> -->
-                                    <select id="branchname" name="branchname" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('branchname', $user->branchname))">
-                                        <option value = "CB Main" {{ $op1_b; }}">CB Main</option>
-                                        <option value = "CB Annex" {{ $op2_b; }}">CB Annex</option>
-                                        <option value = "CB Complex" {{ $op3_b; }}}">CB Complex</option>
-                                        <option value = "CB Plus 1" {{ $op4_b; }}">CB Plus 1</option>
-                                        <option value = "CB Plus 2" {{ $op5_b; }}">CB Plus 2</option>
-                                        <option value = "CB Plus 3" {{ $op6_b; }}">CB Plus 3</option>
-                                    </select>
-                                    <x-input-error :messages="$errors->get('branchname')" class="mt-2" />
-                                </div>
-                            </div>
                             <!-- accesstype -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 @php
@@ -174,10 +137,8 @@
                                         $op1_a = 'selected = "selected"';
                                     elseif ($user->accesstype == 'Supervisor'):
                                         $op2_a = 'selected = "selected"';
-                                    elseif ($user->accesstype == 'Cashier'):
+                                    elseif ($user->accesstype == 'Member'):
                                         $op3_a = 'selected = "selected"';
-                                    elseif ($user->accesstype == 'Crew'):
-                                        $op4_a = 'selected = "selected"';
                                     endif;
                                     
                                 @endphp
@@ -185,12 +146,11 @@
                                     <x-input-label for="accesstype" :value="__('Access Type')" />
                                     <!-- <x-text-input id="accesstype" class="block mt-1 w-full" type="text" name="accesstype" :value="old('accesstype')" required autofocus autocomplete="off" /> -->
                                     <select id="accesstype" name="accesstype" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('accesstype', $user->accesstype)">
-                                        @if($user->accesstype == 'Administrator')
+                                        @if(auth()->user()->accesstype == 'Administrator')
                                         <option value ="Administrator" {{ $op1_a; }}">Administrator</option>
                                         <option value ="Supervisor" {{ $op2_a; }}">Supervisor</option>
                                         @endif
-                                        <option value ="Cashier" {{ $op3_a; }}">Cashier</option>
-                                        <option value ="Crew" {{ $op4_a; }}">Crew</option>
+                                        <option value ="Member" {{ $op3_a; }}">Member</option>
                                     </select>
                                     <x-input-error :messages="$errors->get('accesstype')" class="mt-2" />
                                     
