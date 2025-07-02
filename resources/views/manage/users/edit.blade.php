@@ -106,7 +106,7 @@
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
                                     <x-input-label for="middlename" :value="__('Middle Name')" />
-                                    <x-text-input id="middlename" class="block mt-1 w-full" type="text" name="middlename" :value="old('middlename', $user->middlename)" required autofocus />
+                                    <x-text-input id="middlename" class="block mt-1 w-full" type="text" name="middlename" :value="old('middlename', $user->middlename)" autofocus />
                                     <x-input-error :messages="$errors->get('username')" class="mt-2" />
                                 </div>
                             </div>

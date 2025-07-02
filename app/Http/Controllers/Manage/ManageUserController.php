@@ -140,9 +140,6 @@ class ManageUserController extends Controller
     {
         $user = User::where('userid', $userid)->first();
 
-        $access = access::where('accessid',$request->access)->first();
-        $department = department::where('deptid',$request->department)->first();
-
         $fullname = $user->lastname . ', ' . $user->firstname . ' ' . $user->middlename;
 
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
@@ -177,6 +174,7 @@ class ManageUserController extends Controller
                 'lastname' => $request->lastname,
                 'birthdate' => $request->birthdate,
                 'mobile_primary' => $request->mobile,
+                'accesstype' => $request->accesstype,
                 'rnotes' => $request->notes,
                 'updated_by' => auth()->user()->email,
                 'mod' => $mod + 1,
@@ -201,6 +199,7 @@ class ManageUserController extends Controller
                 'lastname' => $request->lastname,
                 'birthdate' => $request->birthdate,
                 'mobile_primary' => $request->mobile,
+                'accesstype' => $request->accesstype,
                 'rnotes' => $request->notes,
                 'updated_by' => auth()->user()->email,
                 'mod' => $mod + 1,
