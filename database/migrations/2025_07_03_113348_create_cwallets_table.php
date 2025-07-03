@@ -13,15 +13,19 @@ return new class extends Migration
     {
         Schema::create('cwallets', function (Blueprint $table) {
             $table->increments('cwid');
+            $table->string('qrcwaddress')->nullable();
             $table->string('cwaddress');
+            $table->string('qrwallcode')->nullable();
             $table->string('wallcode');
+            $table->string('notes')->nullable();
+            $table->string('userid')->nullable();
+            $table->string('fullname')->nullable();
             $table->dateTime('timerecorded');
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->integer('mod');
             $table->string('copied')->nullable();
             $table->string('walletstatus')->nullable();
-            $table->string('userid')->nullable();
             $table->string('status');
             $table->timestamps();
         });

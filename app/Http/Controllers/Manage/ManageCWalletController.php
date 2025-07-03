@@ -12,19 +12,16 @@ class ManageCWalletController extends Controller
 {
     public function search(Request $request)
     {
-        $user = cwallet::whereNot('accessname','Requester')
+        $wallet = cwallet::orderBy('cwid',$request->orderrow)
                 ->where(function(Builder $builder) use($request){
-                    $builder->where('username','like',"%{$request->search}%")
-                            ->orWhere('firstname','like',"%{$request->search}%")
-                            ->orWhere('lastname','like',"%{$request->search}%")
-                            ->orWhere('middlename','like',"%{$request->search}%")
-                            ->orWhere('email','like',"%{$request->search}%")
+                    $builder->where('cwaddress','like',"%{$request->search}%")
+                            ->orWhere('wallcode','like',"%{$request->search}%")
                             ->orWhere('status','like',"%{$request->search}%"); 
                 })
                 ->orderBy('lastname',$request->orderrow)
                 ->paginate($request->pagerow);
     
-        return view('manage.wallets.index',compact('user'))
+        return view('manage.wallets.index',compact('wallet'))
             ->with('i', (request()->input('page', 1) - 1) * $request->pagerow);
     }
     /**
@@ -34,10 +31,10 @@ class ManageCWalletController extends Controller
     {
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
-         $user = cwallet::orderBy('status','asc')
+         $wallet = cwallet::orderBy('status','asc')
                     ->paginate(5);
 
-        return view('manage.wallets.index',compact('user'))
+        return view('manage.wallets.index',compact('wallet'))
          ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -51,171 +48,110 @@ class ManageCWalletController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request, $access, $department);
-        $n1 = strtoupper($request->firstname[0]);
-        // $n2 = strtoupper($request->middlename[0]);
-        $n3 = strtoupper($request->lastname[0]);
-        $n4 = preg_replace('/[-]+/', '', $request->birthdate);
-
-        // $newpassword = $n1 . $n2 . $n3 . $n4;
-        $newpassword = $n1 . $n3 . $n4;
-        //dd($newpassword);
-
+        // dd($request);
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
         if(auth()->user()->accesstype == 'Supervisor')
         {
             if($request->accesstype == 'Adminstrator')
             {
-                return redirect()->route('manageuser.index')
-                        ->with('failed','User creation failed');
+                return redirect()->route('managewallet.index')
+                        ->with('failed','Wallet creation failed');
             }
             elseif($request->accesstype == 'Supervisor')
             {
 
-                return redirect()->route('manageuser.index')
-                        ->with('failed','User creation failed');
+                return redirect()->route('managewallet.index')
+                        ->with('failed','Wallet creation failed');
             }
         }
-        $user = cwallet::create([
-            'avatar' => 'avatars/avatar-default.jpg',
-            'username' => $request->email,
-            'email' => $request->email,
-            'password' => Hash::make($newpassword),
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'birthdate' => $request->birthdate,
-            'created_by' => auth()->user()->email,
-            'updated_by' => 'Null',
-            'timerecorded' => $timenow,
-            'modifiedid' => 0,
-            'mod' => 0,
-            'status' => 'Active',
+        $wallet = cwallet::create([
+            'cwaddress'=> $request->address,
+            'wallcode'=> $request->cc,
+            'timerecorded'=> $timenow,
+            'created_by'=> auth()->user()->userid,
+            'mod'=> 0,
+            'copied'=> 'N',
+            'walletstatus'=> 'Inactive',
+            'status'=> 'Inactive',
         ]);
     
-        if ($user) {
+        if ($wallet) {
     
-            return redirect()->route('manageuser.index')
-                        ->with('success','User created successfully.');
+            return redirect()->route('managewallet.index')
+                        ->with('success','Wallet created successfully.');
         }else{
 
-            return redirect()->route('manageuser.index')
-                        ->with('failed','User creation failed');
+            return redirect()->route('managewallet.index')
+                        ->with('failed','Wallet creation failed');
         }  
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($userid)
+    public function show($cwid)
     {
-        $user = cwallet::where('userid',$userid)->first();
+        $wallet = cwallet::where('cwid',$cwid)->first();
 
         return view('manage.wallets.show')
-                    ->with(['user' => $user]);
+                    ->with(['wallet' => $wallet]);
 
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($userid)
+    public function edit($cwid)
     {
-        $user = cwallet::where('userid',$userid)->first();
+        $wallet = cwallet::where('cwid',$cwid)->first();
 
        return view('manage.wallets.edit')
-                    ->with(['user' => $user]);
+                    ->with(['wallet' => $wallet]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $userid)
+    public function update(Request $request, $cwid)
     {
-        $user = cwallet::where('userid', $userid)->first();
-
-        if(empty($user->rfid))
-        {
-            $rfid = $this->generateUniqueCode();
-        }
-
-        $fullname = $user->lastname . ', ' . $user->firstname . ' ' . $user->middlename;
+        $wallet = cwallet::where('cwid', $cwid)->first();
 
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
         $mod = 0;
-        $mod = $user->mod;
+        $mod = $wallet->mod;
 
         if(auth()->user()->accesstype == 'Supervisor')
         {
             if($request->accesstype == 'Administrator')
             {
-                return redirect()->route('manageuser.index')
-                        ->with('failed','User update failed');
+                return redirect()->route('managewallet.index')
+                        ->with('failed','Wallet update failed');
             }
             elseif($request->accesstype == 'Supervisor')
             {
        
-                return redirect()->route('manageuser.index')
-                        ->with('failed','User update failed');
+                return redirect()->route('managewallet.index')
+                        ->with('failed','Wallet update failed');
             }
         }
-
-        if(!empty($request->password) != !empty($request->password_confirmation)){
-            return redirect()->route('manageuser.index')
-                    ->with('failed','User update failed');
-        }
-        if(empty($request->password)){
-            $user =cwallet::where('userid',$user->userid)->update([
-                'rfid' => $rfid,
-                'username' => $request->email,
-                'email' => $request->email,
-                'firstname' => $request->firstname,
-                'lastname' => $request->lastname,
-                'birthdate' => $request->birthdate,
-                'mobile_primary' => $request->mobile,
-                'accesstype' => $request->accesstype,
-                'rnotes' => $request->notes,
-                'updated_by' => auth()->user()->email,
-                'mod' => $mod + 1,
-                'status' => $request->status,
-            ]);
-            if($user){
-               
-                return redirect()->route('manageuser.index')
-                            ->with('success','User updated successfully');
-            }else{
-
-                return redirect()->route('manageuser.index')
-                            ->with('failed','User update failed');
-            }
-        }elseif($request->password == $request->password_confirmation){
-            $user =cwallet::where('userid',$user->userid)->update([
-                'username' => $request->email,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'firstname' => $request->firstname,
-                'middlename' => $request->middlename,
-                'lastname' => $request->lastname,
-                'birthdate' => $request->birthdate,
-                'mobile_primary' => $request->mobile,
-                'accesstype' => $request->accesstype,
-                'rnotes' => $request->notes,
-                'updated_by' => auth()->user()->email,
-                'mod' => $mod + 1,
-                'status' => $request->status,
-            ]);
-            if($user){
-                return redirect()->route('manageuser.index')
-                            ->with('success','User updated successfully');
-            }else{
-             
-                return redirect()->route('manageuser.index')
-                            ->with('failed','User update failed');
-            }
+       
+        $wallet =cwallet::where('cwid',$wallet->cwid)->update([
+            'cwaddress'=> $request->address,
+            'wallcode'=> $request->cc,
+            'timerecorded'=> $timenow,
+            'updated_by' => auth()->user()->userid,
+            'mod'=> $mod + 1,
+        ]);
+        if($wallet){
+            
+            return redirect()->route('managewallet.index')
+                        ->with('success','Wallet updated successfully');
         }else{
-            return redirect()->back()
-                    ->with('failed','User update failed. Password Mismatched');
+
+            return redirect()->route('managewallet.index')
+                        ->with('failed','Wallet update failed');
         }
 
     }
@@ -223,56 +159,49 @@ class ManageCWalletController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($userid)
+    public function destroy($cwid)
     {
-        $user = cwallet::where('userid', $userid)->first();
-        $fullname = $user->lastname . ', ' . $user->firstname . ' ' . $user->middlename;
-        // dd($userid,$fullname,$user);
-        if($user->userid == auth()->user()->userid){
-            $notes = 'Users. Activation. Self Account. ' . $fullname;
-
-                return redirect()->route('manageuser.index')
-                        ->with('failed','User Update on own account not allowed.');
-        }
+        $wallet = cwallet::where('cwid', $cwid)->first();
+       
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
         if(auth()->user()->accesstype == 'Supervisor')
         {
-            if($user->accesstype == 'Administrator')
+            if($wallet->accesstype == 'Administrator')
             {
 
-                return redirect()->route('manageuser.index')
-                        ->with('failed','User update failed');
+                return redirect()->route('managewallet.index')
+                        ->with('failed','Wallet update failed');
             }
-            elseif($user->accesstype == 'Supervisor')
+            elseif($wallet->accesstype == 'Supervisor')
             {
 
-                return redirect()->route('manageuser.index')
-                        ->with('failed','User update failed');
+                return redirect()->route('managewallet.index')
+                        ->with('failed','Wallet update failed');
             }
         }
 
-        if($user->status == 'Active')
+        if($wallet->status == 'Active')
         {
-            cwallet::where('userid', $user->userid)
+            cwallet::where('cwid', $wallet->cwid)
             ->update([
             'status' => 'Inactive',
         ]);
 
 
 
-        return redirect()->route('manageuser.index')
-            ->with('success','User Decativated successfully');
+        return redirect()->route('managewallet.index')
+            ->with('success','Wallet Decativated successfully');
         }
-        elseif($user->status == 'Inactive')
+        elseif($wallet->status == 'Inactive')
         {
-            cwallet::where('userid', $user->userid)
+            cwallet::where('cwid', $wallet->cwid)
             ->update([
             'status' => 'Active',
         ]);
 
 
-        return redirect()->route('manageuser.index')
-            ->with('success','User Activated successfully');
+        return redirect()->route('managewallet.index')
+            ->with('success','Wallet Activated successfully');
         }
     }
 }

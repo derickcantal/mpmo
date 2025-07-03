@@ -17,7 +17,7 @@
                                 <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
                                 </svg>
-                                Users
+                                Wallet
                             </a>
                             </li>
                             
@@ -26,7 +26,8 @@
                                 <svg class="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                                 </svg>
-                                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Create New User</span>
+                                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                                    Create New Wallet</span>
                             </div>
                             </li>
                         </ol>
@@ -38,74 +39,29 @@
                         <!-- Modal header -->
                         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                User Profile Information
+                                Wallet Information
                             </h3>
                         </div>
                         <!-- Modal body -->
                         <div class="grid mb-4 grid-cols-2">
+                            <!-- Address -->
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- username -->
                                 <div class="form-group">
-                                    <x-input-label for="username" :value="__('Username')" />
-                                    <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
-                                    <x-input-error :messages="$errors->get('username')" class="mt-2" />
+                                    <x-input-label for="address" :value="__('Wallet Address')" />
+                                    <x-text-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" required autofocus/>
+                                    <x-input-error :messages="$errors->get('address')" class="mt-2" />
                                 </div>
                             </div>
+                            <!-- cc -->
                             <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- Email Address -->
                                 <div class="form-group">
-                                    <x-input-label for="email" :value="__('Email')" />
-                                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="email" />
-                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                                    <x-input-label for="cc" :value="__('Code')" />
+                                    <textarea id="cc" name="cc" :value="old('cc')" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                                    <x-input-error :messages="$errors->get('cc')" class="mt-2" />
                                 </div>
                             </div>
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- firstname -->
-                                <div class="form-group">
-                                    <x-input-label for="firstname" :value="__('First Name')" />
-                                    <x-text-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname')" required autofocus autocomplete="given-name" />
-                                    <x-input-error :messages="$errors->get('firstname')" class="mt-2" />
-                                </div>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- middlename -->
-                                <div class="form-group">
-                                    <x-input-label for="middlename" :value="__('Middle Name')" />
-                                    <x-text-input id="middlename" class="block mt-1 w-full" type="text" name="middlename" :value="old('middlename')" required autofocus autocomplete="additional-name" />
-                                    <x-input-error :messages="$errors->get('username')" class="mt-2" />
-                                </div>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                    <!-- lastname -->
-                                    <div class="form-group">
-                                    <x-input-label for="lastname" :value="__('Last Name')" />
-                                    <x-text-input id="lastname" class="block mt-1 w-full" type="text" name="lastname" :value="old('lastname')" required autofocus autocomplete="family-name" />
-                                    <x-input-error :messages="$errors->get('lastname')" class="mt-2" />
-                                </div>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- birthdate -->
-                                <div class="form-group">
-                                    <x-input-label for="birthdate" :value="__('Birth Date')" />
-                                    <x-text-input id="birthdate" class="block mt-1 w-full" type="date" name="birthdate" :value="old('birthdate')" required autofocus autocomplete="bday" />
-                                    <x-input-error :messages="$errors->get('birthdate')" class="mt-2" />
-                                </div>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- accesstype -->
-                                <div class="form-group">
-                                    <x-input-label for="accesstype" :value="__('Access Type')" />
-                                    <!-- <x-text-input id="accesstype" class="block mt-1 w-full" type="text" name="accesstype" :value="old('accesstype')" required autofocus autocomplete="off" /> -->
-                                    <select id="accesstype" name="accesstype" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('accesstype')">
-                                        @if(auth()->user()->accesstype == 'Administrator')
-                                        <option value ="Administrator">Administrator</option>
-                                        <option value ="Supervisor">Supervisor</option>
-                                        @endif
-                                        <option value ="Member">Member</option>
-                                    </select>
-                                    <x-input-error :messages="$errors->get('accesstype')" class="mt-2" />
-                                </div>
-                            </div>
+                            
+                            
                         </div>
                         <!-- Button -->
                         <div class="flex items-center justify-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">

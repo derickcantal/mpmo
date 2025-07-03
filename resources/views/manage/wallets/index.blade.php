@@ -91,10 +91,10 @@
                                     No
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Profile
+                                    Address
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Access Type
+                                    Owner
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Status
@@ -105,7 +105,7 @@
                                 
                             </tr>
                         </thead>
-                            @forelse ($user as $users)
+                            @forelse ($wallet as $wallets)
                             
                         <tbody>
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -113,32 +113,28 @@
                                 <td class="px-6 py-4">
                                     <x-input-label>{{ ++$i }}</x-input-label>
                                 </td>
-                                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                    <img class="w-10 h-10 rounded-full" src="{{ asset("/storage/$users->avatar") }}" alt="avatar">
-                                    <div class="ps-3">
-                                        
-                                        <x-input-label>{{ $users->lastname }}, {{ $users->firstname }} {{ $users->middlename }}</x-input-label>
-                                        <x-input-label for="email" :value="$users->email"/>
-                                </th>
                                 <td class="px-6 py-4">
-                                    <x-input-label for="accesstype" :value="$users->accesstype"/>
+                                    <x-input-label for="accesstype" :value="$wallets->cwaddress"/>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <x-input-label for="accesstype" :value="$wallets->userid"/>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
-                                        @if($users->status == 'Active')
+                                        @if($wallets->status == 'Active')
                                             <div class="h-2.5 w-2.5 rounded-full inline-block mr-2 bg-green-700"></div>
-                                        @elseif($users->status == 'Inactive')
+                                        @elseif($wallets->status == 'Inactive')
                                             <div class="h-2.5 w-2.5 rounded-full inline-block mr-2 bg-red-700"></div>
                                         @endif
-                                        <x-input-label for="status" :value="$users->status"/>
+                                        <x-input-label for="status" :value="$wallets->status"/>
                                     </div>
                                 </td>
-                                <form action="{{ route('managewallet.destroy',$users->userid) }}" method="POST" >
+                                <form action="{{ route('managewallet.destroy',$wallets->cwid) }}" method="POST" >
                                     @csrf
                                     @method('DELETE')
                                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="flex items-center space-x-2">
-                                            <a href="{{ route('managewallet.edit',$users->userid) }}" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                            <a href="{{ route('managewallet.edit',$wallets->cwid) }}" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                                     <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
@@ -146,7 +142,7 @@
                                                 Modify
                                             </a>
 
-                                            <a href="{{ route('managewallet.show',$users->userid) }}" class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                            <a href="{{ route('managewallet.show',$wallets->cwid) }}" class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 -ml-0.5">
                                                     <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" />
@@ -154,11 +150,11 @@
                                                 Show
                                             </a>
                                             
-                                            @if ($users->status == 'Active')
+                                            @if ($wallets->status == 'Active')
                                                 <button type="submit" class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                                     Deactivate
                                                 </button>
-                                            @elseif ($users->status == 'Inactive')
+                                            @elseif ($wallets->status == 'Inactive')
                                                 <button type="submit" class="flex items-center text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-900">
                                                     Activate
                                                 </button>
@@ -179,7 +175,7 @@
                     </table>
                 </div>
                 <div class="mt-4">
-                {{ $user->appends(request()->query())->links() }}
+                {{ $wallet->appends(request()->query())->links() }}
                 </div>
             </div>
         </div>

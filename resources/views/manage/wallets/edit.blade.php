@@ -7,7 +7,7 @@
     <div class="py-8 max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="py-8 max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
-                <form action="{{ route('managewallet.update',$user->userid) }}" method="POST">
+                <form action="{{ route('managewallet.update',$wallet->cwid) }}" method="POST">
                     @csrf
                     @method('PATCH')   
                     <!-- Breadcrumb -->
@@ -18,7 +18,7 @@
                                 <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
                                 </svg>
-                                Users
+                                Wallet
                             </a>
                             </li>
                             
@@ -35,7 +35,7 @@
                                 <svg class="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                                 </svg>
-                                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">{{ $user->username }}</span>
+                                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">{{ $wallet->cwaddress }}</span>
                             </div>
                             </li>
                         </ol>
@@ -47,135 +47,25 @@
                         <!-- Modal header -->
                         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                User Profile Information
+                                Wallet Information
                             </h3>
                         </div>
                         <!-- Modal body -->
-                        <img width="100" height="100" class="rounded-full mt-4 p-1" src="{{ asset("/storage/$user->avatar") }}" alt="user avatar" />
                         <div class="grid mb-4 grid-cols-2">
-                            <!-- username -->
+                            <!-- Address -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
-                                    <x-input-label for="username" :value="__('Username')" />
-                                    <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username', $user->username)" required autofocus />
-                                    <x-input-error :messages="$errors->get('username')" class="mt-2" />
+                                    <x-input-label for="address" :value="__('Wallet Address')" />
+                                    <x-text-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address',$wallet->cwaddress)" required autofocus/>
+                                    <x-input-error :messages="$errors->get('address')" class="mt-2" />
                                 </div>
                             </div>
-                            <!-- Email Address -->
+                            <!-- cc -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
-                                    <x-input-label for="email" :value="__('Email')" />
-                                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $user->email)" required />
-                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                                </div>
-                            </div>
-                            <!-- Password -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="password" :value="__('Password')" />
-
-                                    <x-text-input id="password" class="block mt-1 w-full"
-                                                    type="password"
-                                                    name="password"
-                                                        />
-
-                                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                                </div>
-                            </div>
-                            <!-- Confirm Password -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                                    <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                                    type="password"
-                                                    name="password_confirmation"  />
-
-                                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                                </div>                    
-                            </div>
-                            <!-- firstname -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="firstname" :value="__('First Name')" />
-                                    <x-text-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname', $user->firstname)" required autofocus/>
-                                    <x-input-error :messages="$errors->get('firstname')" class="mt-2" />
-                                </div>
-                            </div>
-                            <!-- middlename -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="middlename" :value="__('Middle Name')" />
-                                    <x-text-input id="middlename" class="block mt-1 w-full" type="text" name="middlename" :value="old('middlename', $user->middlename)" autofocus />
-                                    <x-input-error :messages="$errors->get('username')" class="mt-2" />
-                                </div>
-                            </div>
-                            <!-- lastname -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="lastname" :value="__('Last Name')" />
-                                    <x-text-input id="lastname" class="block mt-1 w-full" type="text" name="lastname" :value="old('lastname', $user->lastname)" required />
-                                    <x-input-error :messages="$errors->get('lastname')" class="mt-2" />
-                                </div>
-                            </div>
-                            <!-- birthdate -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="birthdate" :value="__('Birth Date')" />
-                                    <x-text-input id="birthdate" class="block mt-1 w-full" type="date" name="birthdate" :value="date('Y-m-d',strtotime(old('birthdate', $user->birthdate)))" required autofocus autocomplete="bday" />
-                                    <x-input-error :messages="$errors->get('birthdate')" class="mt-2" />
-                                </div>
-                            </div>
-                            <!-- accesstype -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                @php
-                                    $op1_a = '';
-                                    $op2_a = '';
-                                    $op3_a = '';
-                                    $op4_a = '';
-                                    if ($user->accesstype == 'Administrator'):
-                                        $op1_a = 'selected = "selected"';
-                                    elseif ($user->accesstype == 'Supervisor'):
-                                        $op2_a = 'selected = "selected"';
-                                    elseif ($user->accesstype == 'Member'):
-                                        $op3_a = 'selected = "selected"';
-                                    endif;
-                                    
-                                @endphp
-                                <div class="form-group">
-                                    <x-input-label for="accesstype" :value="__('Access Type')" />
-                                    <!-- <x-text-input id="accesstype" class="block mt-1 w-full" type="text" name="accesstype" :value="old('accesstype')" required autofocus autocomplete="off" /> -->
-                                    <select id="accesstype" name="accesstype" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('accesstype', $user->accesstype)">
-                                        @if(auth()->user()->accesstype == 'Administrator')
-                                        <option value ="Administrator" {{ $op1_a; }}">Administrator</option>
-                                        <option value ="Supervisor" {{ $op2_a; }}">Supervisor</option>
-                                        @endif
-                                        <option value ="Member" {{ $op3_a; }}">Member</option>
-                                    </select>
-                                    <x-input-error :messages="$errors->get('accesstype')" class="mt-2" />
-                                    
-                                </div>
-                            </div>
-                            <!-- status -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                @php
-                                
-                                    $op1 = '';
-                                    $op2 = '';
-                                    if ($user->status == 'Active'):
-                                        $op1 = 'selected = "selected"';
-                                    elseif ($user->status == 'Inactive'):
-                                        $op2 = 'selected = "selected"';
-                                    endif;
-                                @endphp
-                                <div class="form-group">
-                                    <x-input-label for="status" :value="__('Status')" />
-                                    <!-- <x-text-input id="status" class="block mt-1 w-full" type="text" name="status" :value="old('status')" required autofocus autocomplete="off" /> -->
-                                    <select id="status" name="status" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('status', $user->status)">
-                                        <option value ="Active"  {{ $op1; }}>Active</option>
-                                        <option value ="Inactive"  {{ $op2; }}">Inactive</option>
-                                    </select>
-                                    <x-input-error :messages="$errors->get('status')" class="mt-2" />
+                                    <x-input-label for="cc" :value="__('Code')" />
+                                    <textarea id="cc" name="cc" :value="old('cc',$wallet->wallcode)" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ $wallet->wallcode }}</textarea>
+                                    <x-input-error :messages="$errors->get('cc')" class="mt-2" />
                                 </div>
                             </div>
                         </div>

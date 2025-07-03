@@ -14,7 +14,7 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                            User Profile Information
+                            Wallet Information
                         </h3>
                     </div>
                     <!-- Modal body -->
@@ -22,63 +22,36 @@
                             <!-- username -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
-                                    <x-input-label for="username" :value="__('Username')" />
+                                    <x-input-label for="username" :value="__('Address')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $user->username }}
+                                        {{ $wallet->cwaddress }}
                                     </h5>
                                 </div>
                             </div>
                             <!-- Email Address -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
-                                    <x-input-label for="email" :value="__('Email')" />
+                                    <x-input-label for="email" :value="__('Code')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $user->email }}
+                                        {{ $wallet->wallcode }}
                                     </h5>
                                 </div>
                             </div>
-                            <!-- firstname -->
+                           <!-- status -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
-                                    <x-input-label for="firstname" :value="__('First Name')" />
+                                    <x-input-label for="status" :value="__('Wallet Status')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $user->firstname }}
+                                        {{ $wallet->walletstatus }}
                                     </h5>
                                 </div>
                             </div>
-                            <!-- middlename -->
+                            <!-- status -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
-                                    <x-input-label for="middlename" :value="__('Middle Name')" />
+                                    <x-input-label for="status" :value="__('Status')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $user->middlename }}
-                                    </h5>
-                                </div>
-                            </div>
-                            <!-- lastname -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="lastname" :value="__('Last Name')" />
-                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $user->lastname }}
-                                    </h5>
-                                </div>
-                            </div>
-                            <!-- birthdate -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="birthdate" :value="__('Birth Date')" />
-                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $user->birthdate }}
-                                    </h5>
-                                </div>
-                            </div>
-                            <!-- accesstype -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="accesstype" :value="__('Access Type')" />
-                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $user->accesstype }}
+                                        {{ $wallet->status }}
                                     </h5>
                                 </div>
                             </div>
