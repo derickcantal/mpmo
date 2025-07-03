@@ -16,11 +16,36 @@ use \Carbon\Carbon;
 
 class RegisteredUserController extends Controller
 {
+    public function generateUniqueCode()
+    {
+
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersNumber = strlen($characters);
+        $codeLength = 6;
+
+        $code = '';
+
+        while (strlen($code) < 6) {
+            $position = rand(0, $charactersNumber - 1);
+            $character = $characters[$position];
+            $code = $code.$character;
+        }
+
+        if (temp_users::where('rfid', $code)->exists()) {
+            $this->generateUniqueCode();
+        }
+
+        return $code;
+
+    }
+
     /**
      * Display the registration view.
      */
     public function create(): View
     {
+    
+
         return view('auth.register');
     }
 
@@ -44,6 +69,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $temp_users = temp_users::create([
+            'rfid' => $this->generateUniqueCode(),
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'avatar' => 'avatars/avatar-default.jpg',
@@ -55,11 +81,15 @@ class RegisteredUserController extends Controller
             'accesstype' => 'Temporary',
             'timerecorded' => $timenow,
             'created_by' => 'Self Registration',
+            'mpmobal' => 0,
             'trxbal' => 0,
             'usdtbal' => 0,
+            'availbal' => 0,
+            'dailyin' => 0,
             'totalbal' => 0,
             'mod' => 0,
             'copied' => 'N',
+            'walletstatus' => 'Inactive',
             'status' => 'Inactive',
         ]);
 

@@ -27,7 +27,7 @@ class temp_users extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'userid',
+        'rfid',
         'avatar',
         'username',
         'password',
@@ -57,6 +57,7 @@ class temp_users extends Model
         'updated_by',
         'mod',
         'copied',
+        'rfidby',
         'walletstatus',
         'status',
     ];

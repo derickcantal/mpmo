@@ -30,7 +30,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'userid',
+        'rfid',
         'avatar',
         'username',
         'password',
@@ -60,6 +60,7 @@ class User extends Authenticatable
         'updated_by',
         'mod',
         'copied',
+        'rfidby',
         'walletstatus',
         'status',
     ];

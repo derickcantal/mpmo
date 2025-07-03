@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manage\ManageUserController;
 use App\Http\Controllers\Manage\ManageTempUsersController;
+use App\Http\Controllers\Manage\ManageCWalletController;
 
 
 Route::get('/', function () {
@@ -38,6 +39,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/manage/users/temp/{tempusers}', [ManageTempUsersController::class, 'update'])->name('managetempusers.update');
     Route::delete('/manage/users/temp/{tempusers}', [ManageTempUsersController::class, 'destroy'])->name('managetempusers.destroy');
     Route::get('/manage/users/temp/{tempusers}/edit', [ManageTempUsersController::class, 'edit'])->name('managetempusers.edit');
+
+    Route::get('/manage/wallet', [ManageCWalletController::class, 'index'])->name('managewallet.index');
+    Route::post('/manage/wallet', [ManageCWalletController::class, 'store'])->name('managewallet.store');
+    Route::get('/manage/wallet/create', [ManageCWalletController::class, 'create'])->name('managewallet.create');
+    Route::get('/manage/wallet/search', [ManageCWalletController::class, 'search'])->name('managewallet.search');
+    Route::get('/manage/wallet/{wallet}', [ManageCWalletController::class, 'show'])->name('managewallet.show');
+    Route::patch('/manage/wallet/{wallet}', [ManageCWalletController::class, 'update'])->name('managewallet.update');
+    Route::delete('/manage/wallet/{wallet}', [ManageCWalletController::class, 'destroy'])->name('managewallet.destroy');
+    Route::get('/manage/wallet/{wallet}/edit', [ManageCWalletController::class, 'edit'])->name('managewallet.edit');
 
 });
 require __DIR__.'/auth.php';

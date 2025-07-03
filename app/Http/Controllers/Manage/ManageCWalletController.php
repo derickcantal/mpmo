@@ -4,40 +4,15 @@ namespace App\Http\Controllers\Manage;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use \Carbon\Carbon;
-use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
-use Illuminate\Support\Facades\Hash;
+use App\Models\cwallet;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
-class ManageUserController extends Controller
+class ManageCWalletController extends Controller
 {
-    public function generateUniqueCode()
-    {
-
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersNumber = strlen($characters);
-        $codeLength = 6;
-
-        $code = '';
-
-        while (strlen($code) < 6) {
-            $position = rand(0, $charactersNumber - 1);
-            $character = $characters[$position];
-            $code = $code.$character;
-        }
-
-        if (temp_users::where('rfid', $code)->exists()) {
-            $this->generateUniqueCode();
-        }
-
-        return $code;
-
-    }
-
     public function search(Request $request)
     {
-        $user = User::whereNot('accessname','Requester')
+        $user = cwallet::whereNot('accessname','Requester')
                 ->where(function(Builder $builder) use($request){
                     $builder->where('username','like',"%{$request->search}%")
                             ->orWhere('firstname','like',"%{$request->search}%")
@@ -49,7 +24,7 @@ class ManageUserController extends Controller
                 ->orderBy('lastname',$request->orderrow)
                 ->paginate($request->pagerow);
     
-        return view('manage.users.index',compact('user'))
+        return view('manage.wallets.index',compact('user'))
             ->with('i', (request()->input('page', 1) - 1) * $request->pagerow);
     }
     /**
@@ -59,17 +34,16 @@ class ManageUserController extends Controller
     {
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
-         $user = User::whereNot('accesstype',"Renters")
-                    ->orderBy('status','asc')
+         $user = cwallet::orderBy('status','asc')
                     ->paginate(5);
 
-        return view('manage.users.index',compact('user'))
+        return view('manage.wallets.index',compact('user'))
          ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     public function create()
     {
-       return view('manage.users.create');
+       return view('manage.wallets.create');
     }
 
     /**
@@ -103,7 +77,7 @@ class ManageUserController extends Controller
                         ->with('failed','User creation failed');
             }
         }
-        $user = User::create([
+        $user = cwallet::create([
             'avatar' => 'avatars/avatar-default.jpg',
             'username' => $request->email,
             'email' => $request->email,
@@ -135,9 +109,9 @@ class ManageUserController extends Controller
      */
     public function show($userid)
     {
-        $user = User::where('userid',$userid)->first();
+        $user = cwallet::where('userid',$userid)->first();
 
-        return view('manage.users.show')
+        return view('manage.wallets.show')
                     ->with(['user' => $user]);
 
     }
@@ -147,9 +121,9 @@ class ManageUserController extends Controller
      */
     public function edit($userid)
     {
-        $user = User::where('userid',$userid)->first();
+        $user = cwallet::where('userid',$userid)->first();
 
-       return view('manage.users.edit')
+       return view('manage.wallets.edit')
                     ->with(['user' => $user]);
     }
 
@@ -158,7 +132,7 @@ class ManageUserController extends Controller
      */
     public function update(Request $request, $userid)
     {
-        $user = User::where('userid', $userid)->first();
+        $user = cwallet::where('userid', $userid)->first();
 
         if(empty($user->rfid))
         {
@@ -192,7 +166,7 @@ class ManageUserController extends Controller
                     ->with('failed','User update failed');
         }
         if(empty($request->password)){
-            $user =User::where('userid',$user->userid)->update([
+            $user =cwallet::where('userid',$user->userid)->update([
                 'rfid' => $rfid,
                 'username' => $request->email,
                 'email' => $request->email,
@@ -216,7 +190,7 @@ class ManageUserController extends Controller
                             ->with('failed','User update failed');
             }
         }elseif($request->password == $request->password_confirmation){
-            $user =User::where('userid',$user->userid)->update([
+            $user =cwallet::where('userid',$user->userid)->update([
                 'username' => $request->email,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -251,7 +225,7 @@ class ManageUserController extends Controller
      */
     public function destroy($userid)
     {
-        $user = User::where('userid', $userid)->first();
+        $user = cwallet::where('userid', $userid)->first();
         $fullname = $user->lastname . ', ' . $user->firstname . ' ' . $user->middlename;
         // dd($userid,$fullname,$user);
         if($user->userid == auth()->user()->userid){
@@ -279,7 +253,7 @@ class ManageUserController extends Controller
 
         if($user->status == 'Active')
         {
-            User::where('userid', $user->userid)
+            cwallet::where('userid', $user->userid)
             ->update([
             'status' => 'Inactive',
         ]);
@@ -291,7 +265,7 @@ class ManageUserController extends Controller
         }
         elseif($user->status == 'Inactive')
         {
-            User::where('userid', $user->userid)
+            cwallet::where('userid', $user->userid)
             ->update([
             'status' => 'Active',
         ]);

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('userid');
             $table->string('avatar');
+            $table->string('rfid');
             $table->string('username');
             $table->string('firstname');
             $table->string('middlename')->nullable();
@@ -45,6 +46,7 @@ return new class extends Migration
             $table->integer('mod');
             $table->string('copied')->nullable();
             $table->string('walletstatus')->nullable();
+            $table->string('rfidby')->nullable();
             $table->string('status');
         });
 

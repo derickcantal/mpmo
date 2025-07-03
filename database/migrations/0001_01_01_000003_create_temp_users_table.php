@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('temp_users', function (Blueprint $table) {
             $table->increments('userid');
             $table->string('avatar');
+            $table->string('rfid');
             $table->string('username');
             $table->string('firstname');
             $table->string('middlename')->nullable();
@@ -44,6 +45,7 @@ return new class extends Migration
             $table->string('updated_by')->nullable();
             $table->integer('mod');
             $table->string('copied')->nullable();
+            $table->string('rfidby')->nullable();
             $table->string('walletstatus');
             $table->string('status');
         });
