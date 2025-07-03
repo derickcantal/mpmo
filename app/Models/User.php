@@ -44,6 +44,7 @@ class User extends Authenticatable
         'trxbal', 
         'usdtbal',
         'totalbal',
+        'dailyin',
         'availbal',
         'pets',
         'birthdate',

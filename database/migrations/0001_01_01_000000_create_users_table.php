@@ -25,6 +25,7 @@ return new class extends Migration
             $table->decimal('trxbal', $precision = 8, $scale = 2);
             $table->decimal('usdtbal', $precision = 8, $scale = 2);
             $table->decimal('totalbal', $precision = 8, $scale = 2);
+            $table->decimal('dailyin', $precision = 8, $scale = 2);
             $table->decimal('availbal', $precision = 8, $scale = 2);
             $table->integer('pets')->nullable();
             $table->date('birthdate')->nullable();

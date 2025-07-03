@@ -41,6 +41,7 @@ class temp_users extends Model
         'trxbal', 
         'usdtbal',
         'totalbal',
+        'dailyin',
         'availbal',
         'pets',
         'birthdate',
