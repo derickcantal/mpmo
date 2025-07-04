@@ -15,6 +15,10 @@
                         Temporary Users</a>
                 </li>
                 <li>
+                    <a href="{{ route('managewallet.index') }}" class="text-gray-900 dark:text-white hover:underline">
+                        Wallet</a>
+                </li>
+                <li>
                     <a href="#" class="text-gray-900 dark:text-white hover:underline">
                         My Money</a>
                 </li>

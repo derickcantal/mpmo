@@ -7,7 +7,7 @@
     <div class="py-8 max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="py-8 max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
-                <form action="{{ route('managewallet.store') }}" method="POST">
+                <form action="{{ route('managewallet.store') }}" enctype="multipart/form-data" method="POST">
                     @csrf   
                     <!-- Breadcrumb -->
                     <nav class="flex px-5 py-3 text-gray-700 bg-white dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
@@ -52,12 +52,28 @@
                                     <x-input-error :messages="$errors->get('address')" class="mt-2" />
                                 </div>
                             </div>
+                            <!-- avatar -->
+                            <div class="col-span-2 sm:col-span-1">
+                                <div class="form-group mt-4">
+                                    <x-input-label for="name" value="Upload Wallet QR" />
+                                    <x-text-input id="walletqr" name="walletqr" type="file"  class="mt-1 block w-full mt-1" :value="old('walletqr')" autofocus autocomplete="off" required/>
+                                    <x-input-error class="mt-2" :messages="$errors->get('walletqr')" />
+                                </div>
+                            </div>
                             <!-- cc -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
                                     <x-input-label for="cc" :value="__('Code')" />
                                     <textarea id="cc" name="cc" :value="old('cc')" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                                     <x-input-error :messages="$errors->get('cc')" class="mt-2" />
+                                </div>
+                            </div>
+                            <!-- avatar -->
+                            <div class="col-span-2 sm:col-span-1">
+                                <div class="form-group mt-4">
+                                    <x-input-label for="name" value="Upload Code QR" />
+                                    <x-text-input id="codeqr" name="codeqr" type="file"  class="mt-1 block w-full mt-1" :value="old('codeqr')" autofocus autocomplete="off" required/>
+                                    <x-input-error class="mt-2" :messages="$errors->get('codeqr')" />
                                 </div>
                             </div>
                             

@@ -24,7 +24,9 @@ class cwallet extends Model
 
     protected $fillable = [
         'cwaddress',
+        'qrcwaddress',
         'wallcode',
+        'qrwallcode',
         'timerecorded',
         'created_by',
         'updated_by',

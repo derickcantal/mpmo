@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \Carbon\Carbon;
 use App\Models\cwallet;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
 
 class ManageCWalletController extends Controller
 {
@@ -50,6 +53,34 @@ class ManageCWalletController extends Controller
     {
         // dd($request);
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
+
+        $validated = $request->validate([
+            'walletqr'=>'required|image|file',
+            'codeqr'=>'required|image|file',
+        ]);
+
+        $ipath = 'wallet/';
+
+        if(!Storage::disk('public')->exists($ipath)){
+            Storage::disk('public')->makeDirectory($ipath);
+            // dd('path created');
+        }
+
+        $manager = ImageManager::imagick();
+        $name_gen = hexdec(uniqid()).'.'.$request->file('walletqr')->getClientOriginalExtension();
+        
+        $image = $manager->read($request->file('walletqr'));
+       
+        $encoded = $image->toWebp()->save(storage_path('app/public/wallet/'.$name_gen.'.webp'));
+        $walletqr = 'wallet/w_'.$name_gen.'.webp';
+
+        $manager1 = ImageManager::imagick();
+        $name_gen1 = hexdec(uniqid()).'.'.$request->file('codeqr')->getClientOriginalExtension();
+        
+        $image1 = $manager1->read($request->file('codeqr'));
+       
+        $encoded1 = $image1->toWebp()->save(storage_path('app/public/wallet/'.$name_gen1.'.webp'));
+        $codeqr = 'wallet/c_'.$name_gen.'.webp';
 
         if(auth()->user()->accesstype == 'Supervisor')
         {

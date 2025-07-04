@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cwallets', function (Blueprint $table) {
             $table->increments('cwid');
-            $table->string('qrcwaddress')->nullable();
+            $table->string('qrcwaddress')->nullable(); 
             $table->string('cwaddress');
             $table->string('qrwallcode')->nullable();
             $table->string('wallcode');

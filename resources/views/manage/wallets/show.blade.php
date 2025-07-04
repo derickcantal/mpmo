@@ -28,6 +28,15 @@
                                     </h5>
                                 </div>
                             </div>
+                            <!-- QR Address -->
+                            <div class="col-span-2 sm:col-span-1 p-4">
+                                <div class="form-group">
+                                    <x-input-label for="email" :value="__('QR Address')" />
+                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        {{ $wallet->qrcwaddress }}
+                                    </h5>
+                                </div>
+                            </div>
                             <!-- Email Address -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
@@ -37,7 +46,16 @@
                                     </h5>
                                 </div>
                             </div>
-                           <!-- status -->
+                            <!-- QR Address -->
+                            <div class="col-span-2 sm:col-span-1 p-4">
+                                <div class="form-group">
+                                    <x-input-label for="email" :value="__('QR Address')" />
+                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        {{ $wallet->qrwallcode }}
+                                    </h5>
+                                </div>
+                            </div>
+                            <!-- status -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
                                     <x-input-label for="status" :value="__('Wallet Status')" />
