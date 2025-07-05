@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('cwid')->nullable();
             $table->string('cwaddress')->nullable();
             $table->string('qrcwaddress')->nullable();
+            $table->string('qrbsccwaddress')->nullable(); 
+            $table->string('bsccwaddress')->nullable();
             $table->string('ownercwaddress')->nullable();
             $table->string('ownerqrcwaddress')->nullable();
             $table->decimal('mpmobal', $precision = 8, $scale = 2);
