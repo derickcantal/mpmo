@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\temp_users;
 use \Carbon\Carbon;
 use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
 use Illuminate\Support\Facades\Hash;
