@@ -39,7 +39,27 @@ class ManageCWalletController extends Controller
         $wallet = cwallet::where('cwid',$cwid)->first();
         $user = User::where('userid',$userid)->first();
 
-        dd($wallet,$user);
+        // dd($wallet,$user);
+
+        if(empty($user->cwid))
+        {
+            $users =User::where('userid',$user->userid)->update([
+                'cwid' => $wallet->cwid,
+                'cwaddress' => $wallet->cwaddress,
+                'qrcwaddress' => $wallet->qrcwaddress,
+            ]);
+
+            $wallets =cwallet::where('cwid',$wallet->cwid)->update([
+                'userid'=> $user->userid,
+            ]);
+
+            return redirect()->route('managewallet.index')
+                        ->with('success','Wallet Successfully Assigned.');
+        }else
+        {
+            return redirect()->route('managewallet.index')
+                        ->with('failed','Wallet Already Assigned.');
+        }
 
         
     }

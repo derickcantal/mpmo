@@ -19,9 +19,11 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('middlename')->nullable();
             $table->string('lastname');
-            $table->string('wallcode')->nullable();
-            $table->string('trxaddress')->nullable();
-            $table->string('usdtaddress')->nullable();
+            $table->integer('cwid')->nullable();
+            $table->string('cwaddress')->nullable();
+            $table->string('qrcwaddress')->nullable();
+            $table->string('ownercwaddress')->nullable();
+            $table->string('ownerqrcwaddress')->nullable();
             $table->decimal('mpmobal', $precision = 8, $scale = 2);
             $table->decimal('trxbal', $precision = 8, $scale = 2);
             $table->decimal('usdtbal', $precision = 8, $scale = 2);
