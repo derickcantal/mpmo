@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manage\ManageUserController;
 use App\Http\Controllers\Manage\ManageTempUsersController;
 use App\Http\Controllers\Manage\ManageCWalletController;
+use App\Http\Controllers\Manage\ManageTransactionsController;
 
 
 Route::get('/', function () {
@@ -51,6 +52,21 @@ Route::middleware('auth')->group(function () {
     Route::patch('/manage/wallet/{wallet}', [ManageCWalletController::class, 'update'])->name('managewallet.update');
     Route::delete('/manage/wallet/{wallet}', [ManageCWalletController::class, 'destroy'])->name('managewallet.destroy');
     Route::get('/manage/wallet/{wallet}/edit', [ManageCWalletController::class, 'edit'])->name('managewallet.edit');
+
+    Route::get('/manage/transactions', [ManageTransactionsController::class, 'index'])->name('managetxn.index');
+    Route::post('/manage/transactions', [ManageTransactionsController::class, 'store'])->name('managetxn.store');
+    Route::post('/manage/transactions/convert', [ManageTransactionsController::class, 'storeconvert'])->name('managetxn.storeconvert');
+    Route::post('/manage/transactions/deposit', [ManageTransactionsController::class, 'storedeposit'])->name('managetxn.storedeposit');
+    Route::post('/manage/transactions/withdraw', [ManageTransactionsController::class, 'storewithdraw'])->name('managetxn.storewithdraw');
+    Route::get('/manage/transactions/create', [ManageTransactionsController::class, 'create'])->name('managetxn.create');
+    Route::get('/manage/transactions/convert', [ManageTransactionsController::class, 'convert'])->name('managetxn.convert');
+    Route::get('/manage/transactions/deposit', [ManageTransactionsController::class, 'deposit'])->name('managetxn.deposit');
+    Route::get('/manage/transactions/withraw', [ManageTransactionsController::class, 'withdraw'])->name('managetxn.withdraw');
+    Route::get('/manage/transactions/search', [ManageTransactionsController::class, 'search'])->name('managetxn.search');
+    Route::get('/manage/transactions/{txnid}', [ManageTransactionsController::class, 'show'])->name('managetxn.show');
+    Route::patch('/manage/transactions/{txnid}', [ManageTransactionsController::class, 'update'])->name('managetxn.update');
+    Route::delete('/manage/transactions/{txnid}', [ManageTransactionsController::class, 'destroy'])->name('managetxn.destroy');
+    Route::get('/manage/usetransactionsrs/{txnid}/edit', [ManageTransactionsController::class, 'edit'])->name('managetxn.edit');
 
 });
 require __DIR__.'/auth.php';

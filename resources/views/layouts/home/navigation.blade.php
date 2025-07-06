@@ -19,12 +19,8 @@
                         Wallet</a>
                 </li>
                 <li>
-                    <a href="#" class="text-gray-900 dark:text-white hover:underline">
-                        Deposits</a>
-                </li>
-                <li>
-                    <a href="#" class="text-gray-900 dark:text-white hover:underline">
-                        Withdrawal</a>
+                    <a href="{{ route('managetxn.index') }}" class="text-gray-900 dark:text-white hover:underline">
+                        Transactions</a>
                 </li>
             </ul>
         </div>

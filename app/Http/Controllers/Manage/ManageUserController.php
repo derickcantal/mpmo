@@ -60,8 +60,7 @@ class ManageUserController extends Controller
     {
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
-         $user = User::whereNot('accesstype',"Renters")
-                    ->orderBy('status','asc')
+         $user = User::orderBy('status','asc')
                     ->paginate(5);
 
         return view('manage.users.index',compact('user'))
