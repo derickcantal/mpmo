@@ -15,10 +15,6 @@
                         TUsers</a>
                 </li>
                 <li>
-                    <a href="{{ route('managewallet.index') }}" class="text-gray-900 dark:text-white hover:underline">
-                        Wallet</a>
-                </li>
-                <li>
                     <a href="{{ route('managetxn.index') }}" class="text-gray-900 dark:text-white hover:underline">
                         Transactions</a>
                 </li>

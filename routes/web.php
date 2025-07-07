@@ -6,6 +6,7 @@ use App\Http\Controllers\Manage\ManageUserController;
 use App\Http\Controllers\Manage\ManageTempUsersController;
 use App\Http\Controllers\Manage\ManageCWalletController;
 use App\Http\Controllers\Manage\ManageTransactionsController;
+use App\Http\Controllers\Manage\ManageMailboxController;
 
 
 Route::get('/', function () {
@@ -67,6 +68,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/manage/transactions/{txnid}', [ManageTransactionsController::class, 'update'])->name('managetxn.update');
     Route::delete('/manage/transactions/{txnid}', [ManageTransactionsController::class, 'destroy'])->name('managetxn.destroy');
     Route::get('/manage/usetransactionsrs/{txnid}/edit', [ManageTransactionsController::class, 'edit'])->name('managetxn.edit');
+
+    Route::get('/manage/mailbox', [ManageMailboxController::class, 'index'])->name('managemailbox.index');
+    Route::post('/manage/mailbox', [ManageMailboxController::class, 'store'])->name('managemailbox.store');
+    Route::get('/manage/mailbox/create', [ManageMailboxController::class, 'create'])->name('managemailbox.create');
+    Route::get('/manage/mailbox/search', [ManageMailboxController::class, 'search'])->name('managemailbox.search');
+    Route::get('/manage/mailbox/{mailbox}', [ManageMailboxController::class, 'show'])->name('managemailbox.show');
+    Route::patch('/manage/mailbox/{mailbox}', [ManageMailboxController::class, 'update'])->name('managemailbox.update');
+    Route::delete('/manage/mailbox/{mailbox}', [ManageMailboxController::class, 'destroy'])->name('managemailbox.destroy');
+    Route::get('/manage/mailbox/{mailbox}/edit', [ManageMailboxController::class, 'edit'])->name('managemailbox.edit');
 
 });
 require __DIR__.'/auth.php';
