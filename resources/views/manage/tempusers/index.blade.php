@@ -1,12 +1,8 @@
 <x-app-layout>
-    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm">
-        <div class="max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
-            @include('layouts.home.navigation')
-        </div>
-    </div>
-	<div class="py-8 max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
+    @include('layouts.home.navigation')
+	<div class="py-8 mx-auto sm:px-6 lg:px-8">
 		<div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="py-8 max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
+            <div class="py-8 mx-auto sm:px-6 lg:px-8">
                 <!-- Breadcrumb -->
                 <nav class="flex px-5 py-3 text-gray-700 bg-white dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -81,7 +77,7 @@
 
                 @csrf
                 <!-- table -->
-                <div class="max-w-screen-2xl overflow-x-auto shadow-md sm:rounded-lg mt-4" >
+                <div class="overflow-x-auto shadow-md sm:rounded-lg mt-4" >
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
