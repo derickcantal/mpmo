@@ -20,7 +20,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                             </svg>
                             <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                                Users</span>
+                                Transactions</span>
                         </div>
                         </li>
                     </ol>
@@ -46,9 +46,7 @@
                             </svg>
                             Withdraw
                         </a>
-                    </div>
-                    <div class="flex flex-col-reverse md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-end mx-4 py-4 dark:border-gray-700 ">
-                        <form class="flex items-center" action="{{ route('managetxn.search') }}" method="get">
+                        <form class="w-full" action="{{ route('managetxn.search') }}" method="get">
                             @csrf
                             <div class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
                                 

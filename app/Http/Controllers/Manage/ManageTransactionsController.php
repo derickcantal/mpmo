@@ -13,29 +13,32 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class ManageTransactionsController extends Controller
 {
-    public function withdrawstore(Request $request)
+    public function storewithdraw(Request $request)
     {
-        
+        return redirect()->route('managetxn.index')
+                        ->with('failed','Feature still on progress.');
     }
 
     public function withdraw(Request $request)
     {
-        
+        return view('manage.transactions.withdraw');
     }
 
-    public function depositstore(Request $request)
+    public function storedeposit(Request $request)
     {
-        
+        return redirect()->route('managetxn.index')
+                        ->with('failed','Feature still on progress.');
     }
 
     public function deposit(Request $request)
     {
-        
+        return view('manage.transactions.deposit');
     }
 
-    public function convertstore(Request $request)
+    public function storeconvert(Request $request)
     {
-        
+        return redirect()->route('managetxn.index')
+                        ->with('failed','Feature still on progress.');
     }
 
     public function convert(Request $request)
