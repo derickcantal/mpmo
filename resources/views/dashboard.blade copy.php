@@ -25,12 +25,26 @@
                     <div class="bg-white rounded-lg shadow p-5">
                         <header class="text-center mb-10">
                             <img src="{{ asset("storage/img/logo.jpeg") }}" alt="MPMO Logo" class="mx-auto w-32 h-32 mb-4">
-                            <h1 class="text-4xl font-bold text-orange-600">MPMO Token</h1>
+                            <h1 class="text-4xl font-bold text-orange-600">MPMO Token Presale</h1>
+                            <p class="text-lg text-gray-700 mt-2">Catch your monster, join the world of MPMO!</p>
                         </header>
-                        <div class="flex flex-col items-center justify-center">
-                            <dt class="mb-2 text-3xl font-extrabold">{{ number_format(auth()->user()->mpmobal, 2) }}</dt>
-                            <dd class="text-gray-500 dark:text-gray-400">$MPMO Balance</dd>
-                        </div>
+                        <h2 class="text-2xl font-bold mb-4 text-center text-orange-500">Join the Presale Now!</h2>
+
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700">Wallet Address</label>
+                                <input type="text" placeholder="0x..." class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400">
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700">Amount to Buy (BNB)</label>
+                                <input type="number" placeholder="0.1" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400">
+                            </div>
+
+                            <button type="submit" class="w-full bg-orange-500 text-white py-3 rounded-xl hover:bg-orange-600 transition">Buy MPMO Tokens</button>
+                        </form>
+
+                        <p class="text-center text-gray-500 text-sm mt-4">Presale ends: August 15, 2025</p>
                     </div>
 
                     <!-- Card 2 -->
