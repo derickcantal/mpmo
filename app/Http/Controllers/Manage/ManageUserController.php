@@ -164,6 +164,10 @@ class ManageUserController extends Controller
         {
             $rfid = $this->generateUniqueCode();
         }
+        else
+        {
+            $rfid = $user->rfid;
+        }
 
         $fullname = $user->lastname . ', ' . $user->firstname . ' ' . $user->middlename;
 

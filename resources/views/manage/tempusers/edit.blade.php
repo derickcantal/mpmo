@@ -14,7 +14,7 @@
                                 <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
                                 </svg>
-                                Users
+                                Temporary Users
                             </a>
                             </li>
                             
@@ -47,10 +47,10 @@
                             </h3>
                         </div>
                         <!-- Modal body -->
-                        <img width="100" height="100" class="rounded-full mt-4" src="{{ asset("/storage/$user->avatar") }}" alt="user avatar" />
+                        <img width="100" height="100" class="rounded-full mt-4 px-4" src="{{ asset("/storage/$user->avatar") }}" alt="user avatar" />
                             <div class="grid gap-4 mb-4 grid-cols-2">
                                 <!-- Email Address -->
-                                <div class="col-span-2 sm:col-span-1">
+                                <div class="col-span-2 sm:col-span-1 px-4">
                                     <div class="form-group mt-4">
                                         <x-input-label for="email" :value="__('Email')" />
                                         <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $user->email)" readonly />
@@ -59,7 +59,7 @@
                                 </div>
 
                                 <!-- firstname -->
-                                <div class="col-span-2 sm:col-span-1">
+                                <div class="col-span-2 sm:col-span-1 px-4">
                                     <div class="form-group mt-4">
                                         <x-input-label for="firstname" :value="__('First Name')" />
                                         <x-text-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname', $user->firstname)" required autofocus/>
@@ -68,7 +68,7 @@
                                 </div>
 
                                 <!-- lastname -->
-                                <div class="col-span-2 sm:col-span-1">
+                                <div class="col-span-2 sm:col-span-1 px-4">
                                     <div class="form-group mt-4">
                                         <x-input-label for="lastname" :value="__('Last Name')" />
                                         <x-text-input id="lastname" class="block mt-1 w-full" type="text" name="lastname" :value="old('lastname', $user->lastname)" required />
@@ -77,7 +77,7 @@
                                 </div>
 
                                 <!-- birthdate -->
-                                <div class="col-span-2 sm:col-span-1">
+                                <div class="col-span-2 sm:col-span-1 px-4">
                                     <div class="form-group mt-4">
                                         <x-input-label for="birthdate" :value="__('Birth Date')" />
                                         <x-text-input id="birthdate" class="block mt-1 w-full" type="date" name="birthdate" :value="date('Y-m-d',strtotime(old('birthdate', $user->birthdate)))" required autofocus autocomplete="bday" />
@@ -86,7 +86,7 @@
                                 </div>
 
                                 <!-- mobile -->
-                                <div class="col-span-2 sm:col-span-1">
+                                <div class="col-span-2 sm:col-span-1 px-4">
                                     <div class="form-group mt-4">
                                         <x-input-label for="mobile" :value="__('Mobile No.')" />
                                         <x-text-input id="mobile" class="block mt-1 w-full" type="text" name="mobile" :value="old('mobile', $user->mobile_primary)" required autofocus />
@@ -95,7 +95,7 @@
                                 </div>
 
                                 <!-- status -->
-                                <div class="col-span-2 sm:col-span-1">
+                                <div class="col-span-2 sm:col-span-1 px-4">
                                     @php
                                     
                                         $op1 = '';
@@ -118,7 +118,7 @@
                                 </div>
 
                                 <!-- notes -->
-                                <div class="col-span-2 sm:col-span-1">
+                                <div class="col-span-2 sm:col-span-1 px-4">
                                     <div class="form-group mt-4">
                                         <x-input-label for="notes" :value="__('Notes')" />
                                         <x-text-input id="notes" class="block mt-1 w-full" type="text" name="notes" :value="old('notes', $user->notes)"  />

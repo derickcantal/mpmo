@@ -4,8 +4,13 @@
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
                 <li>
                     <a href="{{ url('/dashboard') }}" class="text-gray-900 dark:text-white hover:underline" aria-current="page">
-                        Home</a>
+                        My Wallet</a>
                 </li>
+                <li>
+                    <a href="{{ route('managemyprofile.index') }}" class="text-gray-900 dark:text-white hover:underline">
+                        Profile</a>
+                </li>
+                @if(auth()->user()->accesstype == "Administrator")
                 <li>
                     <a href="{{ route('manageuser.index') }}" class="text-gray-900 dark:text-white hover:underline">
                         Users</a>
@@ -14,10 +19,7 @@
                     <a href="{{ route('managetempusers.index') }}" class="text-gray-900 dark:text-white hover:underline">
                         TUsers</a>
                 </li>
-                <li>
-                    <a href="{{ route('managetxn.index') }}" class="text-gray-900 dark:text-white hover:underline">
-                        My Wallet</a>
-                </li>
+                @endif
                 <li>
                     <a href="{{ route('managetxn.index') }}" class="text-gray-900 dark:text-white hover:underline">
                         Transactions</a>

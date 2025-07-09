@@ -7,6 +7,7 @@ use App\Http\Controllers\Manage\ManageTempUsersController;
 use App\Http\Controllers\Manage\ManageCWalletController;
 use App\Http\Controllers\Manage\ManageTransactionsController;
 use App\Http\Controllers\Manage\ManageMailboxController;
+use App\Http\Controllers\Manage\ManageMyProfileController;
 
 
 Route::get('/', function () {
@@ -24,6 +25,20 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/manage/myprofile', [ManageMyProfileController::class, 'index'])->name('managemyprofile.index');
+    Route::get('/manage/myprofile/changepassword', [ManageMyProfileController::class, 'changepassword'])->name('managemyprofile.changepassword');
+    Route::get('/manage/myprofile/signature', [ManageMyProfileController::class, 'signature'])->name('managemyprofile.signature');
+    Route::get('/manage/myprofile/avatar', [ManageMyProfileController::class, 'myavatar'])->name('managemyprofile.myavatar');
+    Route::patch('/manage/myprofile/avatar/update/{myprofile}', [ManageMyProfileController::class, 'savemyavatar'])->name('managemyprofile.savemyavatar');
+    Route::patch('/manage/myprofile/signature/update/{myprofile}', [ManageMyProfileController::class, 'savesignature'])->name('managemyprofile.savesignature');
+    Route::post('/manage/myprofile', [ManageMyProfileController::class, 'store'])->name('managemyprofile.store');
+    Route::get('/manage/myprofile/create', [ManageMyProfileController::class, 'create'])->name('managemyprofile.create');
+    Route::get('/manage/myprofile/search', [ManageMyProfileController::class, 'search'])->name('managemyprofile.search');
+    Route::get('/manage/myprofile/{myprofile}', [ManageMyProfileController::class, 'show'])->name('managemyprofile.show');
+    Route::patch('/manage/myprofile/{myprofile}', [ManageMyProfileController::class, 'update'])->name('managemyprofile.update');
+    Route::delete('/manage/myprofile/{myprofile}', [ManageMyProfileController::class, 'destroy'])->name('managemyprofile.destroy');
+    Route::get('/manage/myprofile/{myprofile}/edit', [ManageMyProfileController::class, 'edit'])->name('managemyprofile.edit');
+
     Route::get('/manage/user', [ManageUserController::class, 'index'])->name('manageuser.index');
     Route::post('/manage/user', [ManageUserController::class, 'store'])->name('manageuser.store');
     Route::get('/manage/user/create', [ManageUserController::class, 'create'])->name('manageuser.create');

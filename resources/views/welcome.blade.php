@@ -19,13 +19,13 @@
             </style>
         @endif
     </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
+    <body class="bg-white dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
         <section class="bg-white px-4  antialiased dark:bg-gray-900 ">
             <div class="mx-auto grid max-w-screen-xl rounded-lg bg-white p-4 dark:bg-gray-800 md:p-8 lg:grid-cols-12 lg:gap-8 lg:p-16 xl:gap-16">
                 <div class="lg:col-span-5 lg:mt-0">
                 <a href="{{ url('/dashboard') }}">
-                    <img class="mb-4 h-56 w-56 dark:hidden sm:h-96 sm:w-96 md:h-full md:w-full" src="{{ asset("storage/img/logo.png") }}" alt="logo" />
-                    <img class="mb-4 hidden dark:block md:h-full" src="{{ asset("storage/img/logo.png") }}" alt="logo" />
+                    <img class="mb-4  h-auto max-w-md dark:hidden sm:h-96 sm:w-96 md:h-full md:w-full" src="{{ asset("storage/img/logo.png") }}" alt="logo" />
+                    <img class="mb-4 hidden  h-auto max-w-md  dark:block md:h-full" src="{{ asset("storage/img/logo.png") }}" alt="logo" />
                 </a>
                 </div>
                 <div class="me-auto place-self-center lg:col-span-7">
@@ -43,19 +43,8 @@
                                 Creating an account.
                                 <a href="{{ route('register') }}" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ml-1">
                                     <span>Register</span>
-                                    <svg
-                                        width="10"
-                                        height="11"
-                                        viewBox="0 0 10 11"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-2.5 h-2.5"
-                                    >
-                                        <path
-                                            d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                            stroke="currentColor"
-                                            stroke-linecap="square"
-                                        />
+                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5">
+                                        <path d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001" stroke="currentColor" stroke-linecap="square"/>
                                     </svg>
                                 </a>
                             </span>

@@ -51,10 +51,10 @@
                         </h3>
                     </div>
                     <!-- Modal body -->
-                    <img width="100" height="100" class="rounded-full mt-4" src="{{ asset("/storage/$user->avatar") }}" alt="user avatar" />
+                    <img width="100" height="100" class="rounded-full mt-4 px-4" src="{{ asset("/storage/$user->avatar") }}" alt="user avatar" />
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <!-- Email Address -->
-                        <div class="col-span-2 sm:col-span-1 ">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="email" :value="__('Email')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -64,7 +64,7 @@
                         </div>
 
                         <!-- First  Name -->
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="firstname" :value="__('First Name')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -74,7 +74,7 @@
                         </div>
 
                         <!-- Middle Name -->
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="middlename" :value="__('Middle Name')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -84,7 +84,7 @@
                         </div>
                 
                         <!-- Last Name -->
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="lastname" :value="__('Last Name')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -94,7 +94,7 @@
                         </div>
 
                         <!-- Birthday -->
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="birthdate" :value="__('Birthday')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -104,7 +104,7 @@
                         </div>
 
                         <!-- Mobile No -->
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="mobile_primary" :value="__('Mobile No.')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -113,28 +113,18 @@
                             </div>
                         </div>
 
-                        <!-- Department Name -->
-                        <div class="col-span-2 sm:col-span-1">
-                            <div class="form-group mt-4">
-                                <x-input-label for="deptname" :value="__('Department')" />
-                                <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->deptname }}
-                                </h5>
-                            </div>
-                        </div>
-                        
                         <!-- Access Type -->
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="accessname" :value="__('Access Type')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->accessname }}
+                                    {{ $user->accesstype }}
                                 </h5>
                             </div>
                         </div>
 
                         <!-- createdby -->
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="created_by" :value="__('Registered By')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -144,7 +134,7 @@
                         </div>
 
                         <!-- TimeDate -->
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="timerecorded" :value="__('Registered Date')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -153,18 +143,8 @@
                             </div>
                         </div>
 
-                        <!-- notes -->
-                        <div class="col-span-2 sm:col-span-1">
-                            <div class="form-group mt-4">
-                                <x-input-label for="notes" :value="__('Notes')" />
-                                <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->notes }}
-                                </h5>
-                            </div>
-                        </div>
-
                         <!-- status -->
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="status" :value="__('Status')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">

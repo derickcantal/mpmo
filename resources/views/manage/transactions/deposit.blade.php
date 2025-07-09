@@ -78,7 +78,7 @@
                             <!-- Proof -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group mt-4">
-                                    <x-input-label for="name" value="Upload Screenshot" />
+                                    <x-input-label for="imgproof" value="Upload Screenshot" />
                                     <x-text-input id="imgproof" name="imgproof" type="file"  class="mt-1 block w-full mt-1" :value="old('imgproof')" autofocus autocomplete="off" required/>
                                     <x-input-error class="mt-2" :messages="$errors->get('imgproof')" />
                                 </div>

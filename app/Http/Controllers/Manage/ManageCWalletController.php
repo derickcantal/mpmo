@@ -16,6 +16,11 @@ class ManageCWalletController extends Controller
 {
     public function userlistsearch (Request $request,$cwid)
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
+
         $wallet = cwallet::where('cwid',$cwid)->first();
 
         $user = User::orderBy('lastname',$request->orderrow)
@@ -36,6 +41,11 @@ class ManageCWalletController extends Controller
 
     public function userliststore($cwid,$userid)
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
+
         $wallet = cwallet::where('cwid',$cwid)->first();
         $user = User::where('userid',$userid)->first();
 
@@ -65,6 +75,11 @@ class ManageCWalletController extends Controller
     }
     public function userlist($cwid)
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
+
         $wallet = cwallet::where('cwid',$cwid)->first();
 
         $user = User::latest()->paginate(5);
@@ -77,6 +92,11 @@ class ManageCWalletController extends Controller
 
     public function search(Request $request)
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
+        
         $wallet = cwallet::orderBy('cwid',$request->orderrow)
                 ->where(function(Builder $builder) use($request){
                     $builder->where('cwaddress','like',"%{$request->search}%")
@@ -95,16 +115,25 @@ class ManageCWalletController extends Controller
     public function index()
     {
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
 
-         $wallet = cwallet::orderBy('status','asc')
+            $wallet = cwallet::orderBy('status','asc')
                     ->paginate(5);
-
-        return view('manage.wallets.index',compact('wallet'))
-         ->with('i', (request()->input('page', 1) - 1) * 5);
+        
+            return view('manage.wallets.index',compact('wallet'))
+                ->with('i', (request()->input('page', 1) - 1) * 5);
+        
     }
 
     public function create()
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
        return view('manage.wallets.create');
     }
 
@@ -113,6 +142,10 @@ class ManageCWalletController extends Controller
      */
     public function store(Request $request)
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
         // dd($request);
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
@@ -187,6 +220,11 @@ class ManageCWalletController extends Controller
      */
     public function show($cwid)
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
+
         $wallet = cwallet::where('cwid',$cwid)->first();
 
         return view('manage.wallets.show')
@@ -199,6 +237,11 @@ class ManageCWalletController extends Controller
      */
     public function edit($cwid)
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
+
         $wallet = cwallet::where('cwid',$cwid)->first();
 
        return view('manage.wallets.edit')
@@ -210,6 +253,11 @@ class ManageCWalletController extends Controller
      */
     public function update(Request $request, $cwid)
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
+
         $wallet = cwallet::where('cwid', $cwid)->first();
         $oldqrcwaddress = $wallet->qrcwaddress;
         $oldqrwallcode = $wallet->qrwallcode;
@@ -311,6 +359,11 @@ class ManageCWalletController extends Controller
      */
     public function destroy($cwid)
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net'){
+            return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+        }
+
         $wallet = cwallet::where('cwid', $cwid)->first();
        
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');

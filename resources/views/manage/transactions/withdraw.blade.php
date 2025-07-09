@@ -40,6 +40,15 @@
                         </div>
                         <!-- Modal body -->
                         <div class="grid mb-4 grid-cols-2">
+                             <!-- Wallet -->
+                             <div class="col-span-2 sm:col-span-1 p-4">
+                                <div class="form-group">
+                                    <x-input-label for="walletdest" :value="__('Available Balance(TRX)')" />
+                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        {{ auth()->user()->trxbal }}
+                                    </h5>
+                                </div>
+                            </div>
                              <!-- Amount -->
                              <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
@@ -48,24 +57,14 @@
                                     <x-input-error :messages="$errors->get('amount')" class="mt-2" />
                                 </div>
                             </div>
-                            <!-- Token -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="tokenname" :value="__('Token')" />
-                                    <select id="tokenname" name="tokenname" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('tokenname')">
-                                        <!-- <option value ="MPMO">MPMO</option> -->
-                                        <option value ="TRX">TRX</option>
-                                    </select>
-                                    <x-input-error :messages="$errors->get('tokenname')" class="mt-2" />
-                                </div>
-                            </div>
                            
                             <!-- Wallet -->
                             <div class="col-span-2 sm:col-span-1 p-4">
                                 <div class="form-group">
                                     <x-input-label for="walletdest" :value="__('Wallet Address(Destination)')" />
-                                    <x-text-input id="walletdest" class="block mt-1 w-full" type="text" name="walletdest" :value="old('walletdest')" required />
-                                    <x-input-error :messages="$errors->get('walletdest')" class="mt-2" />
+                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        {{ auth()->user()->ownercwaddress }}
+                                    </h5>
                                 </div>
                             </div>
                             
