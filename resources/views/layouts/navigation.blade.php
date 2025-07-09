@@ -2,7 +2,7 @@
     <div class="flex flex-wrap justify-between items-center">
         <div class="flex justify-start items-center">
             <a href="{{ url('/dashboard') }}" class="flex mr-4">
-                <img src="{{ asset("storage/img/logo.jpeg") }}" class="mr-3 h-8 rounded-full" alt="FlowBite Logo" />
+                <img src="{{ asset("storage/img/logo.png") }}" class="mr-3 h-8 rounded-full" alt="Logo" />
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                     MPMO
                 </span>

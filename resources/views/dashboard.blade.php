@@ -24,7 +24,7 @@
                     <!-- Card 1 -->
                     <div class="bg-white rounded-lg shadow p-5">
                         <header class="text-center mb-10">
-                            <img src="{{ asset("storage/img/logo.jpeg") }}" alt="MPMO Logo" class="mx-auto w-32 h-32 mb-4">
+                            <img src="{{ asset("storage/img/logo.png") }}" alt="MPMO Logo" class="mx-auto w-32 h-32 mb-4">
                             <h1 class="text-4xl font-bold text-orange-600">MPMO Token</h1>
                         </header>
                         <div class="flex flex-col items-center justify-center">

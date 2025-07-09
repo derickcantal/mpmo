@@ -24,8 +24,8 @@
             <div class="mx-auto grid max-w-screen-xl rounded-lg bg-white p-4 dark:bg-gray-800 md:p-8 lg:grid-cols-12 lg:gap-8 lg:p-16 xl:gap-16">
                 <div class="lg:col-span-5 lg:mt-0">
                 <a href="{{ url('/dashboard') }}">
-                    <img class="mb-4 h-56 w-56 dark:hidden sm:h-96 sm:w-96 md:h-full md:w-full" src="{{ asset("storage/img/logo.jpeg") }}" alt="peripherals" />
-                    <img class="mb-4 hidden dark:block md:h-full" src="{{ asset("storage/img/logo.jpeg") }}" alt="peripherals" />
+                    <img class="mb-4 h-56 w-56 dark:hidden sm:h-96 sm:w-96 md:h-full md:w-full" src="{{ asset("storage/img/logo.png") }}" alt="logo" />
+                    <img class="mb-4 hidden dark:block md:h-full" src="{{ asset("storage/img/logo.png") }}" alt="logo" />
                 </a>
                 </div>
                 <div class="me-auto place-self-center lg:col-span-7">
