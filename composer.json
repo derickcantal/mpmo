@@ -10,13 +10,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "endroid/qr-code": "^6.0",
+        "endroid/qr-code-bundle": "^6.0",
         "intervention/image": "^3.11",
         "kornrunner/keccak": "^1.1",
         "kornrunner/secp256k1": "^0.3.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "livewire/livewire": "^3.6",
-        "mdanter/ecc": "^1.0"
+        "livewire/livewire": "^3.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -75,6 +76,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
+            "endroid/installer": true,
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
         }

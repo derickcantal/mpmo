@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('tokenrates', function (Blueprint $table) {
             $table->increments('trid');
             $table->string('trdescription');
-            $table->decimal('mpmototrx', $precision = 8, $scale = 2);
-            $table->decimal('trxtompmo', $precision = 8, $scale = 2);
-            $table->decimal('trxtophp', $precision = 8, $scale = 2);
-            $table->decimal('phptotrx', $precision = 8, $scale = 2);
+            $table->decimal('mpmototrx', 20, 6);
+            $table->decimal('trxtompmo', 20, 6);
+            $table->decimal('trxtophp', 20, 6);
+            $table->decimal('phptotrx', 20, 6);
             $table->dateTime('timerecorded');
             $table->string('created_by');
             $table->string('updated_by')->nullable();

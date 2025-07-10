@@ -8,6 +8,21 @@ use App\Models\transactions;
 use App\Services\TronGridService;
 use Illuminate\Support\Facades\Auth;
 
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\WebPWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\QrCodeInterface;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\Label\Label;
+
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
+
+
 class DashboardController extends Controller
 {
     protected $tron;
@@ -28,8 +43,28 @@ class DashboardController extends Controller
 
     public function createWallet()
     {
+        $data = 'TTMXREjCY9MJmy1YzNnwSZhk9tCSV2X9Pp';
+
+        $qrCode = new QrCode(
+            data: $data,
+            encoding: new Encoding('UTF-8'),
+            size: 300,
+            margin: 10
+        );
+        
+
+        $writer = new WebPWriter();
+        $result = $writer->write($qrCode);
+        $webpData = $result->getString();
+
+        $filename = 'qrcodes/cwa_' . hexdec(uniqid()) . '.webp';
+        
+
+        Storage::disk('public')->put($filename, $webpData);
+
+        dd($filename);
+
         $walletData = $this->tron->createWallet();
-        dd($walletData);
         cwallet::create([
             'userid' => Auth::user()->userid,
             'address' => $walletData['address'],

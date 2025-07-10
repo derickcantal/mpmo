@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('qrbsccwaddress')->nullable(); 
             $table->string('bsccwaddress')->nullable();
             $table->string('qrwallcode')->nullable();
-            $table->string('wallcode');
+            $table->string('wallcode')->nullable();
             $table->string('notes')->nullable();
             $table->unsignedInteger('userid');
             $table->foreign('userid')->references('userid')->on('users')->onDelete('cascade');

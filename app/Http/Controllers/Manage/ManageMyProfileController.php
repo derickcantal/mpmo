@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\manage;
+namespace App\Http\Controllers\Manage;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use \Carbon\Carbon; 
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
+use Imagick;
 use Illuminate\Support\Facades\Storage;
 
 class ManageMyProfileController extends Controller
@@ -28,18 +29,18 @@ class ManageMyProfileController extends Controller
             Storage::disk('public')->makeDirectory($ipath);
             // dd('path created');
         }
+
         $manager = ImageManager::imagick();
-        $name_gen = hexdec(uniqid()).'.'.$request->file('myavatar')->getClientOriginalExtension();
-        
-        $image = $manager->read($request->file('myavatar'));
-       
-        $encoded = $image->toWebp()->save(storage_path('app/public/avatar/'.$name_gen.'.webp'));
-        $path = 'avatar/'.$name_gen.'.webp';
 
-        // $path = Storage::disk('public')->put('avatars',$request->file('avatar'));
+        $uploadedFile = $request->file('myavatar');
+        $image = $manager->read($uploadedFile->getRealPath());
 
-        // $path = $request->file('avatar')->store('avatars','public');
+        $webpData = (string) $image->toWebp(80);
+
+        $path = 'avatar/u_' . hexdec(uniqid()) . '.webp';
         
+        Storage::disk('public')->put($path, $webpData);
+
         if($oldavatar = $request->user()->avatar){
             Storage::disk('public')->delete($oldavatar);
         }
