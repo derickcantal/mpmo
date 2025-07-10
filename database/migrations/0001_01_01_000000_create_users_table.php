@@ -26,12 +26,12 @@ return new class extends Migration
             $table->string('bsccwaddress')->nullable();
             $table->string('ownercwaddress')->nullable();
             $table->string('ownerqrcwaddress')->nullable();
-            $table->decimal('mpmobal', $precision = 8, $scale = 2);
-            $table->decimal('trxbal', $precision = 8, $scale = 2);
-            $table->decimal('usdtbal', $precision = 8, $scale = 2);
-            $table->decimal('totalbal', $precision = 8, $scale = 2);
-            $table->decimal('dailyin', $precision = 8, $scale = 2);
-            $table->decimal('availbal', $precision = 8, $scale = 2);
+            $table->decimal('mpmobal', 20, 6);
+            $table->decimal('trxbal', 20, 6);
+            $table->decimal('usdtbal', 20, 6);
+            $table->decimal('totalbal', 20, 6);
+            $table->decimal('dailyin', 20, 6);
+            $table->decimal('availbal', 20, 6);
             $table->integer('pets')->nullable();
             $table->date('birthdate')->nullable();
             $table->string('email')->unique();
@@ -44,6 +44,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->string('accesstype');
+            $table->string('role');
             $table->dateTime('timerecorded');
             $table->string('created_by');
             $table->string('updated_by')->nullable();

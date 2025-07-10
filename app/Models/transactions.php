@@ -41,4 +41,9 @@ class transactions extends Model
         'copied',
         'status',
     ];
+
+    public function wallet()
+    {
+        return $this->belongsTo(cwallet::class);
+    }
 }

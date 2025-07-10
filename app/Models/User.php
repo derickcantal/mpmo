@@ -89,4 +89,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function wallets()
+    {
+        return $this->hasMany(cwallet::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
 }

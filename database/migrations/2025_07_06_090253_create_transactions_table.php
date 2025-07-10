@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('txntype');
             $table->string('addresssend');
             $table->string('addressreceive');
-            $table->decimal('amount', $precision = 8, $scale = 2);
-            $table->decimal('amountvalue', $precision = 8, $scale = 2);
-            $table->decimal('amountfee', $precision = 8, $scale = 2);
+            $table->decimal('amount', 20, 6);
+            $table->decimal('amountvalue', 20, 6);
+            $table->decimal('amountfee', 20, 6);
+            $table->unsignedInteger('cwid');
+            $table->foreign('cwid')->references('cwid')->on('cwallets')->onDelete('cascade');
             $table->string('fullname')->nullable();
             $table->dateTime('timerecorded');
             $table->string('created_by');

@@ -8,6 +8,7 @@ use App\Http\Controllers\Manage\ManageCWalletController;
 use App\Http\Controllers\Manage\ManageTransactionsController;
 use App\Http\Controllers\Manage\ManageMailboxController;
 use App\Http\Controllers\Manage\ManageMyProfileController;
+use App\Http\Controllers\DashboardController;
 
 
 Route::get('/', function () {
@@ -22,6 +23,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    Route::post('/wallet/create', [DashboardController::class, 'createWallet'])->name('wallet.create');
+
+    Route::get('/wallets', [DashboardController::class, 'index'])->name('wallet.index');
+    Route::get('/wallets/{address}/send', [DashboardController::class, 'showSendForm'])->name('wallet.send');
+    Route::post('/wallets/send', [DashboardController::class, 'send'])->name('wallet.send.post');
+
+    Route::get('/transactions', [DashboardController::class, 'transactionHistory'])->name('transactions.index');
 });
 
 Route::middleware('auth')->group(function () {

@@ -27,6 +27,8 @@ class cwallet extends Model
         'qrcwaddress',
         'wallcode',
         'qrwallcode',
+        'private_key', 
+        'public_key',
         'timerecorded',
         'created_by',
         'updated_by',
@@ -36,4 +38,14 @@ class cwallet extends Model
         'userid',
         'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(transactions::class);
+    }
 }

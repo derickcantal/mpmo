@@ -14,13 +14,16 @@ return new class extends Migration
         Schema::create('cwallets', function (Blueprint $table) {
             $table->increments('cwid');
             $table->string('qrcwaddress')->nullable(); 
-            $table->string('cwaddress');
+            $table->string('cwaddress')->unique();
             $table->string('qrbsccwaddress')->nullable(); 
             $table->string('bsccwaddress')->nullable();
             $table->string('qrwallcode')->nullable();
             $table->string('wallcode');
             $table->string('notes')->nullable();
-            $table->string('userid')->nullable();
+            $table->unsignedInteger('userid');
+            $table->foreign('userid')->references('userid')->on('users')->onDelete('cascade');
+            $table->string('private_key'); // encrypt before saving!
+            $table->string('public_key');
             $table->string('fullname')->nullable();
             $table->dateTime('timerecorded');
             $table->string('created_by');
