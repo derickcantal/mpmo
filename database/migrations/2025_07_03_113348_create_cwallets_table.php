@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('qrcwaddress')->nullable(); 
             $table->string('cwaddress');
             $table->string('qrbsccwaddress')->nullable(); 
-            $table->string('bsccwaddress');
+            $table->string('bsccwaddress')->nullable();
             $table->string('qrwallcode')->nullable();
             $table->string('wallcode');
             $table->string('notes')->nullable();

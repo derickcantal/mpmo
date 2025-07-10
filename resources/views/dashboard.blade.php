@@ -24,6 +24,20 @@
                     <!-- Card 1 -->
                     <div class="bg-white rounded-lg shadow p-5">
                         <header class="text-center mb-10">
+                            <h5 class="text-2xl font-bold text-orange-600">Account Information</h5>
+                        </header>
+                        @php
+                            $qrdep = auth()->user()->qrcwaddress;
+                        @endphp
+                        <div class="flex flex-col items-center justify-center">
+                            <img class="mx-auto w-32 h-32 mb-4" src="{{ asset("/storage/$qrdep") }}" alt="QR" />
+                            <dd class="text-gray-500 dark:text-gray-400">Deposit Address:</dd>
+                            <dt class="mb-2 text-1xl font-extrabold">{{ auth()->user()->cwaddress }}</dt>
+                        </div>
+                    </div>
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-lg shadow p-5">
+                        <header class="text-center mb-10">
                             <img src="{{ asset("storage/img/logo.png") }}" alt="MPMO Logo" class="mx-auto w-32 h-32 mb-4">
                             <h1 class="text-4xl font-bold text-orange-600">MPMO</h1>
                         </header>
