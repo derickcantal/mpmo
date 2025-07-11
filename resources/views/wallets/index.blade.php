@@ -10,9 +10,9 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             @foreach($wallets as $wallet)
             <div class="p-4 bg-white rounded-lg shadow">
-                <h3 class="font-semibold mb-2">{{ $wallet->address }}</h3>
+                <h3 class="font-semibold mb-2">{{ $wallet->cwaddress }}</h3>
                 <p>Balance: {{ $wallet->balance }} TRX</p>
-                <a href="{{ route('wallet.send', $wallet->address) }}" class="text-blue-600 hover:underline mt-2 inline-block">Send TRX</a>
+                <a href="{{ route('wallet.send', $wallet->cwaddress) }}" class="text-blue-600 hover:underline mt-2 inline-block">Send TRX</a>
             </div>
             @endforeach
         </div>

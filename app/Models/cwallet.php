@@ -41,7 +41,7 @@ class cwallet extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'cwid', 'cwid');
+        return $this->belongsTo(User::class, 'userid', 'userid');
     }
 
     public function transactions()

@@ -35,7 +35,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $wallets = Auth::user()->wallets();
+        $wallets = Auth::user()->wallets()->get();
         foreach ($wallets as $wallet) {
             $wallet->balance = $this->tron->getBalance($wallet->cwaddress);
         }

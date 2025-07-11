@@ -9,6 +9,7 @@ use App\Http\Controllers\Manage\ManageTransactionsController;
 use App\Http\Controllers\Manage\ManageMailboxController;
 use App\Http\Controllers\Manage\ManageMyProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\QrController;
 
 
 Route::get('/', function () {
@@ -32,6 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/wallets/send', [DashboardController::class, 'send'])->name('wallet.send.post');
 
     Route::get('/transactions', [DashboardController::class, 'transactionHistory'])->name('transactions.index');
+
+    Route::get('/scan', [QrController::class, 'scan'])->name('qr.scan');
+    Route::post('/submit-scan', [QrController::class, 'submit'])->name('qr.submit');
 });
 
 Route::middleware('auth')->group(function () {

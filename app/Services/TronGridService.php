@@ -187,10 +187,16 @@ class TronGridService
      */
     protected function publicKeyFromPrivateKey(string $privateKeyHex): string
     {
-        $privateKey = $this->generator->getPrivateKey(gmp_init($privateKeyHex, 16));
-        $publicKey = $privateKey->getPublicKey();
+        $generator = EccFactory::getSecgCurves()->generator256k1();
+        $adapter = EccFactory::getAdapter();
+        $secretGmp = gmp_init($privateKeyHex, 16);
 
-        return $this->encodePublicKey($publicKey);
+        $privateKey = $generator->getPrivateKeyFrom($secretGmp);
+        $publicKeyPoint = $privateKey->getPublicKey()->getPoint();
+        // $privateKey = $this->generator->getPrivateKey(gmp_init($privateKeyHex, 16));
+
+        return '04' . str_pad(gmp_strval($publicKeyPoint->getX(), 16), 64, '0', STR_PAD_LEFT)
+               . str_pad(gmp_strval($publicKeyPoint->getY(), 16), 64, '0', STR_PAD_LEFT);
     }
 
     /**
