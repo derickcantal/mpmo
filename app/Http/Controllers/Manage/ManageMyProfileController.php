@@ -11,8 +11,15 @@ use Illuminate\Http\RedirectResponse;
 use \Carbon\Carbon; 
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
-use Imagick;
 use Illuminate\Support\Facades\Storage;
+
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\WebPWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\QrCodeInterface;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\Label\Label;
 
 class ManageMyProfileController extends Controller
 {
@@ -62,9 +69,8 @@ class ManageMyProfileController extends Controller
     {
         $validated = $request->validate([
             'owneraddress'=>'required|string|starts_with:T',
-            'qrowneraddress'=>'required|image|file',
+           // 'qrowneraddress'=>'required|image|file',
         ]);
-        // dd($request,$userid);
 
         $ipath = 'userqr/';
 
@@ -72,18 +78,36 @@ class ManageMyProfileController extends Controller
             Storage::disk('public')->makeDirectory($ipath);
             // dd('path created');
         }
+
+        $data = $request->owneraddress;
+
+        $qrCode = new QrCode(
+            data: $data,
+            encoding: new Encoding('UTF-8'),
+            size: 400,
+            margin: 10
+        );
+
+        $writer = new WebPWriter();
+        $result = $writer->write($qrCode);
+        $webpData = $result->getString();
+
         $manager = ImageManager::imagick();
-        $name_gen = hexdec(uniqid()).'.'.$request->file('qrowneraddress')->getClientOriginalExtension();
-        
-        $image = $manager->read($request->file('qrowneraddress'));
-       
-        $encoded = $image->toWebp()->save(storage_path('app/public/userqr/with_'.$name_gen.'.webp'));
-        $path = 'userqr/with_'.$name_gen.'.webp';
 
-        // $path = Storage::disk('public')->put('avatars',$request->file('avatar'));
+        $qrImage = $manager->read($webpData);
 
-        // $path = $request->file('avatar')->store('avatars','public');
-        
+        $logoImage = $manager->read(public_path('storage/img/logo.png'));
+
+        $logoSize = intval($qrImage->width() * 0.25);
+        $logoImage = $logoImage->scale(width: $logoSize);
+
+        $qrImage = $qrImage->place($logoImage, 'center');
+
+        $finalWebp = (string) $qrImage->toWebp(80);
+
+        $path = 'userqr/with_' . hexdec(uniqid()) . '.webp';
+        Storage::disk('public')->put($path, $finalWebp);
+
         if($oldavatar = $request->user()->ownerqrcwaddress){
             Storage::disk('public')->delete($oldavatar);
         }

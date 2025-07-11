@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Auth;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\WebPWriter;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
-use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\QrCodeInterface;
 use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\Label\Label;
+
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -48,19 +49,29 @@ class DashboardController extends Controller
         $qrCode = new QrCode(
             data: $data,
             encoding: new Encoding('UTF-8'),
-            size: 300,
+            size: 400,
             margin: 10
         );
-        
 
         $writer = new WebPWriter();
         $result = $writer->write($qrCode);
         $webpData = $result->getString();
 
-        $filename = 'qrcodes/cwa_' . hexdec(uniqid()) . '.webp';
-        
+        $manager = ImageManager::imagick();
 
-        Storage::disk('public')->put($filename, $webpData);
+        $qrImage = $manager->read($webpData);
+
+        $logoImage = $manager->read(public_path('storage/img/logo.png'));
+
+        $logoSize = intval($qrImage->width() * 0.25);
+        $logoImage = $logoImage->scale(width: $logoSize);
+
+        $qrImage = $qrImage->place($logoImage, 'center');
+
+        $finalWebp = (string) $qrImage->toWebp(80);
+
+        $filename = 'qrcodes/' . hexdec(uniqid()) . '.webp';
+        Storage::disk('public')->put($filename, $finalWebp);
 
         dd($filename);
 

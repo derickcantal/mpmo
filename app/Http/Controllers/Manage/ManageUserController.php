@@ -11,8 +11,105 @@ use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\WebPWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\QrCodeInterface;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\Label\Label;
+
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
+use App\Services\TronGridService;
+use App\Models\cwallet;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
 class ManageUserController extends Controller
 {
+    protected $tron;
+
+    public function __construct(TronGridService $tron)
+    {
+        $this->tron = $tron;
+    }
+
+    public function createwallet($user,$timenow,$fullname)
+    {
+        //dd('for wallet creation');
+        $walletData = $this->tron->createWallet();
+
+        if(empty($user->cwaddress))
+        {
+            // dd('No Wallet Assigned');
+
+            $data = $walletData['address'];
+
+            $qrCode = new QrCode(
+                data: $data,
+                encoding: new Encoding('UTF-8'),
+                size: 400,
+                margin: 10
+            );
+
+            $writer = new WebPWriter();
+            $result = $writer->write($qrCode);
+            $webpData = $result->getString();
+
+            $manager = ImageManager::imagick();
+
+            $qrImage = $manager->read($webpData);
+
+            $logoImage = $manager->read(public_path('storage/img/logo.png'));
+
+            $logoSize = intval($qrImage->width() * 0.25);
+            $logoImage = $logoImage->scale(width: $logoSize);
+
+            $qrImage = $qrImage->place($logoImage, 'center');
+
+            $finalWebp = (string) $qrImage->toWebp(80);
+
+            $filename = 'userqr/dep_' . hexdec(uniqid()) . '.webp';
+            Storage::disk('public')->put($filename, $finalWebp);
+
+             $wallet = cwallet::create([
+                'userid' => $user->userid,
+                'cwaddress' => $walletData['address'],
+                'private_key' => encrypt($walletData['privateKey']),
+                'public_key' => $walletData['publicKey'],
+                'qrcwaddress'=> $filename,
+                'timerecorded'=> $timenow,
+                'created_by'=> auth()->user()->userid,
+                'mod'=> 0,
+                'copied'=> 'N',
+                'walletstatus'=> 'Inactive',
+                'status'=> 'Inactive',
+            ]);
+
+            if($wallet)
+            {
+                $wdata = cwallet::where('userid',$user->userid)->first();
+                $user =User::where('userid',$user->userid)->update([
+                    'cwid' => $wdata->cwid,
+                    'cwaddress' => $walletData['address'],
+                    'qrcwaddress'=> $filename,
+                    'updated_by' => auth()->user()->email,
+                    'walletstatus' => 'Active',
+                ]);
+                if($user){
+                
+                    return redirect()->route('manageuser.index')
+                                ->with('success','Wallet Generated successfully');
+                }else{
+
+                    return redirect()->route('manageuser.index')
+                                ->with('failed','Wallet Generation failed');
+                }
+            }
+        }
+    }
+
     public function generateUniqueCode()
     {
 
@@ -253,18 +350,16 @@ class ManageUserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($userid)
+    public function statuschange($user,$timenow,$fullname)
     {
-        $user = User::where('userid', $userid)->first();
-        $fullname = $user->lastname . ', ' . $user->firstname . ' ' . $user->middlename;
-        // dd($userid,$fullname,$user);
+
         if($user->userid == auth()->user()->userid){
             $notes = 'Users. Activation. Self Account. ' . $fullname;
 
-                return redirect()->route('manageuser.index')
-                        ->with('failed','User Update on own account not allowed.');
+            return redirect()->route('manageuser.index')
+                    ->with('failed','User Update on own account not allowed.');
         }
-        $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
+
         if(auth()->user()->accesstype == 'Supervisor')
         {
             if($user->accesstype == 'Administrator')
@@ -304,5 +399,24 @@ class ManageUserController extends Controller
         return redirect()->route('manageuser.index')
             ->with('success','User Activated successfully');
         }
+    }
+
+    public function destroy(Request $request,$userid)
+    {
+        $user = User::where('userid', $userid)->first();
+        $fullname = $user->lastname . ', ' . $user->firstname . ' ' . $user->middlename;
+        // dd($userid,$fullname,$user);
+
+        $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
+
+
+        $action = $request->input('action');
+
+        if ($action === 'save') {
+            return $this->createwallet($user,$timenow,$fullname);
+        } elseif ($action === 'delete') {
+            return $this->statuschange($user,$timenow,$fullname);
+        }
+        
     }
 }

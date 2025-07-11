@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/manage/user', [ManageUserController::class, 'index'])->name('manageuser.index');
     Route::post('/manage/user', [ManageUserController::class, 'store'])->name('manageuser.store');
+    Route::post('/manage/user/{userid}/generate', [ManageUserController::class, 'createwallet'])->name('manageuser.createwallet');
     Route::get('/manage/user/create', [ManageUserController::class, 'create'])->name('manageuser.create');
     Route::get('/manage/user/search', [ManageUserController::class, 'search'])->name('manageuser.search');
     Route::get('/manage/user/{user}', [ManageUserController::class, 'show'])->name('manageuser.show');

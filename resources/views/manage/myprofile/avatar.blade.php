@@ -69,10 +69,10 @@
                     <!-- Modal content -->
                     <div class="relative bg-white rounded-lg dark:bg-gray-800 p-4">
                         <!-- Modal body -->
-                        @php
-                            $myavatar = $user->avatar;
-                        @endphp
-                        <img width="100" height="100" class="rounded-full mt-4" src="{{ asset("/storage/$myavatar") }}" alt="user avatar" />
+                      
+                        @if(!empty($user->avatar))
+                            <img width="100" height="100" class="rounded-full mt-4" src="{{ asset("/storage/$user->avatar") }}" alt="user avatar" />
+                        @endif
                         <div class="grid gap-4 mb-4 grid-cols-2">
                             <!-- Middle Name -->
                             <div class="col-span-2 sm:col-span-1">

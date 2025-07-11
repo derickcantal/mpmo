@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('notes')->nullable();
             $table->unsignedInteger('userid');
             $table->foreign('userid')->references('userid')->on('users')->onDelete('cascade');
-            $table->string('private_key'); // encrypt before saving!
+            $table->text('private_key'); // encrypt before saving!
             $table->string('public_key');
             $table->string('fullname')->nullable();
             $table->dateTime('timerecorded');
