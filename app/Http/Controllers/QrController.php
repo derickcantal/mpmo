@@ -15,8 +15,12 @@ class QrController extends Controller
     {
         $scannedText = $request->input('scanned_text');
 
-        // Handle the scanned text, e.g., search in DB, log, etc.
-        // Example: return as a response
-        return back()->with('success', 'Scanned QR Text: ' . $scannedText);
+        // Example action: log or store the scanned text
+        \Log::info('Scanned QR Text:', ['text' => $scannedText]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Received: ' . $scannedText,
+        ]);
     }
 }

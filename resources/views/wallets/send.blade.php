@@ -23,7 +23,7 @@
 
         <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
             <div class="relative mb-4">
-                <input type="text" id="scanned-text" readonly
+                <input type="text" id="scanned-text"
                     class="block w-full pr-10 p-2.5 border rounded-lg"
                     placeholder="Scan QR code here">
                 <button type="button" onclick="openScanner()" class="absolute inset-y-0 right-0 pr-3 text-gray-500 hover:text-blue-600">

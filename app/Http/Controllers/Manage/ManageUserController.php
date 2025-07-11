@@ -38,11 +38,16 @@ class ManageUserController extends Controller
     public function createwallet($user,$timenow,$fullname)
     {
         //dd('for wallet creation');
-        $walletData = $this->tron->createWallet();
-
+        if((!empty($user->cwaddress)))
+        {
+            return redirect()->route('manageuser.index')
+                                ->with('failed','User has wallet');
+        }
+        
         if(empty($user->cwaddress))
         {
             // dd('No Wallet Assigned');
+            $walletData = $this->tron->createWallet();
 
             $data = $walletData['address'];
 
@@ -108,6 +113,7 @@ class ManageUserController extends Controller
                 }
             }
         }
+       
     }
 
     public function generateUniqueCode()
