@@ -92,7 +92,7 @@ class User extends Authenticatable
 
     public function wallets()
     {
-        return $this->hasMany(cwallet::class);
+        return $this->hasMany(cwallet::class, 'cwid', 'cwid');
     }
 
     public function isAdmin()

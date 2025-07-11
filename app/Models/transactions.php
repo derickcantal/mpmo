@@ -34,6 +34,7 @@ class transactions extends Model
         'amountvalue',
         'amountfee',
         'fullname',
+        'userid',
         'timerecorded',
         'created_by',
         'updated_by',
@@ -44,6 +45,6 @@ class transactions extends Model
 
     public function wallet()
     {
-        return $this->belongsTo(cwallet::class);
+        return $this->belongsTo(cwallet::class, 'cwid', 'cwid');
     }
 }

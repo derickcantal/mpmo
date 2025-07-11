@@ -25,6 +25,8 @@ return new class extends Migration
             $table->decimal('amountfee', 20, 6);
             $table->unsignedInteger('cwid');
             $table->foreign('cwid')->references('cwid')->on('cwallets')->onDelete('cascade');
+            $table->unsignedInteger('userid');
+            $table->foreign('userid')->references('userid')->on('users')->onDelete('cascade');
             $table->string('fullname')->nullable();
             $table->dateTime('timerecorded');
             $table->string('created_by');

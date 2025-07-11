@@ -142,6 +142,9 @@ class ManageCWalletController extends Controller
      */
     public function store(Request $request)
     {
+         return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+
         if(auth()->user()->email != 'admin@mypocketmonster.net'){
             return redirect()->route('dashboard')
                         ->with('failed','Not Allowed.');
@@ -227,7 +230,10 @@ class ManageCWalletController extends Controller
 
         $wallet = cwallet::where('cwid',$cwid)->first();
 
+        $privatekey = decrypt($wallet->private_key);
+
         return view('manage.wallets.show')
+                    ->with(['privatekey' => $privatekey])
                     ->with(['wallet' => $wallet]);
 
     }
@@ -253,6 +259,9 @@ class ManageCWalletController extends Controller
      */
     public function update(Request $request, $cwid)
     {
+         return redirect()->route('dashboard')
+                        ->with('failed','Not Allowed.');
+
         if(auth()->user()->email != 'admin@mypocketmonster.net'){
             return redirect()->route('dashboard')
                         ->with('failed','Not Allowed.');

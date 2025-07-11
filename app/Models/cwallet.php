@@ -41,11 +41,11 @@ class cwallet extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'cwid', 'cwid');
     }
 
     public function transactions()
     {
-        return $this->hasMany(transactions::class);
+        return $this->hasMany(transactions::class, 'cwid', 'cwid');
     }
 }

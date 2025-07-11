@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <x-input-label for="email" :value="__('Code')" />
                                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $wallet->wallcode }}
+                                        {{ $privatekey }}
                                     </h5>
                                 </div>
                             </div>
