@@ -21,95 +21,100 @@
             <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Send TRX</button>
         </form>
 
-        <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold mb-4 text-center">Scan QR Code</h2>
+        <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+            <div class="relative mb-4">
+                <input type="text" id="scanned-text" readonly
+                    class="block w-full pr-10 p-2.5 border rounded-lg"
+                    placeholder="Scan QR code here">
+                <button type="button" onclick="openScanner()" class="absolute inset-y-0 right-0 pr-3 text-gray-500 hover:text-blue-600">
+                    <!-- QR icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h4v4H4V4zm0 12h4v4H4v-4zm12-12h4v4h-4V4zm0 12h4v4h-4v-4zM9 4h6v1H9V4zm0 5h1v6H9V9zm5 0h1v6h-1V9zm-5 6h6v1H9v-1z"/>
+                    </svg>
+                </button>
+            </div>
 
-        <!-- Textbox with icon -->
-        <div class="relative mb-4">
-            <input type="text" id="scanned-text" name="scanned_text" readonly placeholder="Scan a QR Code"
-                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10">
-            <button type="button" onclick="toggleScanner()" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-blue-600">
-                <!-- QR code icon from Heroicons -->
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h4v4H4V4zm0 12h4v4H4v-4zm12-12h4v4h-4V4zm0 12h4v4h-4v-4zM9 4h6v1H9V4zm0 5h1v6H9V9zm5 0h1v6h-1V9zm-5 6h6v1H9v-1z"/>
-                </svg>
-            </button>
+            <!-- QR Scanner hidden by default -->
+            <div id="qr-reader-container" class="hidden mb-4">
+                <div id="qr-reader" style="width: 100%; height: 300px;"></div>
+                <button type="button" onclick="closeScanner()" class="mt-2 bg-red-500 text-white px-4 py-2 rounded">Close Scanner</button>
+            </div>
+
+            <div id="message" class="text-green-600 text-sm"></div>
         </div>
-
-        <!-- Scanner area, hidden by default -->
-        <div id="qr-reader-container" class="hidden mb-4 rounded-md border">
-            <div id="qr-reader"></div>
-            <button type="button" onclick="stopScanner()" class="mt-2 text-white bg-red-500 hover:bg-red-600 font-medium rounded-lg text-sm px-4 py-2">Close Scanner</button>
-        </div>
-
-        <!-- Success message -->
-        <div id="message" class="text-sm text-green-600 font-medium text-center"></div>
     </div>
+    @push('scripts')
+        <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+        <script>
+            let html5Qrcode;
+            const qrRegionId = "qr-reader";
 
-     <script>
-        let html5QrcodeScanner;
-
-        function toggleScanner() {
-            const container = document.getElementById('qr-reader-container');
-
-            if (container.classList.contains('hidden')) {
+            async function openScanner() {
+                const container = document.getElementById('qr-reader-container');
                 container.classList.remove('hidden');
-                startScanner();
-            } else {
-                stopScanner();
+
+                if (!html5Qrcode) {
+                    html5Qrcode = new Html5Qrcode(qrRegionId);
+                }
+
+                try {
+                    await html5Qrcode.start(
+                        { facingMode: "environment" }, // Use back camera on phones
+                        {
+                            fps: 10,
+                            qrbox: { width: 250, height: 250 }
+                        },
+                        qrCodeSuccessCallback,
+                        qrCodeErrorCallback
+                    );
+                } catch (err) {
+                    console.error("Camera start failed:", err);
+                    document.getElementById('message').textContent = 'Failed to start camera: ' + err;
+                }
             }
-        }
 
-        function startScanner() {
-            html5QrcodeScanner = new Html5Qrcode("qr-reader");
-
-            html5QrcodeScanner.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 250 },
-                onScanSuccess,
-                onScanError
-            ).catch(err => console.error(err));
-        }
-
-        function stopScanner() {
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.stop().then(() => {
-                    html5QrcodeScanner.clear();
-                }).catch(err => console.error(err));
+            async function closeScanner() {
+                if (html5Qrcode) {
+                    try {
+                        await html5Qrcode.stop();
+                        await html5Qrcode.clear();
+                    } catch (err) {
+                        console.error("Error stopping scanner:", err);
+                    }
+                }
+                document.getElementById('qr-reader-container').classList.add('hidden');
             }
-            document.getElementById('qr-reader-container').classList.add('hidden');
-        }
 
-        function onScanSuccess(decodedText) {
-            document.getElementById('scanned-text').value = decodedText;
-            sendToServer(decodedText);
-            stopScanner();  // Stop after successful scan
-        }
+            function qrCodeSuccessCallback(decodedText) {
+                document.getElementById('scanned-text').value = decodedText;
+                sendToServer(decodedText);
+                closeScanner();
+            }
 
-        function onScanError(error) {
-            console.warn(`Scan error: ${error}`);
-        }
+            function qrCodeErrorCallback(errorMessage) {
+                // Comment this out for less console noise
+                console.warn(errorMessage);
+            }
 
-        function sendToServer(scannedText) {
-            fetch('{{ route('qr.submit') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ scanned_text: scannedText })
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('message').textContent = data.message || 'Scanned data submitted successfully!';
-            })
-            .catch(error => {
-                console.error(error);
-                document.getElementById('message').textContent = 'Error submitting scan';
-            });
-        }
-    </script>
-      
-    </div>
+            function sendToServer(scannedText) {
+                fetch('{{ route('qr.submit') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ scanned_text: scannedText })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('message').textContent = data.message || 'Scan submitted successfully.';
+                })
+                .catch(error => {
+                    console.error(error);
+                    document.getElementById('message').textContent = 'Error submitting scan.';
+                });
+            }
+        </script>
+    @endpush
 </x-app-layout>
     
