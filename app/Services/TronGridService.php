@@ -3,219 +3,180 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use kornrunner\Keccak;
 
 class TronGridService
 {
-    protected $baseUrl = 'https://api.trongrid.io/';
-    protected $http;
-    protected $generator;
+    protected string $nodeUrl;
 
     public function __construct()
     {
-        $this->http = Http::baseUrl($this->baseUrl);
-        $adapter = EccFactory::getAdapter();
-        $this->generator = EccFactory::getSecgCurves($adapter)->generator256k1();
+        $this->nodeUrl = config('services.tron.node_url', env('TRON_NODE_URL'));
     }
 
-    /**
-     * Create new wallet (private key, public key, address)
-     * @return array
-     */
-    public function createWallet()
+    // 1. Generate new wallet (private/public/address)
+    public function generateWallet(): array
     {
-        /** @var PrivateKeyInterface $privateKey */
-        $privateKey = $this->generator->createPrivateKey();
+        $generator = EccFactory::getSecgCurves()->generator256k1();
+        $privateKey = $generator->createPrivateKey();
         $publicKey = $privateKey->getPublicKey();
+        $publicKeyHex = '04' .
+            str_pad(gmp_strval($publicKey->getPoint()->getX(), 16), 64, '0', STR_PAD_LEFT) .
+            str_pad(gmp_strval($publicKey->getPoint()->getY(), 16), 64, '0', STR_PAD_LEFT);
 
-        $privateKeyHex = str_pad(gmp_strval($privateKey->getSecret(), 16), 64, '0', STR_PAD_LEFT);
-        $publicKeyHex = $this->encodePublicKey($publicKey);
-
-        $address = $this->publicKeyToAddress($publicKeyHex);
+        $keccak = Keccak::hash(hex2bin(substr($publicKeyHex, 2)), 256);
+        $addressHex = '41' . substr($keccak, -40);
+        $addressBase58 = $this->base58CheckEncode($addressHex);
 
         return [
-            'privateKey' => $privateKeyHex,
-            'publicKey' => $publicKeyHex,
-            'address' => $address,
+            'private_key' => $privateKey->getSecret(), // GMP
+            'private_key_hex' => str_pad(gmp_strval($privateKey->getSecret(), 16), 64, '0', STR_PAD_LEFT),
+            'public_key' => $publicKeyHex,
+            'address' => $addressBase58,
+            'address_hex' => $addressHex
         ];
     }
 
-    /**
-     * Encode public key (uncompressed) as hex string 04 + X + Y
-     */
-    protected function encodePublicKey($publicKey)
+    // 2. Send TRX
+    public function sendTrx(string $fromAddress, string $toAddress, float $amountTrx, string $privateKeyHex)
     {
-        $x = str_pad(gmp_strval($publicKey->getPoint()->getX(), 16), 64, '0', STR_PAD_LEFT);
-        $y = str_pad(gmp_strval($publicKey->getPoint()->getY(), 16), 64, '0', STR_PAD_LEFT);
-        return '04' . $x . $y;
-    }
+        try {
+            $amountSun = intval($amountTrx * 1_000_000);
+            $response = Http::post("{$this->nodeUrl}/wallet/createtransaction", [
+                'owner_address' => $this->base58ToHex($fromAddress),
+                'to_address' => $this->base58ToHex($toAddress),
+                'amount' => $amountSun,
+            ]);
 
-    /**
-     * Convert public key hex to Tron base58 address
-     */
-    protected function publicKeyToAddress($publicKeyHex)
-    {
-        $publicKeyBin = hex2bin($publicKeyHex);
-        $hash = Keccak::hash(substr($publicKeyBin, 1), 256);
-        $addressHex = '41' . substr($hash, 24);
-        return $this->base58CheckEncode($addressHex);
-    }
+            $transaction = $response->json();
 
-    /**
-     * Base58Check encode with checksum
-     */
-    protected function base58CheckEncode($hex)
-    {
-        $alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-        $base = strlen($alphabet);
-
-        $hexBytes = hex2bin($hex);
-        $checksum = substr(hash('sha256', hash('sha256', $hexBytes, true), true), 0, 4);
-        $hexWithChecksum = $hexBytes . $checksum;
-        $num = gmp_init(bin2hex($hexWithChecksum), 16);
-
-        $encoded = '';
-        while (gmp_cmp($num, 0) > 0) {
-            list($num, $rem) = gmp_div_qr($num, $base);
-            $encoded = $alphabet[gmp_intval($rem)] . $encoded;
-        }
-
-        // Leading zeros handled as '1's
-        foreach (str_split($hexWithChecksum) as $byte) {
-            if ($byte === "\x00") {
-                $encoded = '1' . $encoded;
-            } else {
-                break;
+            if (isset($transaction['Error'])) {
+                throw new \Exception("Creation error: {$transaction['Error']}");
             }
-        }
 
-        return $encoded;
+            $signed = $this->signTransaction($transaction, $privateKeyHex);
+
+            $broadcast = Http::post("{$this->nodeUrl}/wallet/broadcasttransaction", $signed);
+            $result = $broadcast->json();
+
+            if (!($result['result'] ?? false)) {
+                throw new \Exception("Broadcast failed: " . json_encode($result));
+            }
+
+            return $result;
+        } catch (\Throwable $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
-    /**
-     * Get balance of an address in TRX
-     */
-    public function getBalance($address)
+    // 3. Freeze TRX for BANDWIDTH or ENERGY
+    public function freezeBalance(string $ownerAddress, int $amountSun, int $duration = 3, string $resource = 'BANDWIDTH', string $privateKeyHex)
     {
-        $response = $this->http->get("v1/accounts/{$address}");
-        $data = $response->json();
+        $tx = Http::post("{$this->nodeUrl}/wallet/freezebalance", [
+            'owner_address' => $this->base58ToHex($ownerAddress),
+            'frozen_balance' => $amountSun,
+            'frozen_duration' => $duration,
+            'resource' => strtoupper($resource),
+        ])->json();
 
-        if (!empty($data['data'][0]['balance'])) {
-            return $data['data'][0]['balance'] / 1_000_000;
-        }
-        return 0;
+        $signed = $this->signTransaction($tx, $privateKeyHex);
+
+        return Http::post("{$this->nodeUrl}/wallet/broadcasttransaction", $signed)->json();
     }
 
-    /**
-     * Send TRX from private key wallet to recipient
-     */
-    public function sendTrx(string $privateKeyHex, string $toAddressBase58, float $amountTrx)
+    // 4. Unfreeze
+    public function unfreezeBalance(string $ownerAddress, string $resource = 'BANDWIDTH', string $privateKeyHex)
     {
-        $amountSun = (int)round($amountTrx * 1_000_000);
+        $tx = Http::post("{$this->nodeUrl}/wallet/unfreezebalance", [
+            'owner_address' => $this->base58ToHex($ownerAddress),
+            'resource' => strtoupper($resource),
+        ])->json();
 
-        // Derive owner address hex from private key
-        $publicKeyHex = $this->publicKeyFromPrivateKey($privateKeyHex);
-        $ownerAddressHex = $this->base58ToHex($this->publicKeyToAddress($publicKeyHex));
-        $toAddressHex = $this->base58ToHex($toAddressBase58);
+        $signed = $this->signTransaction($tx, $privateKeyHex);
 
-        // Step 1: Create transaction
-        $createTxResp = $this->http->post('wallet/createtransaction', [
-            'to_address' => $toAddressHex,
-            'owner_address' => $ownerAddressHex,
-            'amount' => $amountSun,
-        ]);
-
-        $tx = $createTxResp->json();
-
-        if (!isset($tx['txID'])) {
-            return ['success' => false, 'message' => 'Failed to create transaction'];
-        }
-
-        // Step 2: Sign transaction
-        $signedTx = $this->signTransaction($tx, $privateKeyHex);
-
-        // Step 3: Broadcast transaction
-        $broadcastResp = $this->http->post('wallet/broadcasttransaction', $signedTx);
-        $broadcast = $broadcastResp->json();
-
-        if (!empty($broadcast['result']) && $broadcast['result'] === true) {
-            return ['success' => true, 'tx_hash' => $tx['txID']];
-        }
-
-        return ['success' => false, 'message' => 'Broadcast failed', 'details' => $broadcast];
+        return Http::post("{$this->nodeUrl}/wallet/broadcasttransaction", $signed)->json();
     }
 
-    /**
-     * Sign the transaction raw_data_hex with private key
-     */
-    protected function signTransaction(array $transaction, string $privateKeyHex)
+    // 5. Get balance
+    public function getBalance(string $address)
     {
-        $rawDataHex = $transaction['raw_data_hex'] ?? null;
-        if (!$rawDataHex) {
-            throw new \Exception('Transaction raw_data_hex missing');
-        }
+        $res = Http::post("{$this->nodeUrl}/wallet/getaccount", [
+            'address' => $this->base58ToHex($address),
+        ])->json();
 
-        $rawDataBin = hex2bin($rawDataHex);
-        $hash = hash('sha256', $rawDataBin, true);
+        return [
+            'balance_trx' => isset($res['balance']) ? $res['balance'] / 1_000_000 : 0,
+            'bandwidth' => $res['free_net_limit'] ?? 0,
+        ];
+    }
 
-        $signature = $this->signHash($hash, $privateKeyHex);
+    // 6. Get transaction status
+    public function getTransactionStatus(string $txid)
+    {
+        return Http::post("{$this->nodeUrl}/wallet/gettransactionbyid", ['value' => $txid])->json();
+    }
 
+    // Helper: sign transaction
+    public function signTransaction(array $transaction, string $privateKeyHex)
+    {
+        $rawData = $transaction['raw_data_hex'];
+        $hash = Keccak::hash(hex2bin($rawData), 256);
+        $signature = $this->signHex($hash, $privateKeyHex);
         $transaction['signature'] = [$signature];
-
         return $transaction;
     }
 
-    /**
-     * Sign a 32-byte hash using secp256k1 private key
-     */
-    protected function signHash(string $hash, string $privateKeyHex)
+    protected function signHex(string $hashHex, string $privateKeyHex): string
     {
+        $secp = EccFactory::getSecgCurves()->generator256k1();
         $adapter = EccFactory::getAdapter();
-        $privateKey = $this->generator->getPrivateKey(gmp_init($privateKeyHex, 16));
+        $privateKey = $secp->getPrivateKeyFrom(gmp_init($privateKeyHex, 16));
         $signer = EccFactory::getSigner();
-
-        $signature = $signer->sign($privateKey, $hash);
-
-        // DER encode the signature
-        return bin2hex($signature->toDer());
+        $signature = $signer->sign($privateKey, gmp_init($hashHex, 16));
+        return implode('', [
+            str_pad(gmp_strval($signature->getR(), 16), 64, '0', STR_PAD_LEFT),
+            str_pad(gmp_strval($signature->getS(), 16), 64, '0', STR_PAD_LEFT)
+        ]);
     }
 
-    /**
-     * Derive public key hex from private key hex
-     */
-    protected function publicKeyFromPrivateKey(string $privateKeyHex): string
-    {
-        $generator = EccFactory::getSecgCurves()->generator256k1();
-        $adapter = EccFactory::getAdapter();
-        $secretGmp = gmp_init($privateKeyHex, 16);
-
-        $privateKey = $generator->getPrivateKeyFrom($secretGmp);
-        $publicKeyPoint = $privateKey->getPublicKey()->getPoint();
-        // $privateKey = $this->generator->getPrivateKey(gmp_init($privateKeyHex, 16));
-
-        return '04' . str_pad(gmp_strval($publicKeyPoint->getX(), 16), 64, '0', STR_PAD_LEFT)
-               . str_pad(gmp_strval($publicKeyPoint->getY(), 16), 64, '0', STR_PAD_LEFT);
-    }
-
-    /**
-     * Convert base58 address to hex (needed for tron API)
-     */
-    protected function base58ToHex(string $base58): string
+    // Address helpers
+    public function base58ToHex(string $address): string
     {
         $alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-        $base = strlen($alphabet);
-        $num = gmp_init(0);
-
-        $length = strlen($base58);
-        for ($i = 0; $i < $length; $i++) {
-            $pos = strpos($alphabet, $base58[$i]);
-            $num = gmp_add(gmp_mul($num, $base), $pos);
+        $decoded = 0;
+        for ($i = 0; $i < strlen($address); $i++) {
+            $decoded = bcmul($decoded, '58');
+            $decoded = bcadd($decoded, (string) strpos($alphabet, $address[$i]));
         }
+        return strtoupper(substr(str_pad(gmp_strval($decoded, 16), 50, '0', STR_PAD_LEFT), 0, 42));
+    }
 
-        $hex = gmp_strval($num, 16);
+    public function base58CheckEncode(string $hex): string
+    {
+        $data = hex2bin($hex);
+        $hash0 = hash('sha256', $data, true);
+        $hash1 = hash('sha256', $hash0, true);
+        $checksum = substr($hash1, 0, 4);
+        return $this->base58Encode($data . $checksum);
+    }
 
-        return str_pad($hex, 42, '0', STR_PAD_LEFT);
+    public function base58Encode(string $input): string
+    {
+        $alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+        $intVal = gmp_init(bin2hex($input), 16);
+        $output = '';
+        while (gmp_cmp($intVal, 0) > 0) {
+            list($intVal, $rem) = gmp_div_qr($intVal, 58);
+            $output = $alphabet[gmp_intval($rem)] . $output;
+        }
+        foreach (str_split($input) as $char) {
+            if ($char === "\x00") $output = $alphabet[0] . $output;
+            else break;
+        }
+        return $output;
     }
 }

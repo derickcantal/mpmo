@@ -35,6 +35,10 @@ class DashboardController extends Controller
 
     public function index()
     {
+        if(auth()->user()->email != 'admin@mypocketmonster.net')
+        {
+            return redirect()->back()->with('failed', 'Access not Allowed!');
+        }
         $wallets = Auth::user()->wallets()->get();
         foreach ($wallets as $wallet) {
             $wallet->balance = $this->tron->getBalance($wallet->cwaddress);
@@ -44,6 +48,8 @@ class DashboardController extends Controller
 
     public function createWallet()
     {
+        return redirect()->back()->with('failed', 'Wallet Create Disabled!');
+
         $data = 'TTMXREjCY9MJmy1YzNnwSZhk9tCSV2X9Pp';
 
         $qrCode = new QrCode(
@@ -73,7 +79,6 @@ class DashboardController extends Controller
         $filename = 'qrcodes/' . hexdec(uniqid()) . '.webp';
         Storage::disk('public')->put($filename, $finalWebp);
 
-        dd($filename);
 
         $walletData = $this->tron->createWallet();
         cwallet::create([
@@ -88,33 +93,55 @@ class DashboardController extends Controller
 
     public function showSendForm($address)
     {
+        // dd($address);
         return view('wallets.send', compact('address'));
     }
 
-    public function send(Request $request)
+  public function send(Request $request)
     {
-        $request->validate([
-            'address' => 'required',
-            'to_address' => 'required',
-            'amount' => 'required|numeric|min:0.000001',
+        // 1) Validate input
+        $data = $request->validate([
+            'address'    => 'required|string',           // your wallet address field
+            'to_address' => 'required|string',
+            'amount'     => 'required|numeric|min:0.000001',
         ]);
 
-        $wallet = Auth::user()->wallets()->where('cwaddress', $request->address)->firstOrFail();
-        $privateKey = decrypt($wallet->private_key);
+        // 2) Lookup the wallet for the logged-in user
+        $wallet = Auth::user()
+            ->wallets()
+            ->where('cwaddress', $data['address'])
+            ->firstOrFail();
 
-        $result = $this->tron->sendTrx($privateKey, $request->to_address, $request->amount);
+        // 3) Call sendTrx: pass (from, to, amount, encrypted private key)
+        $result = $this->tron->sendTrx(
+            $wallet->cwaddress,
+            $data['to_address'],
+            (float) $data['amount'],
+            $wallet->private_key  // encrypted decimal secret from DB
+        );
 
-        if ($result['success'] ?? false) {
+        // 4) Handle response
+        if (! empty($result['success']) && $result['success'] === true) {
+            // Persist transaction record
             Transaction::create([
-                'cwid' => $wallet->cwid,
-                'to_address' => $request->to_address,
-                'amount' => $request->amount,
-                'tx_hash' => $result['tx_hash'] ?? null,
+                'cwid'      => $wallet->cwid,
+                'to_address'=> $data['to_address'],
+                'amount'    => $data['amount'],
+                'tx_hash'   => $result['txid'] ?? null,
             ]);
-            return redirect()->route('dashboard')->with('success', 'TRX sent!');
-        } else {
-            return back()->withErrors(['send_error' => $result['message'] ?? 'Error sending TRX']);
+
+            return redirect()
+                ->route('dashboard')
+                ->with('success', 'TRX sent! TXID: ' . ($result['txid'] ?? '—'));
         }
+
+        // 5) On error, show detailed message
+        $error = $result['error'] 
+            ?? ($result['detail']['message'] ?? 'Unknown error');
+
+        return back()
+            ->withInput()
+            ->withErrors(['send_error' => $error]);
     }
 
     public function transactionHistory()
