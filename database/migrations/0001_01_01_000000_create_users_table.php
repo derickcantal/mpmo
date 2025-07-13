@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('refid')->nullable();
             $table->string('fullname');
             $table->integer('cwid')->nullable();
+            $table->unsignedBigInteger('trx_balance')->default(0);
+            $table->unsignedBigInteger('mpmo_balance')->default(0);
             $table->date('birthdate')->nullable();
             $table->string('email')->unique();
             $table->string('mobile_primary')->nullable();
@@ -33,7 +35,7 @@ return new class extends Migration
             $table->dateTime('timerecorded');
             $table->string('created_by');
             $table->string('updated_by')->nullable();
-            $table->integer('mod');
+            $table->integer('mod')->default(0);
             $table->string('copied')->nullable();
             $table->string('rfidby')->nullable();
             $table->string('status');

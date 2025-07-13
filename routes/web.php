@@ -10,6 +10,8 @@ use App\Http\Controllers\Manage\ManageMailboxController;
 use App\Http\Controllers\Manage\ManageMyProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\QrController;
+use App\Http\Controllers\TokenController;
+use App\Http\Controllers\TransactionController;
 
 
 Route::get('/', function () {
@@ -36,6 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/wallets/send', [DashboardController::class, 'send'])->name('wallet.send.post');
 
     Route::get('/transactions', [DashboardController::class, 'transactionHistory'])->name('transactions.index');
+    Route::get('/convert', [ConvertController::class,'show'])->name('convert');
+    Route::post('/convert', [ConvertController::class,'execute'])->name('convert.execute');
+
+    Route::get('/token-info', [TokenController::class,'showTokenInfo'])->name('token.info');
+    Route::get('/transaction',[TransactionController::class,'index'])->name('transactions.index');
 
     Route::get('/scan', [QrController::class, 'scan'])->name('qr.scan');
     Route::post('/submit-scan', [QrController::class, 'submit'])->name('qr.submit');

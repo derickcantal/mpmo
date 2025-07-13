@@ -30,40 +30,29 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'rfid',
-        'avatar',
         'username',
-        'password',
-        'firstname',
-        'middlename',
-        'lastname',
+        'avatar',
+        'refid',
+        'fullname',
         'cwid',
-        'cwaddress',
-        'qrcwaddress',
-        'ownercwaddress',
-        'ownerqrcwaddress',
-        'mpmobal',
-        'trxbal', 
-        'usdtbal',
-        'totalbal',
-        'dailyin',
-        'availbal',
-        'pets',
+        'trx_balance',
+        'mpmo_balance',
         'birthdate',
         'email',
         'mobile_primary',
         'mobile_secondary',
         'homeno',
-        'rnotes',
+        'notes',
         'email_verified_at',
+        'password',
         'accesstype',
+        'role',
         'timerecorded',
         'created_by',
         'updated_by',
         'mod',
         'copied',
         'rfidby',
-        'walletstatus',
         'status',
     ];
 
@@ -90,6 +79,10 @@ class User extends Authenticatable
         ];
     }
 
+    public function transactions() 
+    { 
+        return $this->hasMany(transactions::class, 'userid', 'userid'); 
+    }
     public function wallets()
     {
         return $this->hasMany(cwallet::class, 'userid', 'userid');

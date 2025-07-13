@@ -30,11 +30,15 @@ class transactions extends Model
         'txntype',
         'addresssend',
         'addressreceive',
-        'amount',
-        'amountvalue',
-        'amountfee',
-        'userid',
+        'user_id',
+        'trx_amount',
+        'mpmo_gross',
+        'mpmo_fee',
+        'mpmo_net',
+        'type',
+        'meta',
         'cwid',
+        'userid',
         'timerecorded',
         'created_by',
         'updated_by',
@@ -42,6 +46,16 @@ class transactions extends Model
         'copied',
         'status',
     ];
+
+    protected $casts = [
+        'meta'=>'array'
+    ];
+    
+    public function user() 
+    { 
+        return $this->belongsTo(User::class); 
+    }
+
 
     public function wallet()
     {
