@@ -21,12 +21,12 @@ return new class extends Migration
             $table->string('wallcode')->nullable();
             $table->string('ownercwaddress')->nullable();
             $table->string('ownerqrcwaddress')->nullable();
-            $table->decimal('mpmobal', 20, 6);
-            $table->decimal('trxbal', 20, 6);
-            $table->decimal('usdtbal', 20, 6);
-            $table->decimal('totalbal', 20, 6);
-            $table->decimal('dailyin', 20, 6);
-            $table->decimal('availbal', 20, 6);
+            $table->decimal('mpmobal', 20, 6)->default(0);
+            $table->decimal('trxbal', 20, 6)->default(0);
+            $table->decimal('usdtbal', 20, 6)->default(0);
+            $table->decimal('totalbal', 20, 6)->default(0);
+            $table->decimal('dailyin', 20, 6)->default(0);
+            $table->decimal('availbal', 20, 6)->default(0);
             $table->integer('pets')->nullable();
             $table->string('notes')->nullable();
             $table->unsignedInteger('userid');

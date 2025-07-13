@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('userid');
             $table->string('avatar');
-            $table->string('rfid');
+            $table->string('refid');
             $table->string('fullname');
             $table->integer('cwid')->nullable();
             $table->date('birthdate')->nullable();
