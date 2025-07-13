@@ -6,7 +6,7 @@
             @include('layouts.notifications') 
             {{-- Content --}}
 
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-8 px-4">Welcome, {{ Auth::user()->firstname }}!</h1>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-8 px-4">Welcome, {{ Auth::user()->fullname }}!</h1>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
                 <!-- Card 1 -->
@@ -15,12 +15,12 @@
                         <h5 class="text-2xl font-bold text-orange-600">Account Information</h5>
                     </header>
                     @php
-                        $qrdep = auth()->user()->qrcwaddress;
+                        $qrdep = $wallets[0]->qrcwaddress;
                     @endphp
                     <div class="flex flex-col items-center justify-center">
                         <img class="mx-auto w-32 h-32 mb-4" src="{{ asset("/storage/$qrdep") }}" alt="QR" />
                         <dd class="text-gray-500 dark:text-gray-400">Deposit Address:</dd>
-                        <dt class="mb-2 text-1xl font-extrabold">{{ auth()->user()->cwaddress }}</dt>
+                        <dt class="mb-2 text-1xl font-extrabold">{{ $wallets[0]->cwaddress }}</dt>
                     </div>
                 </div>
                 <!-- Card 1 -->
@@ -30,7 +30,7 @@
                         <h1 class="text-4xl font-bold text-orange-600">MPMO</h1>
                     </header>
                     <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl text-yellow-500 font-extrabold">{{ number_format(auth()->user()->mpmobal, 2) }}</dt>
+                        <dt class="mb-2 text-3xl text-yellow-500 font-extrabold">{{ number_format($wallets[0]->mpmobal, 2) }}</dt>
                         <dd class="text-gray-500 dark:text-gray-400">$MPMO Balance</dd>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                         <h1 class="text-4xl font-bold text-orange-600">TRX</h1>
                     </header>
                     <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl text-pink-500 font-extrabold">{{ number_format(auth()->user()->trxbal, 2) }}</dt>
+                        <dt class="mb-2 text-3xl text-pink-500 font-extrabold">{{ number_format($wallets[0]->trxbal, 2) }}</dt>
                         <dd class="text-gray-500 dark:text-gray-400">$TRX Balance</dd>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                         <h1 class="text-4xl font-bold text-orange-600">USDT</h1>
                     </header>
                     <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl font-extrabold">{{ number_format(auth()->user()->usdtsbal, 2) }}</dt>
+                        <dt class="mb-2 text-3xl font-extrabold">{{ number_format($wallets[0]->usdtsbal, 2) }}</dt>
                         <dd class="text-gray-500 dark:text-gray-400">$USDT Balance</dd>
                     </div>
                 </div>

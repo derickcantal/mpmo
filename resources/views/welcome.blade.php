@@ -44,7 +44,7 @@
         <section class="flex-grow flex flex-col justify-center items-center text-center p-4">
             <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 animate-bounce">Hatch Your Adventure!</h1>
             <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl">
-                Join the <span class="font-semibold">MPMO Token Presale</span> and collect adorable monster eggs on Tron—1 TRX = 3 MPMO.
+                Join the <span class="font-semibold">MPMO Token Presale</span> and collect adorable monster eggs on Tron— <br>1 TRX = 3 MPMO.
             </p>
             @guest
                 <a href="{{ route('register') }}" class="px-8 py-4 bg-white text-pink-500 font-bold rounded-full shadow-lg hover:bg-pink-100 transition">
@@ -63,32 +63,33 @@
                 <!-- Common Egg -->
                 <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:scale-105 transition">
                     <h3 class="text-2xl font-bold text-pink-500 mb-2">Common Egg</h3>
-                    <p class="text-gray-600 mb-4">100 MPMO (33.3 TRX)</p>
+                    <p class="text-gray-600 mb-4">300 MPMO (100 TRX)</p>
                     <ul class="text-left text-gray-700 mb-6 space-y-1">
                         <li>✅ 70% Common</li>
                         <li>✨ 25% Rare</li>
-                        <li>🌟 5% Epic</li>
+                        <li>🌟 5% Elite</li>
                     </ul>
                     <a href="{{ route('register') }}" class="px-4 py-2 bg-pink-500 text-white rounded-full">Buy Now</a>
                 </div>
                 <!-- Rare Egg -->
                 <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:scale-105 transition">
                     <h3 class="text-2xl font-bold text-yellow-500 mb-2">Rare Egg</h3>
-                    <p class="text-gray-600 mb-4">300 MPMO (100 TRX)</p>
+                    <p class="text-gray-600 mb-4">800 MPMO (266.7 TRX)</p>
                     <ul class="text-left text-gray-700 mb-6 space-y-1">
                         <li>✨ 50% Rare</li>
-                        <li>🌟 40% Epic</li>
-                        <li>💎 10% Legendary</li>
+                        <li>🌟 40% Common</li>
+                        <li>💎 10% Elite</li>
                     </ul>
                     <a href="{{ route('register') }}" class="px-4 py-2 bg-yellow-500 text-white rounded-full">Buy Now</a>
                 </div>
-                <!-- Legendary Egg -->
+                <!-- Elite Egg -->
                 <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:scale-105 transition">
-                    <h3 class="text-2xl font-bold text-purple-500 mb-2">Legendary Egg</h3>
-                    <p class="text-gray-600 mb-4">800 MPMO (266.7 TRX)</p>
+                    <h3 class="text-2xl font-bold text-purple-500 mb-2">Elite Egg</h3>
+                    <p class="text-gray-600 mb-4">1600 MPMO (533.4 TRX)</p>
                     <ul class="text-left text-gray-700 mb-6 space-y-1">
-                        <li>🌟 Guaranteed Epic</li>
-                        <li>💎 Legendary Odds</li>
+                        <li>✨ 50% Elite</li>
+                        <li>🌟 40% Rare</li>
+                        <li>💎 10% Epic</li>
                     </ul>
                     <a href="{{ route('register') }}" class="px-4 py-2 bg-purple-500 text-white rounded-full">Buy Now</a>
                 </div>

@@ -16,6 +16,30 @@ use Intervention\Image\Drivers\Imagick\Driver;
 
 class ManageTransactionsController extends Controller
 {
+
+    public function generateUniqueCode()
+    {
+
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $charactersNumber = strlen($characters);
+        $codeLength = 64;
+
+        $code = '';
+
+        while (strlen($code) < $codeLength) {
+            $position = rand(0, $charactersNumber - 1);
+            $character = $characters[$position];
+            $code = $code.$character;
+        }
+
+        if (transactions::where('txnhash', $code)->exists()) {
+            $this->generateUniqueCode();
+        }
+
+        return $code;
+
+    }
+
     public function storewithdraw(Request $request)
     {
         return redirect()->route('managetxn.index')
@@ -79,7 +103,8 @@ class ManageTransactionsController extends Controller
             'amount' => $request->amount,
             'amountvalue' => 0,
             'amountfee' => 0,
-            'fullname' => auth()->user()->lastname.', '.auth()->user()->firstname,
+            'userid' => auth()->user()->userid,
+            'cwid' => auth()->user()->cwid,
             'created_by' => auth()->user()->email,
             'updated_by' => 'Null',
             'timerecorded' => $timenow,
@@ -115,20 +140,85 @@ class ManageTransactionsController extends Controller
 
     public function storeconvert(Request $request)
     {
+        $wallets = auth()->user()->wallets()->get();
+        // dd($this->generateUniqueCode());
+        $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
+
+        $trxAmount = $request->input('trxAmount');
+
+        $data = $request->validate([
+            'trxAmount' => 'required|numeric|min:0.01|max:'.$wallets[0]->trxbal,
+        ]);
+        $trxAmount = $data['trxAmount'];
+
+        $feeRate = 0.02;
+        $conversionRate = 3;
+        $grossMpmo = $trxAmount * $conversionRate;
+        $fee     = $grossMpmo * $feeRate;
+        $netMpmo = $grossMpmo - $fee;
+
+        $user = $wallets[0];
+        $user->trxbal  -= $trxAmount;
+        $user->mpmobal += $netMpmo;
+        $user->save();
+
+        $txnhash = $this->generateUniqueCode();
+
+        // dd($request);
+        $transaction = transactions::create([
+            'cwid' => auth()->user()->cwid,
+            'tokenid' => 0,
+            'tokenname' => 'TRX',
+            'txnimg' => 'NULL',
+            'txnhash' => $txnhash,
+            'txntype' => 'CONVERT',
+            'addresssend' => $wallets[0]->cwaddress,
+            'addressreceive' => $wallets[0]->cwaddress,
+            'amount' => $trxAmount,
+            'amountvalue' => $netMpmo,
+            'amountfee' => $fee,
+            'userid' => $wallets[0]->userid,
+            'timerecorded' => $timenow,
+            'created_by' => auth()->user()->email,
+            'mod' => 0,
+            'status' => 'Success',
+        ]);
+
+        $transaction1 = transactions::create([
+            'cwid' => auth()->user()->cwid,
+            'tokenid' => 0,
+            'tokenname' => 'MPMO',
+            'txnimg' => 'NULL',
+            'txnhash' => $txnhash,
+            'txntype' => 'RECEIVE',
+            'addresssend' => $wallets[0]->cwaddress,
+            'addressreceive' => $wallets[0]->cwaddress,
+            'amount' => $netMpmo,
+            'amountvalue' => $trxAmount,
+            'amountfee' => 0,
+            'userid' => $wallets[0]->userid,
+            'timerecorded' => $timenow,
+            'created_by' => auth()->user()->email,
+            'mod' => 0,
+            'status' => 'Success',
+        ]);
+
+
         return redirect()->route('managetxn.index')
-                        ->with('failed','Feature still on progress.');
+                        ->with('success','Conversion Success.');
     }
 
     public function convert(Request $request)
     {
-        if(empty(auth()->user()->cwaddress))
+        $wallets = auth()->user()->wallets()->get();
+        if(empty($wallets[0]->cwaddress))
         {
             return redirect()->route('managetxn.index')
                         ->with('failed','Unique Wallet Not Assigned');
         }
         else
         {
-            return view('manage.transactions.convert');
+            return view('manage.transactions.convert',compact('wallets'));
         }
     }
     /**
@@ -138,7 +228,8 @@ class ManageTransactionsController extends Controller
     {
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
         
-        $transaction = transactions::orderBy('status','asc')
+        $transaction = transactions::query()
+                    ->latest()
                     ->paginate(5);
 
         return view('manage.transactions.index',compact('transaction'))

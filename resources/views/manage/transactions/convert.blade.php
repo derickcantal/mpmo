@@ -1,12 +1,11 @@
 <x-app-layout>
     @include('layouts.home.navigation')
-    <div class="py-8 mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="gradient-bg min-h-screen dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="py-8 mx-auto sm:px-6 lg:px-8">
                 <form action="{{ route('managetxn.storeconvert') }}" method="POST">
                     @csrf   
                     <!-- Breadcrumb -->
-                    <nav class="flex px-5 py-3 text-gray-700 bg-white dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
+                    <nav class="flex px-5 py-3 text-gray-700 bg-transparent dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
                         <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                             <li class="inline-flex items-center">
                             <a href="{{ route('managetxn.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
@@ -30,64 +29,113 @@
                     </nav>
                     <!-- Error & Success Notification -->
                     @include('layouts.notifications') 
-                    <!-- Modal content -->
-                    <div class="relative bg-white rounded-lg dark:bg-gray-800">
-                        <!-- Modal header -->
-                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                Convert Information
-                            </h3>
-                        </div>
-                        <!-- Modal body -->
-                        <div class="grid mb-4 grid-cols-2">
-                            <!-- Amount -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="amount" :value="__('Amount')" />
-                                    <x-text-input id="amount" class="block mt-1 w-full" type="number" name="amount" :value="old('amount')" required />
-                                    <x-input-error :messages="$errors->get('amount')" class="mt-2" />
+                    <div class="bg-transparent min-h-screen py-10">
+                        <div class="max-w-md mx-auto bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-8">
+                            <h1 class="text-3xl font-bold text-gray-800 mb-4">Convert TRX to MPMO</h1>
+                            <p class="text-gray-600 mb-6">Rate: <span class="font-semibold text-pink-500">1 TRX = 3 MPMO</span></p>
+
+                            <!-- Balance Display from Database -->
+                            <div class="grid grid-cols-2 gap-4 text-center mb-6">
+                                <div>
+                                    <p class="text-gray-600">TRX Balance</p>
+                                    <p id="trxBalance" class="text-xl font-bold text-purple-500">{{ number_format($wallets[0]->trxbal, 2) }} TRX</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600">Estimated MPMO</p>
+                                    <p id="mpmoEstimate" class="text-xl font-bold text-yellow-500">0 MPMO</p>
                                 </div>
                             </div>
-                            <!-- Convert FROM -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="tokenname" :value="__('Convert')" />
-                                    <select id="convert" name="convert" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('convert')">
-                                        <option value ="MPMOTRX">MPMO - TRX</option>
-                                        <option value ="TRXMPMO">TRX - MPMO</option>
-                                    </select>
-                                    <x-input-error :messages="$errors->get('convert')" class="mt-2" />
+
+                            <!-- Fee & Net Display -->
+                            <div class="mb-6 space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Conversion Fee (<span id="feeRateLabel">2%</span>)</span>
+                                    <span name= "feeEstimate" id="feeEstimate" class="font-semibold text-red-500">0 MPMO</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Net MPMO</span>
+                                    <span name="netEstimate" id="netEstimate" class="font-semibold text-green-600">0 MPMO</span>
                                 </div>
                             </div>
-                            <!-- Receive -->
-                            <div class="col-span-2 sm:col-span-1 p-4">
-                                <div class="form-group">
-                                    <x-input-label for="receive" :value="__('Receive')" />
-                                    <x-text-input id="receive" class="block mt-1 w-full" type="number" name="receive" :value="old('receive')" required readonly/>
-                                    <x-input-error :messages="$errors->get('receive')" class="mt-2" />
+
+                            <!-- Conversion Form -->
+                            <form id="convertForm">
+                                <div class="mb-2">
+                                    <label for="trxAmount" class="block text-gray-700 font-semibold mb-2">TRX Amount</label>
+                                    <input type="number" step="0.01" name="trxAmount" id="trxAmount" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="0.00" required />
+                                    <p id="inputError" class="text-red-500 text-sm mt-2 hidden">Insufficient TRX balance.</p>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- Button -->
-                        <div class="flex items-center justify-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <button type="submit" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                <svg class="w-4 h-4 mr-2 -ml-0.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h11.586a1 1 0 0 1 .707.293l2.414 2.414a1 1 0 0 1 .293.707V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5Z"/>
-                                    <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M8 4h8v4H8V4Zm7 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                                </svg>
-                                Convert
-                            </button>
-                            <a href="{{ route('managetxn.index') }}" class="py-2 px-3 ms-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                <svg class="w-4 h-4 mr-2 -ml-0.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
-                                </svg>
-                                Cancel
-                            </a>
+                                <button id="convertBtn" type="submit" disabled class="w-full px-6 py-3 bg-purple-300 text-white font-semibold rounded-full shadow cursor-not-allowed transition">
+                                    Convert
+                                </button>
+                            </form>
                         </div>
                     </div>
+
+                    @push('scripts')
+                        <script>
+                            const conversionRate = 3;
+                            const feeRate = 0.02; // 2% fee
+                            const accountBalance = {{ $wallets[0]->trxbal ?? 0 }};
+
+                            document.addEventListener('DOMContentLoaded', () => {
+                                const amountInput = document.getElementById('trxAmount');
+                                const estimateDisplay = document.getElementById('mpmoEstimate');
+                                const feeEstimate = document.getElementById('feeEstimate');
+                                const netEstimate = document.getElementById('netEstimate');
+                                document.getElementById('feeRateLabel').innerText = (feeRate * 100) + '%';
+
+                                const inputError = document.getElementById('inputError');
+                                const convertBtn = document.getElementById('convertBtn');
+
+                                estimateDisplay.innerText = '0 MPMO';
+                                feeEstimate.innerText = '0 MPMO';
+                                netEstimate.innerText = '0 MPMO';
+
+                                amountInput.addEventListener('input', e => {
+                                    const val = parseFloat(e.target.value) || 0;
+                                    const gross = val * conversionRate;
+                                    const fee = gross * feeRate;
+                                    const net = gross - fee;
+
+                                    estimateDisplay.innerText = gross.toFixed(2) + ' MPMO';
+                                    feeEstimate.innerText = fee.toFixed(2) + ' MPMO';
+                                    netEstimate.innerText = net.toFixed(2) + ' MPMO';
+
+                                    if (val > accountBalance) {
+                                        inputError.classList.remove('hidden');
+                                        convertBtn.disabled = true;
+                                        convertBtn.classList.add('cursor-not-allowed', 'bg-purple-300');
+                                    } else {
+                                        inputError.classList.add('hidden');
+                                        convertBtn.disabled = false;
+                                        convertBtn.classList.remove('cursor-not-allowed', 'bg-purple-300');
+                                        convertBtn.classList.add('bg-purple-500', 'hover:bg-purple-600');
+                                    }
+                                });
+
+                                document.getElementById('convertForm').addEventListener('submit', e => {
+                                    e.preventDefault();
+                                    const amount = parseFloat(amountInput.value);
+                                    if (amount > accountBalance) return;
+                                    fetch("{{ route('managetxn.storeconvert') }}", {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                        },
+                                        body: JSON.stringify({ trx_amount: amount })
+                                    })
+                                    .then(res => res.json())
+                                    .then(data => alert(data.message))
+                                    .catch(err => console.error(err));
+                                });
+                            });
+                        </script>
+                    @endpush
+                    
                     
                 </form>
             </div>
         </div>
-    </div>
 </x-app-layout>

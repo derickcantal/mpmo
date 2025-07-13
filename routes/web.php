@@ -17,7 +17,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $wallets = Auth::user()->wallets()->get();
+
+    // dd($wallets);
+    return view('dashboard',compact('wallets'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -97,7 +100,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/manage/transactions/{txnid}', [ManageTransactionsController::class, 'show'])->name('managetxn.show');
     Route::patch('/manage/transactions/{txnid}', [ManageTransactionsController::class, 'update'])->name('managetxn.update');
     Route::delete('/manage/transactions/{txnid}', [ManageTransactionsController::class, 'destroy'])->name('managetxn.destroy');
-    Route::get('/manage/usetransactionsrs/{txnid}/edit', [ManageTransactionsController::class, 'edit'])->name('managetxn.edit');
+    Route::get('/manage/transactions/{txnid}/edit', [ManageTransactionsController::class, 'edit'])->name('managetxn.edit');
+    // Route::post('/manage/transactions/convert/execute', [ConvertController::class, 'execute'])->name('managetxn.convertexecute');
 
     Route::get('/manage/mailbox', [ManageMailboxController::class, 'index'])->name('managemailbox.index');
     Route::post('/manage/mailbox', [ManageMailboxController::class, 'store'])->name('managemailbox.store');

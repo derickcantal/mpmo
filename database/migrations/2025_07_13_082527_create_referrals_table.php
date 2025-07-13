@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('referrals', function (Blueprint $table) {
             $table->string('refid')->unique();
-            $table->string('userid');
+            $table->unsignedInteger('userid');
             $table->foreign('userid')->references('userid')->on('users')->onDelete('cascade');
             $table->string('referral_code')->unique();
             $table->unsignedInteger('limit')->default(0);

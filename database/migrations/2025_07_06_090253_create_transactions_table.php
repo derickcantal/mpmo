@@ -27,7 +27,6 @@ return new class extends Migration
             $table->foreign('cwid')->references('cwid')->on('cwallets')->onDelete('cascade');
             $table->unsignedInteger('userid');
             $table->foreign('userid')->references('userid')->on('users')->onDelete('cascade');
-            $table->string('fullname')->nullable();
             $table->dateTime('timerecorded');
             $table->string('created_by');
             $table->string('updated_by')->nullable();
