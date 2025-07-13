@@ -1,10 +1,10 @@
 <x-app-layout>
     @include('layouts.home.navigation')
 	<div class="py-8 mx-auto sm:px-6 lg:px-8">
-		<div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+		<div class="gradient-bg min-h-screen dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="py-8 mx-auto sm:px-6 lg:px-8">
                 <!-- Breadcrumb -->
-                <nav class="flex px-5 py-3 text-gray-700 bg-white dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
+                <nav class="flex px-5 py-3 text-gray-700 bg-transparent dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                         <li class="inline-flex items-center">
                         <a href="{{ route('managetempusers.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
