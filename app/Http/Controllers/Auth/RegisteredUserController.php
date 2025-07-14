@@ -11,8 +11,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use \Carbon\Carbon;
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
 
 class RegisteredUserController extends Controller
 {
@@ -62,14 +65,12 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class, 'unique:'.temp_users::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'username' => ['required', 'string', 'max:255', 'unique:'.User::class, 'unique:'.temp_users::class],
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
-            'birthdate' => ['required', 'string', 'max:255'],
-            'mobile' => ['required', 'string', 'max:255'],
+            'fullname' => ['required', 'string', 'max:255'],
+            'refcode' => ['required', 'string', 'max:255', Rule::exists('users', 'refid'),],
         ]);
 
         $temp_users = temp_users::create([
-            'rfid' => $this->generateUniqueCode(),
+            'refid' => $request->generateUniqueCode(),
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'avatar' => 'avatars/avatar-default.jpg',
@@ -81,12 +82,6 @@ class RegisteredUserController extends Controller
             'accesstype' => 'Temporary',
             'timerecorded' => $timenow,
             'created_by' => 'Self Registration',
-            'mpmobal' => 0,
-            'trxbal' => 0,
-            'usdtbal' => 0,
-            'availbal' => 0,
-            'dailyin' => 0,
-            'totalbal' => 0,
             'mod' => 0,
             'copied' => 'N',
             'walletstatus' => 'Inactive',
@@ -94,6 +89,17 @@ class RegisteredUserController extends Controller
         ]);
 
         if($temp_users){
+            // generate your verification URL however you like...
+            $verificationUrl = URL::temporarySignedRoute(
+                'verification.verify',
+                now()->addMinutes(60),
+                ['id' => $user->id]
+            );
+
+            // send the welcome email
+            Mail::to($user->email)
+                ->send(new WelcomeMail($user, $verificationUrl));
+
             return redirect()->route('register')
                         ->with('success','User creation success. Please wait for Admin Approval');
         }else{

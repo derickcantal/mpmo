@@ -1,6 +1,6 @@
 <x-app-layout>
     @include('layouts.home.navigation')
-    <div class="gradient-bg dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg py-6">
+    <div class="gradient-bg dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg py-2">
         <div class="mx-auto sm:px-6 lg:px-8">
             <!-- Error & Success Notification -->
             @include('layouts.notifications') 

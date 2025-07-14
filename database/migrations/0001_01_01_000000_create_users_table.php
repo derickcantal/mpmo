@@ -37,7 +37,7 @@ return new class extends Migration
             $table->string('updated_by')->nullable();
             $table->integer('mod')->default(0);
             $table->string('copied')->nullable();
-            $table->string('rfidby')->nullable();
+            $table->string('refidby')->nullable();
             $table->string('status');
         });
 

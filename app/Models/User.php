@@ -52,7 +52,7 @@ class User extends Authenticatable
         'updated_by',
         'mod',
         'copied',
-        'rfidby',
+        'refidby',
         'status',
     ];
 

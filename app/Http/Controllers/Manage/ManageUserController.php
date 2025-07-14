@@ -164,7 +164,8 @@ class ManageUserController extends Controller
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
          $user = User::orderBy('status','asc')
-                    ->paginate(5);
+                    ->with('wallets')
+                    ->paginate(10);
 
         return view('manage.users.index',compact('user'))
          ->with('i', (request()->input('page', 1) - 1) * 5);
@@ -263,16 +264,15 @@ class ManageUserController extends Controller
     {
         $user = User::where('userid', $userid)->first();
 
-        if(empty($user->rfid))
+        if(empty($user->refid))
         {
-            $rfid = $this->generateUniqueCode();
+            $refid = $this->generateUniqueCode();
         }
         else
         {
-            $rfid = $user->rfid;
+            $refid = $user->rfid;
         }
 
-        $fullname = $user->lastname . ', ' . $user->firstname . ' ' . $user->middlename;
 
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
@@ -300,11 +300,10 @@ class ManageUserController extends Controller
         }
         if(empty($request->password)){
             $user =User::where('userid',$user->userid)->update([
-                'rfid' => $rfid,
+                'refid' => $refid,
                 'username' => $request->email,
                 'email' => $request->email,
-                'firstname' => $request->firstname,
-                'lastname' => $request->lastname,
+                'fullname' => $request->fullname,
                 'birthdate' => $request->birthdate,
                 'mobile_primary' => $request->mobile,
                 'accesstype' => $request->accesstype,

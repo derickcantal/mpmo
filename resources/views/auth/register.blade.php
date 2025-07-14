@@ -10,13 +10,26 @@
             @include('layouts.notifications') 
             <form method="POST" action="{{ route('register') }}" class="space-y-4">
                 @csrf
-
                 <!-- Name -->
                 <div>
-                    <label for="name" class="block text-gray-700 font-semibold">Name</label>
-                    <input id="name" name="name" type="text" value="{{ old('name') }}" required autofocus
+                    <label for="refcode" class="block text-gray-700 font-semibold">Referral Code</label>
+                    <input id="refcode" name="refcode" type="text" value="{{ old('refcode') }}" required autofocus
                            class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
-                    @error('name')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                    @error('refcode')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+                <!-- Name -->
+                <div>
+                    <label for="username" class="block text-gray-700 font-semibold">Username</label>
+                    <input id="username" name="username" type="text" value="{{ old('username') }}" required autofocus
+                           class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
+                    @error('username')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+                <!-- Name -->
+                <div>
+                    <label for="fullname" class="block text-gray-700 font-semibold">Full Name</label>
+                    <input id="fullname" name="fullname" type="text" value="{{ old('fullname') }}" required autofocus
+                           class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
+                    @error('fullname')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 <!-- Email Address -->
