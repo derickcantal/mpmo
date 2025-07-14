@@ -1,8 +1,7 @@
 <x-app-layout>
     @include('layouts.home.navigation')
-    <div class="py-8 mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="py-8 mx-auto sm:px-6 lg:px-8">
+    <div class="gradient-bg min-h-screen dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg py-2 flex-1 pb-16 sm:pb-safe">
+        <div class="mx-auto sm:px-6 lg:px-8">
                 <form action="{{ route('managetxn.storedeposit') }}" enctype="multipart/form-data" method="POST">
                     @csrf   
                     <!-- Breadcrumb -->

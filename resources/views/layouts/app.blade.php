@@ -32,7 +32,7 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="flex-1 pb-16 sm:pb-safe">
                 {{ $slot }}
             </main>
         </div>

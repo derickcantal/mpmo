@@ -7,7 +7,8 @@ export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
+        './resources/**/*.blade.php',
+        './resources/**/*.js',
         "./src/**/*.{js,ts,jsx,tsx,mdx}",
         "./node_modules/flowbite/**/*.js"
     ],
@@ -53,11 +54,25 @@ export default {
                     'Noto Color Emoji'
                 ]
             },
+            spacing: {
+                // now you can do `pb-safe` → padding-bottom: env(safe-area-inset-bottom)
+                'safe': 'env(safe-area-inset-bottom)',
+            },
         },
     },
 
     plugins: [
         require('flowbite/plugin'),
-        forms
+        forms,
+        function ({ addUtilities }) {
+            addUtilities({
+                '.pb-safe': {
+                paddingBottom: 'env(safe-area-inset-bottom)',
+                },
+                '.pt-safe': {
+                paddingTop: 'env(safe-area-inset-top)',
+                }
+            })
+        }
     ],
 };

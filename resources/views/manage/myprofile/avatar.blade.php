@@ -1,7 +1,7 @@
 <x-app-layout>
     @include('layouts.home.navigation')
-    <div class="gradient-bg min-h-screen dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="py-8 max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
+    <div class="gradient-bg min-h-screen dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg py-2 flex-1 pb-16 sm:pb-safe">
+        <div class="mx-auto sm:px-6 lg:px-8 px-4">
             <!-- Breadcrumb -->
             <nav class="flex px-5 py-3 text-gray-700 bg-transparent dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -31,7 +31,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                         </svg>
                         <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                            {{ $user->lastname }}, {{ $user->firstname }} {{ $user->middlename }}
+                            {{ $user->fullname }}
                         </span>
                     </div>
                     </li>
@@ -60,13 +60,13 @@
                 </ul>
             </div>
 
-            <form action="{{ route('managemyprofile.savemyavatar',$user->userid) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('managemyprofile.savemyavatar',$user->userid) }}" method="POST" enctype="multipart/form-data" class="py-2">
                 @csrf
                 @method('PATCH')  
                 <!-- Error & Success Notification -->
                 @include('layouts.notifications') 
                 <!-- Modal content -->
-                <div class="relative bg-transparent rounded-lg dark:bg-gray-800 p-4">
+                <div class="relative bg-white rounded-lg dark:bg-gray-800 p-4">
                     <!-- Modal body -->
                     
                     @if(!empty($user->avatar))
@@ -84,7 +84,7 @@
                     </div>
                     
                     <div class="flex items-center justify-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button type="submit" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        <button type="submit" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">
                             <svg class="w-4 h-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h11.586a1 1 0 0 1 .707.293l2.414 2.414a1 1 0 0 1 .293.707V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5Z"/>
                                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M8 4h8v4H8V4Zm7 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>

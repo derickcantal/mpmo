@@ -1,7 +1,6 @@
 <x-app-layout>
     @include('layouts.home.navigation')
-
-    <div class="gradient-bg min-h-screen dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg py-8">
+    <div class="gradient-bg min-h-screen dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg py-2 flex-1 pb-16 sm:pb-safe">
         <div class="mx-auto sm:px-6 lg:px-8">
             <!-- Breadcrumb -->
             <nav class="flex px-5 py-3 text-gray-700 bg-transparent dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
@@ -87,8 +86,6 @@
                 </div>
             </div>
                 
-            
-
             @csrf
             <div class="overflow-x-auto shadow-md sm:rounded-lg mt-4" >
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

@@ -138,7 +138,9 @@ class ManageMyProfileController extends Controller
      */
     public function index()
     {
-        $user = User::where('userid',auth()->user()->userid)->first();
+        $user = User::where('userid',auth()->user()->userid)
+                        ->with('wallets')
+                        ->first();
         
         return view('manage.myprofile.index')
                 ->with(['user' => $user]);
