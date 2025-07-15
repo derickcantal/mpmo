@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\QrController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ConvertController;
 
 
 Route::get('/', function () {
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions', [DashboardController::class, 'transactionHistory'])->name('transactions.index');
     Route::get('/convert', [ConvertController::class,'show'])->name('convert');
     Route::post('/convert', [ConvertController::class,'execute'])->name('convert.execute');
+    Route::get('/token',     [TokenController::class, 'index'])->name('token.index');
+    Route::post('/token',    [TokenController::class, 'convert'])->name('token.convert');
+    Route::post('/token/redeem', [TokenController::class, 'redeem'])->name('token.redeem');
 
     Route::get('/token-info', [TokenController::class,'showTokenInfo'])->name('token.info');
     Route::get('/transaction',[TransactionController::class,'index'])->name('transactions.index');

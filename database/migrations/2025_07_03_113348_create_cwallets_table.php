@@ -21,12 +21,12 @@ return new class extends Migration
             $table->string('wallcode')->nullable();
             $table->string('ownercwaddress')->nullable();
             $table->string('ownerqrcwaddress')->nullable();
-            $table->unsignedBigInteger('trx_balance')->default(0);
-            $table->unsignedBigInteger('mpmo_balance')->default(0);
-            $table->unsignedBigInteger('usdt_balance')->default(0);
-            $table->unsignedBigInteger('total_balance')->default(0);
-            $table->unsignedBigInteger('dailyin')->default(0);
-            $table->unsignedBigInteger('avail_balance')->default(0);
+            $table->decimal('trx_balance',24, 8)->default(0);
+            $table->decimal('mpmo_balance',24, 8)->default(0);
+            $table->decimal('usdt_balance',24, 8)->default(0);
+            $table->decimal('total_balance',24, 8)->default(0);
+            $table->decimal('dailyin',24, 8)->default(0);
+            $table->decimal('avail_balance',24, 8)->default(0);
             $table->integer('pets')->nullable();
             $table->string('notes')->nullable();
             $table->unsignedInteger('userid');

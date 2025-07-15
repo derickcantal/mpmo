@@ -29,7 +29,7 @@
                         <h1 class="text-4xl font-bold text-orange-600">MPMO</h1>
                     </header>
                     <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl text-yellow-500 font-extrabold">{{ number_format($wallets[0]->mpmobal, 2) }}</dt>
+                        <dt class="mb-2 text-3xl text-yellow-500 font-extrabold">{{ number_format(Auth::user()->mpmo_balance, 2) }}</dt>
                         <dd class="text-gray-500 dark:text-gray-400">$MPMO Balance</dd>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                         <h1 class="text-4xl font-bold text-orange-600">TRX</h1>
                     </header>
                     <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl text-pink-500 font-extrabold">{{ number_format($wallets[0]->trxbal, 2) }}</dt>
+                        <dt class="mb-2 text-3xl text-pink-500 font-extrabold">{{ number_format(Auth::user()->trx_balance, 2) }}</dt>
                         <dd class="text-gray-500 dark:text-gray-400">$TRX Balance</dd>
                     </div>
                 </div>

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedInteger('userid');
             $table->foreign('userid')->references('userid')->on('users')->onDelete('cascade');
             $table->enum('type', ['mint','burn','conversion','purchase','referral_fee','buyback']);
-            $table->unsignedBigInteger('amount');
-            $table->unsignedBigInteger('fee')->nullable();
+            $table->decimal('amount',24, 8);
+            $table->decimal('fee',24, 8)->nullable();
             $table->json('meta')->nullable();
             $table->timestamps();
         });

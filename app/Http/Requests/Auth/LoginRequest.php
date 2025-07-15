@@ -61,8 +61,8 @@ class LoginRequest extends FormRequest
 
         $allowed = match ($role) {
             'super-admin'   => $this->allowSuperAdmin,
-            'administrator' => $this->allowAdministrator,
-            'member'        => $this->allowMember,
+            'Administrator' => $this->allowAdministrator,
+            'Member'        => $this->allowMember,
             default         => false,
         };
 

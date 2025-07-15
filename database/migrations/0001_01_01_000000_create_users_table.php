@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('refid')->nullable();
             $table->string('fullname');
             $table->integer('cwid')->nullable();
-            $table->unsignedBigInteger('trx_balance')->default(0);
-            $table->unsignedBigInteger('mpmo_balance')->default(0);
+            $table->decimal('trx_balance',24, 8)->default(0);
+            $table->decimal('mpmo_balance',24, 8)->default(0);
             $table->date('birthdate')->nullable();
             $table->string('email')->unique();
             $table->string('mobile_primary')->nullable();

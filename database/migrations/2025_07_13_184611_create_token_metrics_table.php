@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('token_metrics', function (Blueprint $table) {
             $table->id();
             $table->string('symbol')->unique();
-            $table->unsignedBigInteger('max_supply');
-            $table->unsignedBigInteger('total_supply');
-            $table->unsignedBigInteger('burned_supply')->default(0);
-            $table->unsignedBigInteger('locked_supply')->default(0);
-            $table->unsignedBigInteger('treasury_balance')->default(0);
+            $table->decimal('max_supply',24, 8);
+            $table->decimal('total_supply',24, 8);
+            $table->decimal('burned_supply',24, 8)->default(0);
+            $table->decimal('locked_supply',24, 8)->default(0);
+            $table->decimal('treasury_balance',24, 8)->default(0);
+            $table->decimal('price',24, 8)->default(0);
             $table->timestamps();
         });
     }

@@ -8,7 +8,7 @@ class TokenEvent extends Model
 {
     protected $fillable = [
         'token_metric_id',
-        'user_id',
+        'userid',
         'type',
         'amount',
         'fee',
