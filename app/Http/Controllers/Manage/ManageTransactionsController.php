@@ -14,6 +14,8 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
 
+use App\Http\Requests\TransactionSearchRequest;
+
 class ManageTransactionsController extends Controller
 {
 
@@ -220,6 +222,11 @@ class ManageTransactionsController extends Controller
         {
             return view('manage.transactions.convert',compact('wallets'));
         }
+    }
+
+    public function search(TransactionSearchRequest $request)
+    {
+        $search = $request->validated('search');
     }
     /**
      * Display a listing of the resource.

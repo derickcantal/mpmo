@@ -30,9 +30,11 @@ return new class extends Migration
             $table->integer('pets')->nullable();
             $table->string('notes')->nullable();
             $table->unsignedInteger('userid');
-            $table->foreign('userid')->references('userid')->on('users')->onDelete('cascade');
+            $table->foreign('userid')->references('userid')->on('users')->onDelete('cascade')->nullable();
+            $table->string('qrprivate_key')->nullable();
             $table->text('private_key'); // encrypt before saving!
             $table->string('public_key');
+            $table->string('qrpublic_key')->nullable();
             $table->dateTime('timerecorded');
             $table->string('created_by');
             $table->string('updated_by')->nullable();

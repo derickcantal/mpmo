@@ -26,6 +26,8 @@ use App\Models\cwallet;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
+use App\Http\Requests\UserSearchRequest;
+
 class ManageUserController extends Controller
 {
     protected $tron;
@@ -139,18 +141,17 @@ class ManageUserController extends Controller
 
     }
 
-    public function search(Request $request)
+    public function search(UserSearchRequest $request)
     {
-        $user = User::whereNot('accessname','Requester')
-                ->where(function(Builder $builder) use($request){
-                    $builder->where('username','like',"%{$request->search}%")
-                            ->orWhere('firstname','like',"%{$request->search}%")
-                            ->orWhere('lastname','like',"%{$request->search}%")
-                            ->orWhere('middlename','like',"%{$request->search}%")
-                            ->orWhere('email','like',"%{$request->search}%")
-                            ->orWhere('status','like',"%{$request->search}%"); 
+        $search = $request->validated('search');
+
+        $user = User::orderBy('fullname',$request->orderrow)
+                ->where(function(Builder $builder) use($search){
+                    $builder->where('username','like',"%{$search}%")
+                            ->orWhere('fullname','like',"%{$search}%")
+                            ->orWhere('email','like',"%{$search}%")
+                            ->orWhere('status','like',"%{$search}%"); 
                 })
-                ->orderBy('lastname',$request->orderrow)
                 ->paginate($request->pagerow);
     
         return view('manage.users.index',compact('user'))

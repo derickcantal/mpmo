@@ -55,12 +55,27 @@
                                 <x-input-error :messages="$errors->get('address')" class="mt-2" />
                             </div>
                         </div>
-                        <!-- avatar -->
+                        <!-- address -->
                         <div class="col-span-2 sm:col-span-1">
                             <div class="form-group mt-4">
-                                <x-input-label for="name" value="Upload & Replace Wallet QR" />
+                                <x-input-label for="name" value="Address QR" />
                                 <img width="100" height="100" class="rounded-lg mt-4 p-1" src="{{ asset("/storage/$wallet->qrcwaddress") }}" alt="Image" />
-                                <x-text-input id="walletqr" name="walletqr" type="file"  class="mt-1 block w-full mt-1" :value="old('walletqr')" autofocus autocomplete="off" />
+                                <x-input-error class="mt-2" :messages="$errors->get('walletqr')" />
+                            </div>
+                        </div>
+                        <!-- k -->
+                        <div class="col-span-2 sm:col-span-1 p-4">
+                            <div class="form-group">
+                                <x-input-label for="key" :value="__('Key')" />
+                                <x-text-input id="key" class="block mt-1 w-full" type="text" name="key" :value="old('key',$wallet->private_key)" required autofocus/>
+                                <x-input-error :messages="$errors->get('key')" class="mt-2" />
+                            </div>
+                        </div>
+                        <!-- k -->
+                        <div class="col-span-2 sm:col-span-1">
+                            <div class="form-group mt-4">
+                                <x-input-label for="name" value="Key QR" />
+                                <img width="100" height="100" class="rounded-lg mt-4 p-1" src="{{ asset("/storage/$wallet->qrcwaddress") }}" alt="Image" />
                                 <x-input-error class="mt-2" :messages="$errors->get('walletqr')" />
                             </div>
                         </div>
@@ -72,26 +87,25 @@
                                 <x-input-error :messages="$errors->get('cc')" class="mt-2" />
                             </div>
                         </div>
-                        <!-- avatar -->
+                        <!-- cc -->
                         <div class="col-span-2 sm:col-span-1">
                             <div class="form-group mt-4">
-                                <x-input-label for="name" value="Upload & Replace Code QR" />
+                                <x-input-label for="name" value="Code QR" />
                                 <img width="100" height="100" class="rounded-lg mt-4 p-1" src="{{ asset("/storage/$wallet->qrwallcode") }}" alt="Image" />
-                                <x-text-input id="codeqr" name="codeqr" type="file"  class="mt-1 block w-full mt-1" :value="old('codeqr')" autofocus autocomplete="off" />
                                 <x-input-error class="mt-2" :messages="$errors->get('codeqr')" />
                             </div>
                         </div>
                     </div>
                     <!-- Button -->
                     <div class="flex items-center justify-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button type="submit" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        <button type="submit" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">
                             <svg class="w-4 h-4 mr-2 -ml-0.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h11.586a1 1 0 0 1 .707.293l2.414 2.414a1 1 0 0 1 .293.707V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5Z"/>
                                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M8 4h8v4H8V4Zm7 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                             </svg>
                             Update
                         </button>
-                        <a href="{{ route('managewallet.index') }}" class="py-2 px-3 ms-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                        <a href="{{ route('managewallet.index') }}" class="py-2 px-3 ms-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 rounded-full text-sm px-5 py-2.5 text-center dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                             <svg class="w-4 h-4 mr-2 -ml-0.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
                             </svg>

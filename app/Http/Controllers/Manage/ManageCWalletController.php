@@ -11,9 +11,125 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
+use Illuminate\Support\Facades\Crypt;
+use App\Services\TronGridService;
+use Illuminate\Support\Str;
+
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\WebPWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\QrCodeInterface;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\Label\Label;
+
+use App\Http\Requests\CWalletSearchRequest;
 
 class ManageCWalletController extends Controller
 {
+    protected $tron;
+
+    public function __construct(TronGridService $tron)
+    {
+        $this->tron = $tron;
+    }
+
+    public function createqraddress()
+    {
+        $data = $walletData['address'];
+
+        $qrCode = new QrCode(
+            data: $data,
+            encoding: new Encoding('UTF-8'),
+            size: 400,
+            margin: 10
+        );
+
+        $writer = new WebPWriter();
+        $result = $writer->write($qrCode);
+        $webpData = $result->getString();
+
+        $manager = ImageManager::imagick();
+
+        $qrImage = $manager->read($webpData);
+
+        $logoImage = $manager->read(public_path('storage/img/logo.png'));
+
+        $logoSize = intval($qrImage->width() * 0.25);
+        $logoImage = $logoImage->scale(width: $logoSize);
+
+        $qrImage = $qrImage->place($logoImage, 'center');
+
+        $finalWebp = (string) $qrImage->toWebp(80);
+
+        $filename = 'userqr/dep_' . hexdec(uniqid()) . '.webp';
+        Storage::disk('public')->put($filename, $finalWebp);
+    }
+
+    public function createpk()
+    {
+        $data = $walletData['address'];
+
+        $qrCode = new QrCode(
+            data: $data,
+            encoding: new Encoding('UTF-8'),
+            size: 400,
+            margin: 10
+        );
+
+        $writer = new WebPWriter();
+        $result = $writer->write($qrCode);
+        $webpData = $result->getString();
+
+        $manager = ImageManager::imagick();
+
+        $qrImage = $manager->read($webpData);
+
+        $logoImage = $manager->read(public_path('storage/img/logo.png'));
+
+        $logoSize = intval($qrImage->width() * 0.25);
+        $logoImage = $logoImage->scale(width: $logoSize);
+
+        $qrImage = $qrImage->place($logoImage, 'center');
+
+        $finalWebp = (string) $qrImage->toWebp(80);
+
+        $filename = 'userqr/pk_' . hexdec(uniqid()) . '.webp';
+        Storage::disk('public')->put($filename, $finalWebp);
+    }
+
+    public function createqrcc()
+    {
+        $data = $walletData['address'];
+
+        $qrCode = new QrCode(
+            data: $data,
+            encoding: new Encoding('UTF-8'),
+            size: 400,
+            margin: 10
+        );
+
+        $writer = new WebPWriter();
+        $result = $writer->write($qrCode);
+        $webpData = $result->getString();
+
+        $manager = ImageManager::imagick();
+
+        $qrImage = $manager->read($webpData);
+
+        $logoImage = $manager->read(public_path('storage/img/logo.png'));
+
+        $logoSize = intval($qrImage->width() * 0.25);
+        $logoImage = $logoImage->scale(width: $logoSize);
+
+        $qrImage = $qrImage->place($logoImage, 'center');
+
+        $finalWebp = (string) $qrImage->toWebp(80);
+
+        $filename = 'userqr/cc_' . hexdec(uniqid()) . '.webp';
+        Storage::disk('public')->put($filename, $finalWebp);
+    }
+
     public function userlistsearch (Request $request,$cwid)
     {
         if(auth()->user()->email != 'admin@mypocketmonster.net'){
@@ -90,20 +206,22 @@ class ManageCWalletController extends Controller
 
     }
 
-    public function search(Request $request)
+    public function search(CWalletSearchRequest $request)
     {
+        
         if(auth()->user()->email != 'admin@mypocketmonster.net'){
             return redirect()->route('dashboard')
                         ->with('failed','Not Allowed.');
         }
-        
+
+        $search = $request->validated('search');
+
         $wallet = cwallet::orderBy('cwid',$request->orderrow)
-                ->where(function(Builder $builder) use($request){
-                    $builder->where('cwaddress','like',"%{$request->search}%")
-                            ->orWhere('wallcode','like',"%{$request->search}%")
-                            ->orWhere('status','like',"%{$request->search}%"); 
+                ->where(function(Builder $builder) use($search){
+                    $builder->where('cwaddress','like',"%{$search}%")
+                            ->orWhere('wallcode','like',"%{$search}%")
+                            ->orWhere('status','like',"%{$search}%"); 
                 })
-                ->orderBy('lastname',$request->orderrow)
                 ->paginate($request->pagerow);
     
         return view('manage.wallets.index',compact('wallet'))
@@ -142,7 +260,14 @@ class ManageCWalletController extends Controller
      */
     public function store(Request $request)
     {
-         return redirect()->route('dashboard')
+        $validated = $request->validate([
+            'address'=>'required|string|starts_with:T',
+            'key'=>'required|string',
+            'cc'=>'sometimes|nullable|string',
+        ]);
+
+
+        return redirect()->route('dashboard')
                         ->with('failed','Not Allowed.');
 
         if(auth()->user()->email != 'admin@mypocketmonster.net'){

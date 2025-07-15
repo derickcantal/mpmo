@@ -10,19 +10,19 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use \Carbon\Carbon; 
+use App\Http\Requests\TempUserSearchRequest;
 
 class ManageTempUsersController extends Controller
 {
-    public function search(Request $request)
+    public function search(TempUserSearchRequest $request)
     {
-        $user = temp_users::orderBy('lastname',$request->orderrow)
-                ->where(function(Builder $builder) use($request){
-                    $builder->where('username','like',"%{$request->search}%")
-                            ->orWhere('firstname','like',"%{$request->search}%")
-                            ->orWhere('lastname','like',"%{$request->search}%")
-                            ->orWhere('middlename','like',"%{$request->search}%")
-                            ->orWhere('email','like',"%{$request->search}%")
-                            ->orWhere('status','like',"%{$request->search}%"); 
+        $search = $request->validated('search');
+
+        $user = temp_users::orderBy('fullname',$request->orderrow)
+                ->where(function(Builder $builder) use($search){
+                    $builder->where('username','like',"%{$search}%")
+                            ->orWhere('email','like',"%{$search}%")
+                            ->orWhere('status','like',"%{$search}%"); 
                 })
                 ->paginate($request->pagerow);
     

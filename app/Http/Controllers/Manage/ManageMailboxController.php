@@ -10,6 +10,8 @@ use Illuminate\Validation\Rules;
 use \Carbon\Carbon;
 use App\Models\mailbox;
 
+use App\Http\Requests\MailboxSearchRequest;
+
 class ManageMailboxController extends Controller
 {
     public function userlog($notes,$status){
@@ -165,45 +167,46 @@ class ManageMailboxController extends Controller
             }
     }
 
-    public function search(Request $request)
+    public function search(MailboxSearchRequest $request)
     {
+        $search = $request->validated('search');
         $stat = '';
-        if($request->search == 'active' or $request->search == 'Active'){
+        if($search == 'active' or $search == 'Active'){
             $stat = 1;
             $mailbox = mailbox::query()
-                ->where(function(Builder $builder) use($request,$stat){
-                    $builder->where('username','like',"%{$request->search}%")
-                            ->orWhere('name','like',"%{$request->search}%")
-                            ->orWhere('phone','like',"%{$request->search}%")
-                            ->orWhere('email_other','like',"%{$request->search}%")
-                            ->orWhere('created_by','like',"%{$request->search}%")
-                            ->orWhere('updated_by','like',"%{$request->search}%")
+                ->where(function(Builder $builder) use($search,$stat){
+                    $builder->where('username','like',"%{$search}%")
+                            ->orWhere('name','like',"%{$search}%")
+                            ->orWhere('phone','like',"%{$search}%")
+                            ->orWhere('email_other','like',"%{$search}%")
+                            ->orWhere('created_by','like',"%{$search}%")
+                            ->orWhere('updated_by','like',"%{$search}%")
                             ->orWhere('active','like',"%{$stat}%");
                 })
                 ->orderBy('username',$request->orderrow)
                 ->paginate($request->pagerow);
-        }elseif($request->search == 'inactive' or $request->search == 'Inactive'){
+        }elseif($search == 'inactive' or $search == 'Inactive'){
             $stat = 0;
             $mailbox = mailbox::query()
-                ->where(function(Builder $builder) use($request,$stat){
-                    $builder->where('username','like',"%{$request->search}%")
-                            ->orWhere('name','like',"%{$request->search}%")
-                            ->orWhere('phone','like',"%{$request->search}%")
-                            ->orWhere('email_other','like',"%{$request->search}%")
-                            ->orWhere('created_by','like',"%{$request->search}%")
-                            ->orWhere('updated_by','like',"%{$request->search}%")
+                ->where(function(Builder $builder) use($search,$stat){
+                    $builder->where('username','like',"%{$search}%")
+                            ->orWhere('name','like',"%{$search}%")
+                            ->orWhere('phone','like',"%{$search}%")
+                            ->orWhere('email_other','like',"%{$search}%")
+                            ->orWhere('created_by','like',"%{$search}%")
+                            ->orWhere('updated_by','like',"%{$search}%")
                             ->orWhere('active','like',"%{$stat}%");
                 })
                 ->orderBy('username',$request->orderrow)
                 ->paginate($request->pagerow);
         }else{
             $mailbox = mailbox::query()
-                ->where(function(Builder $builder) use($request,$stat){
-                    $builder->where('username','like',"%{$request->search}%")
-                            ->orWhere('name','like',"%{$request->search}%")
-                            ->orWhere('phone','like',"%{$request->search}%")
-                            ->orWhere('created_by','like',"%{$request->search}%")
-                            ->orWhere('updated_by','like',"%{$request->search}%");
+                ->where(function(Builder $builder) use($search,$stat){
+                    $builder->where('username','like',"%{$search}%")
+                            ->orWhere('name','like',"%{$search}%")
+                            ->orWhere('phone','like',"%{$search}%")
+                            ->orWhere('created_by','like',"%{$search}%")
+                            ->orWhere('updated_by','like',"%{$search}%");
                 })
                 ->orderBy('username',$request->orderrow)
                 ->paginate($request->pagerow);
