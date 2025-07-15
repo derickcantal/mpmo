@@ -11,12 +11,16 @@ use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
+    protected bool $allowSuperAdmin   = true;
+    protected bool $allowAdministrator = true;
+    protected bool $allowMember       = false;
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return ! $this->user();
     }
 
     /**
@@ -50,6 +54,24 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+
+        // Role-based allowance
+        $user = Auth::user();
+        $role = $user->accesstype;
+
+        $allowed = match ($role) {
+            'super-admin'   => $this->allowSuperAdmin,
+            'administrator' => $this->allowAdministrator,
+            'member'        => $this->allowMember,
+            default         => false,
+        };
+
+        if (! $allowed) {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => 'Your account type ('.$role.') is not permitted to log in.',
+            ]);
+        }
     }
 
     /**

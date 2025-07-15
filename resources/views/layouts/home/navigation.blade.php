@@ -10,7 +10,7 @@
                     <a href="{{ route('managemyprofile.index') }}" class="text-gray-900 dark:text-white hover:underline">
                         Profile</a>
                 </li>
-                @if(auth()->user()->accesstype == "Administrator")
+                @if(auth()->user()->accesstype == "Administrator" | auth()->user()->accesstype == "super-admin")
                 <li>
                     <a href="{{ route('manageuser.index') }}" class="text-gray-900 dark:text-white hover:underline">
                         Users</a>

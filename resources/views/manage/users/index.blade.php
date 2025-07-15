@@ -130,7 +130,11 @@
                                 </x-input-label>
                             </td>
                             <td class="px-6 py-4">
+                                @if($users->accesstype == "super-admin")
+                                <x-input-label for="accesstype" value="Administrator"/>
+                                @else
                                 <x-input-label for="accesstype" :value="$users->accesstype"/>
+                                @endif
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center">

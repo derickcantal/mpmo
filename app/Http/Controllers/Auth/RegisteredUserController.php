@@ -16,6 +16,9 @@ use Illuminate\View\View;
 use \Carbon\Carbon;
 use App\Mail\WelcomeMail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\RegistrationRequest;
+use Illuminate\Support\Facades\URL;
+
 
 class RegisteredUserController extends Controller
 {
@@ -57,55 +60,49 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegistrationRequest $request): RedirectResponse
     {
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
-        $request->validate([
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class, 'unique:'.temp_users::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'username' => ['required', 'string', 'max:255', 'unique:'.User::class, 'unique:'.temp_users::class],
-            'fullname' => ['required', 'string', 'max:255'],
-            'refcode' => ['required', 'string', 'max:255', Rule::exists('users', 'refid'),],
-        ]);
+        $data = $request->validated();
 
-        $temp_users = temp_users::create([
-            'refid' => $request->generateUniqueCode(),
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'avatar' => 'avatars/avatar-default.jpg',
-            'username' => $request->username,
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'birthdate' => $request->birthdate,
-            'mobile_primary' => $request->mobile,
-            'accesstype' => 'Temporary',
-            'timerecorded' => $timenow,
-            'created_by' => 'Self Registration',
-            'mod' => 0,
-            'copied' => 'N',
+        $tempUser = temp_users::create([
+            'refid'        => $data['refcode'],
+            'email'        => $data['email'],
+            'password'     => Hash::make($data['password']),
+            'avatar'       => 'avatars/avatar-default.jpg',
+            'username'     => $data['username'],
+            'fullname'     => $data['fullname'],
+            'accesstype'   => 'Temporary',
+            'role'         => 'Member',
+            'timerecorded' => now(),
+            'created_by'   => 'Online',
+            'mod'          => 0,
+            'copied'       => 'N',
             'walletstatus' => 'Inactive',
-            'status' => 'Inactive',
+            'status'       => 'Inactive',
         ]);
 
-        if($temp_users){
-            // generate your verification URL however you like...
+        if ($tempUser) {
+            
             $verificationUrl = URL::temporarySignedRoute(
                 'verification.verify',
                 now()->addMinutes(60),
-                ['id' => $user->id]
+                [
+                    'id'   => $tempUser->getKey(),
+                    'hash' => sha1($tempUser->getEmailForVerification()),
+                ]
             );
 
-            // send the welcome email
-            Mail::to($user->email)
-                ->send(new WelcomeMail($user, $verificationUrl));
+            Mail::to($tempUser->email)
+                ->send(new WelcomeMail($tempUser, $verificationUrl));
 
             return redirect()->route('register')
-                        ->with('success','User creation success. Please wait for Admin Approval');
-        }else{
-            return redirect()->route('register')
-                        ->with('failed','User creation failed. Please Contact Administrator');
+                            ->with('success','User creation success. Please wait for Admin Approval');
         }
+
+        return redirect()->route('register')
+                        ->with('failed','User creation failed. Please Contact Administrator');
 
         event(new Registered($user));
 

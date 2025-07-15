@@ -30,6 +30,9 @@ class ManageMyProfileController extends Controller
         ]);
         // dd($request,$userid);
 
+        $user = User::where('userid',$userid)->first();
+
+
         $ipath = 'avatar/';
 
         if(!Storage::disk('public')->exists($ipath)){
@@ -47,11 +50,12 @@ class ManageMyProfileController extends Controller
         $path = 'avatar/u_' . hexdec(uniqid()) . '.webp';
         
         Storage::disk('public')->put($path, $webpData);
-
-        if($oldavatar = $request->user()->avatar){
-            Storage::disk('public')->delete($oldavatar);
+        if($request->user()->avatar != 'avatars/avatar-default.jpg')
+        {
+            if($oldavatar = $request->user()->avatar){
+                Storage::disk('public')->delete($oldavatar);
+            }
         }
-        
         auth()->user()->update(['avatar' => $path]);
 
         return redirect()->back()
@@ -112,8 +116,13 @@ class ManageMyProfileController extends Controller
             Storage::disk('public')->delete($oldavatar);
         }
         
-        auth()->user()->update(['ownerqrcwaddress' => $path]);
-        auth()->user()->update(['ownercwaddress' => $request->owneraddress]);
+        $user = auth()->user();
+
+        // 1) Update an existing wallet
+        $user->wallets()->update([
+            'ownerqrcwaddress' => $path,
+            'ownercwaddress'   => $request->owneraddress,
+        ]);
 
         return redirect()->back()
                                 ->with('success','Withdrawal Address Updated');

@@ -21,7 +21,6 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $wallets = Auth::user()->wallets()->get();
     
-    dd($wallets);
     return view('dashboard',compact('wallets'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 

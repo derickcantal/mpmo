@@ -21,7 +21,7 @@
     </div>
 
     <div class="content">
-      <p>Hi {{ $user->name }},</p>
+      <p>Hi {{ $user->fullname }},</p>
 
       <p>Thank you for registering at <strong>{{ config('app.name') }}</strong>. We’re excited to have you on board!</p>
 

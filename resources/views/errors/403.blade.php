@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-guest-layout>
 <div class="gradient-bg min-h-screen flex items-center justify-center bg-gray-100 p-6">
   <div class="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 text-center">
      {{-- Logo --}}
@@ -20,4 +20,4 @@
     </a>
   </div>
 </div>
-</x-app-layout>
+</x-guest-layout>

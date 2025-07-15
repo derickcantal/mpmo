@@ -66,7 +66,7 @@
                 <!-- Error & Success Notification -->
                 @include('layouts.notifications') 
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg dark:bg-gray-800">
+                <div class="relative bg-white rounded-lg dark:bg-gray-800 p-4">
                     <!-- Modal body -->
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <!-- Email Address -->

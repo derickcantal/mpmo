@@ -68,7 +68,7 @@
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg p-4 dark:bg-gray-800">
                 <header>
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 px-4">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 p-4">
                         {{ __('Withdrawal Address') }}
                     </h2>
 
@@ -76,8 +76,12 @@
                         {{ __('Ensure your that the withdrawal Address and QR Code is correct. Wrong Information may result in lost of funds.') }}
                     </p>
                 </header>
-                    @if(!empty($user->ownerqrcwaddress))
-                        <img class="h-auto max-w-sm rounded-lg shadow-xs dark:shadow-gray-800 mt-4 p-4" src="{{ asset("/storage/$user->ownerqrcwaddress") }}" alt="QR" />
+                    @if($user->wallets->isEmpty())
+                        
+                    @else
+                        @foreach($user->wallets as $cw)
+                        <img class="h-auto max-w-sm rounded-lg shadow-xs dark:shadow-gray-800 mt-4 p-4" src="{{ asset("/storage/$cw->ownerqrcwaddress") }}" alt="QR" />
+                        @endforeach
                     @endif
                     <!-- Modal body -->
                     <div class="grid gap-4 mb-4 grid-cols-2">

@@ -20,6 +20,11 @@ class temp_users extends Model
     public function gettimerecordedAttribute($dates) {
         return \Carbon\Carbon::parse($dates)->format('Y-m-d h:i:s A');
     }
+
+    public function getEmailForVerification(): string
+    {
+        return $this->email;
+    }
     
     /**
      * The attributes that are mass assignable.
