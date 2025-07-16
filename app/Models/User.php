@@ -93,4 +93,32 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    protected $appends = [
+        'cwaddress',
+        'first_cwaddress',
+        'trx_balance',
+        'mpmo_balance',
+    ];
+
+    public function getFirstCwaddressAttribute()
+    {
+        return optional($this->wallets->first())->cwaddress;
+    }
+
+    public function getCwaddressAttribute()
+    {
+        return optional($this->wallets)->cwaddress;
+    }
+
+    public function getTrxBalanceAttribute()
+    {
+        return optional($this->wallets)->trx_balance;
+    }
+
+     public function getMpmoBalanceAttribute()
+    {
+        return optional($this->wallets)->mpmo_balance;
+    }
+
+
 }

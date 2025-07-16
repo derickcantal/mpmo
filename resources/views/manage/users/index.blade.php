@@ -114,7 +114,7 @@
                             <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                 <img class="w-10 h-10 rounded-full" src="{{ asset("/storage/$users->avatar") }}" alt="avatar">
                                 <div class="ps-3">
-                                    
+                                    <x-input-label>{{ $users->refid }}</x-input-label>
                                     <x-input-label>{{ $users->fullname }}</x-input-label>
                                     <x-input-label for="email" :value="$users->email"/>
                             </th>
@@ -151,13 +151,17 @@
                                 @method('DELETE')
                                 <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <div class="flex items-center space-x-2">
-                                        <button type="submit" name="action"  value="save" class="flex items-center px-4 py-2 bg-orange-500 text-white font-semibold rounded-full shadow hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-orange-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                                            </svg> 
-                                        Generate Wallet
-                                        </button>
+                                        @if(empty($users->first_cwaddress))
+                                            <button type="submit" name="action"  value="save" class="flex items-center px-4 py-2 bg-orange-500 text-white font-semibold rounded-full shadow hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-orange-300 transition">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                                </svg> 
+                                            Activate Wallet
+                                            </button>
+                                        @endif
+
+                                       
 
                                         <a href="{{ route('manageuser.edit',$users->userid) }}" class="flex items-center px-4 py-2 bg-pink-500 text-white font-semibold rounded-full shadow hover:bg-pink-600 focus:outline-none focus:ring-4 focus:ring-pink-300 transition">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">

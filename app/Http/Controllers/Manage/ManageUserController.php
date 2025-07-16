@@ -297,7 +297,7 @@ class ManageUserController extends Controller
         }
         else
         {
-            $refid = $user->rfid;
+            $refid = $user->refid;
         }
 
 
@@ -334,7 +334,7 @@ class ManageUserController extends Controller
                 'birthdate' => $request->birthdate,
                 'mobile_primary' => $request->mobile,
                 'accesstype' => $request->accesstype,
-                'rnotes' => $request->notes,
+                'notes' => $request->notes,
                 'updated_by' => auth()->user()->email,
                 'mod' => $mod + 1,
                 'status' => $request->status,
@@ -350,6 +350,7 @@ class ManageUserController extends Controller
             }
         }elseif($request->password == $request->password_confirmation){
             $user =User::where('userid',$user->userid)->update([
+                'refid' => $refid,
                 'username' => $request->email,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -359,7 +360,7 @@ class ManageUserController extends Controller
                 'birthdate' => $request->birthdate,
                 'mobile_primary' => $request->mobile,
                 'accesstype' => $request->accesstype,
-                'rnotes' => $request->notes,
+                'notes' => $request->notes,
                 'updated_by' => auth()->user()->email,
                 'mod' => $mod + 1,
                 'status' => $request->status,
