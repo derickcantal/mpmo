@@ -34,7 +34,7 @@ class temp_users extends Model
     protected $fillable = [
         'username',
         'avatar',
-        'refid',
+        'referral_code',
         'fullname',
         'cwid',
         'trx_balance',
@@ -54,7 +54,7 @@ class temp_users extends Model
         'updated_by',
         'mod',
         'copied',
-        'refidby',
+        'referred_by',
         'status',
     ];
 

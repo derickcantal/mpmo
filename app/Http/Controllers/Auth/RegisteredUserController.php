@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             $code = $code.$character;
         }
 
-        if (temp_users::where('rfid', $code)->exists()) {
+        if (temp_users::where('referral_code', $code)->exists()) {
             $this->generateUniqueCode();
         }
 
@@ -50,9 +50,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-    
+         $referrerId = session('referrer_id');
 
-        return view('auth.register');
+        return view('auth.register',compact('referrerId'));
     }
 
     /**
@@ -67,7 +67,10 @@ class RegisteredUserController extends Controller
         $data = $request->validated();
 
         $tempUser = temp_users::create([
-            'refid'        => $data['refcode'],
+            'referral_code'=> $this->generateUniqueCode(),
+            'reffered_by'  => $data['referral_code'], 
+            'mpmo_balance' => 0,
+            'trx_balance' => 0,
             'email'        => $data['email'],
             'password'     => Hash::make($data['password']),
             'avatar'       => 'avatars/avatar-default.jpg',

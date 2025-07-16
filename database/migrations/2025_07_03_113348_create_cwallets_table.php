@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cwallets', function (Blueprint $table) {
-            $table->increments('cwid');
+            $table->increments('cwid'); 
             $table->string('qrcwaddress')->nullable(); 
             $table->string('cwaddress')->unique();
             $table->string('qrbsccwaddress')->nullable(); 

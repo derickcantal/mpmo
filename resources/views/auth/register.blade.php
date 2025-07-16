@@ -8,14 +8,34 @@
                 <p class="text-gray-600 mt-1">Join the MPMO adventure!</p>
             </div>
             @include('layouts.notifications') 
+            <!-- If you want the user to see where they came from: -->
+            @if($referrerId)
+                @php $referrer = \App\Models\User::find($referrerId); @endphp
+                <p class="text-sm text-gray-600">
+                    You were referred by {{ $referrer->name }} ({{ $referrer->referral_code }})
+                </p>
+            @endif
             <form method="POST" action="{{ route('register') }}" class="space-y-4">
                 @csrf
+                <!-- show it to the user (readonly) -->
+                @if(session('referrer_code'))
+                <div class="mb-4 text-sm text-gray-700">
+                    You were referred by <strong>{{ session('referrer_code') }}</strong>
+                </div>
+                @endif
+
+                <!-- …and a hidden field for the DB: -->
+                <input
+                type="hidden"
+                name="referred_by"
+                value="{{ old('referred_by', session('referrer_id')) }}"
+                />
                 <!-- Name -->
                 <div>
-                    <label for="refcode" class="block text-gray-700 font-semibold">Referral Code</label>
-                    <input id="refcode" name="refcode" type="text" value="{{ old('refcode') }}" required autofocus
+                    <label for="referral_code" class="block text-gray-700 font-semibold">Referral Code</label>
+                    <input id="referral_code" name="referral_code" type="text" value="{{ old('referrer_code', session('referrer_code')) }}" required readonly
                            class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
-                    @error('refcode')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                    @error('referral_code')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                 </div>
                 <!-- Name -->
                 <div>
@@ -67,6 +87,18 @@
                 <a href="{{ route('login') }}" class="text-pink-500 font-semibold hover:underline">Login here</a>
             </p>
         </div>
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                const params = new URLSearchParams(window.location.search);
+                if (params.has('ref')) {
+                    const ref = params.get('ref');
+                    const input = document.querySelector('input[name="referred_by"]');
+                    if (input) input.value = ref;
+                }
+                });
+            </script>
+        @endpush
     </div>
 </x-guest-layout>
 

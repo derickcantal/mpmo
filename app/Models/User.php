@@ -24,6 +24,16 @@ class User extends Authenticatable
         return \Carbon\Carbon::parse($dates)->format('Y-m-d h:i:s A');
     }
     
+     protected static function booted()
+    {
+        static::creating(function ($user) {
+            // e.g. 8‑character uppercase token
+            $user->referral_code = strtoupper(Str::random(8));
+        });
+    }
+
+    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -32,7 +42,7 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'avatar',
-        'refid',
+        'referral_code',
         'fullname',
         'cwid',
         'trx_balance',
@@ -52,7 +62,7 @@ class User extends Authenticatable
         'updated_by',
         'mod',
         'copied',
-        'refidby',
+        'referred_by',
         'status',
     ];
 
@@ -112,12 +122,24 @@ class User extends Authenticatable
 
     public function getTrxBalanceAttribute()
     {
-        return optional($this->wallets)->trx_balance;
+        return $this->wallets->sum('trx_balance');
+        // return optional($this->wallets)->trx_balance;
     }
 
-     public function getMpmoBalanceAttribute()
+    public function getMpmoBalanceAttribute()
     {
-        return optional($this->wallets)->mpmo_balance;
+        return $this->wallets->sum('mpmo_balance');
+        // return optional($this->wallets)->mpmo_balance;
+    }
+
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referred_by');
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by');
     }
 
 

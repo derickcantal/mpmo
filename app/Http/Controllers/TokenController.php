@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\TokenMetric;
 use App\Services\TokenService;
 use App\Models\price_histories;
+use App\Models\User;
 
 
 class TokenController extends Controller
@@ -15,6 +16,13 @@ class TokenController extends Controller
     public function __construct(TokenService $tokenService)
     {
         $this->tokenService = $tokenService;
+    }
+     public function price(Request $request)
+    {
+        $price = $this->tokenService->getMetric()->price;
+        return response()->json([
+            'price' => (float) $price,
+        ]);
     }
 
     public function showTokenInfo()
@@ -27,7 +35,8 @@ class TokenController extends Controller
         return view('token.info', compact('token'));
     }
 
-    public function index() {
+    public function index()
+    {
 
         $metric      = $this->tokenService->getMetric();
         $user        = auth()->user();
@@ -93,4 +102,60 @@ class TokenController extends Controller
 
         return back()->with('success', 'Redeemed to TRX.');
     }
+
+    /**
+     * Airdrop tokens from treasury to users.
+     * Expects JSON: {"userId":amount, ...}
+     */
+     public function airdrop(Request $request)
+    {
+         $data = $request->validate([
+            'user_ids'   => ['required','array'],
+            'user_ids.*' => ['required','integer','exists:users,userid'],
+            'amounts'    => ['required','array'],
+            'amounts.*'  => ['required','numeric','gt:0'],
+        ]);
+
+        $allocations = array_combine($data['user_ids'], $data['amounts']);
+        $this->tokenService->airdrop($allocations);
+
+        return back()->with('success', 'Airdrop completed.');
+    }
+
+    /**
+     * Distribute staking rewards from treasury.
+     * Expects JSON: {"userId":amount, ...}
+     */
+    public function distributeStakingRewards(Request $request)
+    {
+        $data = $request->validate([
+            'rewards' => ['required','json'],
+        ]);
+
+        $rewards = json_decode($data['rewards'], true);
+        $this->tokenService->distributeStakingRewards($rewards);
+        return back()->with('success', 'Staking rewards distributed.');
+    }
+
+    /**
+     * Incentivize liquidity provision with treasury tokens.
+     * Expects pool_id and JSON allocations: {"userId":amount, ...}
+     */
+    public function incentivizeLiquidity(Request $request)
+    {
+        $data = $request->validate([
+            'pool_id'     => ['required','integer'],
+            'allocations' => ['required','json'],
+        ]);
+
+        $allocations = json_decode($data['allocations'], true);
+        $this->tokenService->incentivizeLiquidity((int) $data['pool_id'], $allocations);
+        return back()->with('success', 'Liquidity incentives allocated.');
+    }
+    public function procedures()
+    {
+        $users = User::all();
+        return view('token.procedures', compact('users'));
+    }
+
 }

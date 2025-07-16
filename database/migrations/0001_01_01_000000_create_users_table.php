@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('userid');
-            $table->string('username');
+            $table->string('username'); 
             $table->string('avatar');
-            $table->string('refid')->nullable();
+            $table->string('referral_code')->unique()->nullable();
+            $table->unsignedBigInteger('referred_by')->nullable();
+            $table->foreign('referred_by')->references('userid')->on('users');
             $table->string('fullname');
             $table->integer('cwid')->nullable();
             $table->decimal('trx_balance',24, 8)->default(0);
@@ -37,7 +39,6 @@ return new class extends Migration
             $table->string('updated_by')->nullable();
             $table->integer('mod')->default(0);
             $table->string('copied')->nullable();
-            $table->string('refidby')->nullable();
             $table->string('status');
         });
 

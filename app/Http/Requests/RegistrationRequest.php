@@ -65,11 +65,11 @@ class RegistrationRequest extends FormRequest
                 'string',
                 'max:255',
             ],
-            'refcode'  => [
+            'referral_code'  => [
                 'required',
                 'string',
                 'max:255',
-                Rule::exists(User::class, 'refid'),
+                Rule::exists(User::class, 'referral_code'),
             ],
         ];
     }

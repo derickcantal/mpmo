@@ -13,6 +13,7 @@ use App\Http\Controllers\QrController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ConvertController;
+use App\Http\Controllers\ReferralController;
 
 
 Route::get('/', function () {
@@ -25,7 +26,11 @@ Route::get('/dashboard', function () {
     return view('dashboard',compact('wallets'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/ref/{code}', [ReferralController::class, 'handle'])->name('referral.handle');
+
+
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -46,9 +51,25 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/token-info', [TokenController::class,'showTokenInfo'])->name('token.info');
     Route::get('/transaction',[TransactionController::class,'index'])->name('transactions.index');
+    Route::get('/token/price', [TokenController::class, 'price'])->name('token.price');
+    Route::get('/token/procedures', [TokenController::class, 'procedures'])
+         ->name('token.procedures');
+    // 1. Airdrop
+    Route::post('/token/airdrop', [TokenController::class, 'airdrop'])
+         ->name('token.airdrop');
+
+    // 2. Staking rewards distribution
+    Route::post('/token/staking-rewards', [TokenController::class, 'distributeStakingRewards'])
+         ->name('token.distributeStakingRewards');
+
+    // 3. Liquidity incentives
+    Route::post('/token/liquidity-incentives', [TokenController::class, 'incentivizeLiquidity'])
+         ->name('token.incentivizeLiquidity');
 
     Route::get('/scan', [QrController::class, 'scan'])->name('qr.scan');
     Route::post('/submit-scan', [QrController::class, 'submit'])->name('qr.submit');
+
+    
 });
 
 Route::middleware('auth')->group(function () {
