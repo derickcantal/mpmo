@@ -46,8 +46,16 @@
                         </h3>
                     </div>
                     <!-- Modal body -->
-                    <img width="100" height="100" class="rounded-full mt-4 p-1" src="{{ asset("/storage/$user->avatar") }}" alt="user avatar" />
-                    <div class="grid mb-4 grid-cols-2">
+                    <img width="100" height="100" class="rounded-full p-4" src="{{ asset("/storage/$user->avatar") }}" alt="user avatar" />
+                    <div class="grid mb-4 grid-cols-2 p-4">
+                        <!-- refid -->
+                        <div class="col-span-2 sm:col-span-1 p-4">
+                            <div class="form-group">
+                                <x-input-label for="refid" :value="__('Referral Code')" />
+                                <x-text-input id="refid" class="block mt-1 w-full" type="text" name="refid" :value="old('refid', $user->refid)" required readonly autofocus />
+                                <x-input-error :messages="$errors->get('refid')" class="mt-2" />
+                            </div>
+                        </div>
                         <!-- username -->
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <div class="form-group">
@@ -89,28 +97,12 @@
                                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                             </div>                    
                         </div>
-                        <!-- firstname -->
+                        <!-- fullname -->
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <div class="form-group">
-                                <x-input-label for="firstname" :value="__('First Name')" />
-                                <x-text-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname', $user->firstname)" required autofocus/>
-                                <x-input-error :messages="$errors->get('firstname')" class="mt-2" />
-                            </div>
-                        </div>
-                        <!-- middlename -->
-                        <div class="col-span-2 sm:col-span-1 p-4">
-                            <div class="form-group">
-                                <x-input-label for="middlename" :value="__('Middle Name')" />
-                                <x-text-input id="middlename" class="block mt-1 w-full" type="text" name="middlename" :value="old('middlename', $user->middlename)" autofocus />
-                                <x-input-error :messages="$errors->get('username')" class="mt-2" />
-                            </div>
-                        </div>
-                        <!-- lastname -->
-                        <div class="col-span-2 sm:col-span-1 p-4">
-                            <div class="form-group">
-                                <x-input-label for="lastname" :value="__('Last Name')" />
-                                <x-text-input id="lastname" class="block mt-1 w-full" type="text" name="lastname" :value="old('lastname', $user->lastname)" required />
-                                <x-input-error :messages="$errors->get('lastname')" class="mt-2" />
+                                <x-input-label for="fullname" :value="__('Full Name')" />
+                                <x-text-input id="fullname" class="block mt-1 w-full" type="text" name="fullname" :value="old('fullname', $user->fullname)" required autofocus/>
+                                <x-input-error :messages="$errors->get('fullname')" class="mt-2" />
                             </div>
                         </div>
                         <!-- birthdate -->
@@ -124,29 +116,17 @@
                         <!-- accesstype -->
                         <div class="col-span-2 sm:col-span-1 p-4">
                             @php
-                                $op1_a = '';
-                                $op2_a = '';
-                                $op3_a = '';
-                                $op4_a = '';
-                                if ($user->accesstype == 'Administrator'):
-                                    $op1_a = 'selected = "selected"';
-                                elseif ($user->accesstype == 'Supervisor'):
-                                    $op2_a = 'selected = "selected"';
-                                elseif ($user->accesstype == 'Member'):
-                                    $op3_a = 'selected = "selected"';
-                                endif;
-                                
+                                $current = old('accesstype', $user->accesstype);
                             @endphp
                             <div class="form-group">
                                 <x-input-label for="accesstype" :value="__('Access Type')" />
-                                <!-- <x-text-input id="accesstype" class="block mt-1 w-full" type="text" name="accesstype" :value="old('accesstype')" required autofocus autocomplete="off" /> -->
-                                <select id="accesstype" name="accesstype" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('accesstype', $user->accesstype)">
-                                    @if(auth()->user()->accesstype == 'Administrator')
-                                    <option value ="Administrator" {{ $op1_a; }}">Administrator</option>
-                                    <option value ="Supervisor" {{ $op2_a; }}">Supervisor</option>
-                                    @endif
-                                    <option value ="Member" {{ $op3_a; }}">Member</option>
-                                </select>
+                                <select id="accesstype" name="accesstype" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                    @foreach($assignable as $value => $label)
+                                        <option value="{{ $value }}" @selected($current === $value)>
+                                        {{ $label }}
+                                        </option>
+                                    @endforeach
+                                    </select>
                                 <x-input-error :messages="$errors->get('accesstype')" class="mt-2" />
                                 
                             </div>
@@ -176,8 +156,8 @@
                     </div>
                     <!-- Button -->
                     <div class="flex items-center justify-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button type="submit" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">
-                            <svg class="w-4 h-4 mr-2 -ml-0.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <button type="submit" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">
+                            <svg class="w-4 h-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h11.586a1 1 0 0 1 .707.293l2.414 2.414a1 1 0 0 1 .293.707V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5Z"/>
                                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M8 4h8v4H8V4Zm7 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                             </svg>

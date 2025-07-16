@@ -133,7 +133,7 @@ class ManageUserController extends Controller
             $code = $code.$character;
         }
 
-        if (temp_users::where('rfid', $code)->exists()) {
+        if (User::where('refid', $code)->exists() & temp_users::where('refid', $code)->exists()) {
             $this->generateUniqueCode();
         }
 
@@ -182,15 +182,7 @@ class ManageUserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request, $access, $department);
-        $n1 = strtoupper($request->firstname[0]);
-        // $n2 = strtoupper($request->middlename[0]);
-        $n3 = strtoupper($request->lastname[0]);
-        $n4 = preg_replace('/[-]+/', '', $request->birthdate);
-
-        // $newpassword = $n1 . $n2 . $n3 . $n4;
-        $newpassword = $n1 . $n3 . $n4;
-        //dd($newpassword);
+        $newpassword = $this->generateUniqueCode();
 
         $timenow = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
 
@@ -210,15 +202,17 @@ class ManageUserController extends Controller
         }
         $user = User::create([
             'avatar' => 'avatars/avatar-default.jpg',
+            'refid' => $this->generateUniqueCode(),
             'username' => $request->email,
             'email' => $request->email,
             'password' => Hash::make($newpassword),
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
+            'fullname' => $request->fullname,
             'birthdate' => $request->birthdate,
             'created_by' => auth()->user()->email,
             'updated_by' => 'Null',
             'timerecorded' => $timenow,
+            'accesstype' => $request->accesstype,
+            'role' => $request->accesstype,
             'modifiedid' => 0,
             'mod' => 0,
             'status' => 'Active',
@@ -253,9 +247,41 @@ class ManageUserController extends Controller
     public function edit($userid)
     {
         $user = User::where('userid',$userid)->first();
+        // figure out which roles the *logged‑in* user is allowed to assign
+        switch (auth()->user()->accesstype) {
+            case 'super-admin':
+                // super‑admins can promote/demote anyone except another super‑admin
+                $assignable = [
+                    'Administrator' => 'Administrator',
+                    'Supervisor'    => 'Supervisor',
+                    'Member'        => 'Member',
+                ];
+                break;
 
-       return view('manage.users.edit')
-                    ->with(['user' => $user]);
+            case 'Administrator':
+                // administrators can only touch supervisors and members
+                $assignable = [
+                    'Supervisor' => 'Supervisor',
+                    'VIP'     => 'VIP',
+                    'Member'     => 'Member',
+                ];
+                break;
+
+            case 'Supervisor':
+                // supervisors can only touch members
+                $assignable = [
+                    'VIP'     => 'VIP',
+                    'Member' => 'Member',
+                ];
+                break;
+
+            default:
+                $assignable = [];
+        }
+
+        return view('manage.users.edit')
+                    ->with(['user' => $user,
+                            'assignable'   => $assignable]);
     }
 
     /**

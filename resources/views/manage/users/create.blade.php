@@ -55,29 +55,14 @@
                             </div>
                         </div>
                         <div class="col-span-2 sm:col-span-1 p-4">
-                            <!-- firstname -->
+                            <!-- fullname -->
                             <div class="form-group">
-                                <x-input-label for="firstname" :value="__('First Name')" />
-                                <x-text-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname')" required autofocus autocomplete="given-name" />
-                                <x-input-error :messages="$errors->get('firstname')" class="mt-2" />
+                                <x-input-label for="fullname" :value="__('Full Name')" />
+                                <x-text-input id="fullname" class="block mt-1 w-full" type="text" name="fullname" :value="old('fullname')" required autofocus />
+                                <x-input-error :messages="$errors->get('fullname')" class="mt-2" />
                             </div>
                         </div>
-                        <div class="col-span-2 sm:col-span-1 p-4">
-                            <!-- middlename -->
-                            <div class="form-group">
-                                <x-input-label for="middlename" :value="__('Middle Name')" />
-                                <x-text-input id="middlename" class="block mt-1 w-full" type="text" name="middlename" :value="old('middlename')" required autofocus autocomplete="additional-name" />
-                                <x-input-error :messages="$errors->get('username')" class="mt-2" />
-                            </div>
-                        </div>
-                        <div class="col-span-2 sm:col-span-1 p-4">
-                                <!-- lastname -->
-                                <div class="form-group">
-                                <x-input-label for="lastname" :value="__('Last Name')" />
-                                <x-text-input id="lastname" class="block mt-1 w-full" type="text" name="lastname" :value="old('lastname')" required autofocus autocomplete="family-name" />
-                                <x-input-error :messages="$errors->get('lastname')" class="mt-2" />
-                            </div>
-                        </div>
+                        
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <!-- birthdate -->
                             <div class="form-group">
@@ -86,14 +71,14 @@
                                 <x-input-error :messages="$errors->get('birthdate')" class="mt-2" />
                             </div>
                         </div>
+                        <!-- accesstype -->
                         <div class="col-span-2 sm:col-span-1 p-4">
-                            <!-- accesstype -->
                             <div class="form-group">
                                 <x-input-label for="accesstype" :value="__('Access Type')" />
-                                <!-- <x-text-input id="accesstype" class="block mt-1 w-full" type="text" name="accesstype" :value="old('accesstype')" required autofocus autocomplete="off" /> -->
                                 <select id="accesstype" name="accesstype" class="form-select mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" :value="old('accesstype')">
-                                    @if(auth()->user()->accesstype == 'Administrator')
+                                    @if(auth()->user()->accesstype == 'super-admin')
                                     <option value ="Administrator">Administrator</option>
+                                    @elseif(auth()->user()->accesstype == 'Administrator')
                                     <option value ="Supervisor">Supervisor</option>
                                     @endif
                                     <option value ="Member">Member</option>

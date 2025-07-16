@@ -25,7 +25,7 @@ class TokenService
         );
     }
 
-     public function generateUniqueCode()
+    public function generateUniqueCode()
     {
 
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
