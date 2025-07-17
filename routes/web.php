@@ -29,7 +29,7 @@ Route::get('/dashboard', function () {
 Route::get('/ref/{code}', [ReferralController::class, 'handle'])->name('referral.handle');
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth','role:super-admin,member')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

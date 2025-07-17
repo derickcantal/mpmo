@@ -98,6 +98,12 @@ class User extends Authenticatable
         return $this->hasMany(cwallet::class, 'userid', 'userid');
     }
 
+    // helper to check roles
+    public function hasRole(string ...$roles): bool
+    {
+        return in_array($this->accesstype, $roles);
+    }
+    
     public function isAdmin()
     {
         return $this->role === 'admin';

@@ -197,18 +197,17 @@ class ManageMyProfileController extends Controller
         $mod = 0;
         $mod = $userdetails->mod;
 
-        if(!empty($userdetails->middlename)){
-            $middlename = $userdetails->middlename;
+        if(!empty($userdetails->birthdate)){
+            $birthdate = $userdetails->birthdate;
         }else{
-            $middlename = $request->middlename;
+            $birthdate = $request->birthdate;
         }
         
 
         $user = User::where('userid',auth()->user()->userid)->update([
-            'middlename' => $middlename,
+            'birthdate' => $birthdate,
             'mobile_primary' => $request->mobile_primary,
             'mobile_secondary' => $request->mobile_secondary,
-            'homeno' => $request->homeno,
             'updated_by' => auth()->user()->email,
             'mod' => $mod + 1,
         ]);
