@@ -52,13 +52,12 @@ class WireguardService
 
         // 3. Save to database (private_key is cast→encrypted)
 
-         $client = VpnClient::create([
+        $client = VpnClient::create([
             'name'       => $name,
             'public_key' => $publicKey,
             'private_key'=> $privateKey,
             'address'    => $address,
         ]);
-
 
         return $client;
     }
@@ -81,9 +80,15 @@ class WireguardService
 
     public function clientQr(VpnClient $client): string
     {
-       $conf = $this->clientConfig($client);
+        // 1) Ensure the client really exists
+        if (! $client->exists) {
+            throw new \InvalidArgumentException('Client must be persisted before generating QR.');
+        }
 
-       $qr = new QrCode(
+        // 2) Build your config and QR code (as before)…
+        $conf = $this->clientConfig($client);
+
+        $qr = new QrCode(
             data: $conf,
             encoding: new Encoding('UTF-8'),
             size: 300,
@@ -92,14 +97,14 @@ class WireguardService
 
         // 1) Extract the raw PNG bytes
         $writer = new WebPWriter();
-        $result = $writer->write($qr);
-        $pngData = $result->getString(); // raw binary
+        $result = $writer->write($qrCode);
 
-        // 2) Persist into your binary column
-        $client->qr_code = $pngData;
-        $client->save();
+        // 3) Force an UPDATE so we don’t trigger INSERT
+        $client->update([
+            'qr_code' => $result->getString(),
+        ]);
 
         // 3) Still return a Data URI for immediate display
-        return $qr->getDataUri();
+        return $result->getDataUri();
     }
 }
