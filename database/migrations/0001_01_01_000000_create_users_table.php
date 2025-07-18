@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('username'); 
             $table->string('avatar');
             $table->string('referral_code')->unique()->nullable();
-            $table->unsignedBigInteger('referred_by')->nullable();
+            $table->unsignedInteger('referred_by')->nullable();
             $table->foreign('referred_by')->references('userid')->on('users');
             $table->string('fullname');
             $table->integer('cwid')->nullable();
