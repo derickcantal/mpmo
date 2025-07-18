@@ -14,12 +14,16 @@
                         <h5 class="text-2xl font-bold text-orange-600">Account Information</h5>
                     </header>
                     @php
-                        $qrdep = $wallets[0]->qrcwaddress;
+                        $qrdep = optional($wallets->first())->qrcwaddress;
                     @endphp
                     <div class="flex flex-col items-center justify-center">
-                        <img class="mx-auto w-32 h-32 mb-4" src="{{ asset("/storage/$qrdep") }}" alt="QR" />
-                        <dd class="text-gray-500 dark:text-gray-400">Deposit Address:</dd>
-                        <dt class="mb-2 text-1xl font-extrabold">{{ $wallets[0]->cwaddress }}</dt>
+                        @if($qrdep)
+                            <img class="mx-auto w-32 h-32 mb-4" src="{{ asset("/storage/$qrdep") }}" alt="QR" />
+                            <dd class="text-gray-500 dark:text-gray-400">Deposit Address:</dd>
+                            <dt class="mb-2 text-1xl font-extrabold">{{ $qrdep }}</dt>
+                        @else
+                            <p>No deposit wallet configured yet.</p>
+                        @endif
                     </div>
                 </div>
                 <!-- Card 1 -->
@@ -53,7 +57,7 @@
                         <h1 class="text-4xl font-bold text-orange-600">USDT</h1>
                     </header>
                     <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl font-extrabold">{{ number_format($wallets[0]->usdtsbal, 2) }}</dt>
+                        <dt class="mb-2 text-3xl font-extrabold">0.00</dt>
                         <dd class="text-gray-500 dark:text-gray-400">$USDT Balance</dd>
                     </div>
                 </div>
