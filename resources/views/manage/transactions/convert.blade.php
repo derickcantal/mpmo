@@ -29,6 +29,7 @@
                     </nav>
                     <!-- Error & Success Notification -->
                     @include('layouts.notifications') 
+
                     <div class="bg-transparent min-h-screen py-10">
                         <div class="max-w-md mx-auto bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-8">
                             <h1 class="text-3xl font-bold text-gray-800 mb-4">Convert TRX to MPMO</h1>
@@ -38,7 +39,7 @@
                             <div class="grid grid-cols-2 gap-4 text-center mb-6">
                                 <div>
                                     <p class="text-gray-600">TRX Balance</p>
-                                    <p id="trxBalance" class="text-xl font-bold text-purple-500">{{ number_format($wallets[0]->trxbal, 2) }} TRX</p>
+                                    <p id="trxBalance" class="text-xl font-bold text-purple-500">{{ number_format($trxBalance, 2) }} TRX</p>
                                 </div>
                                 <div>
                                     <p class="text-gray-600">Estimated MPMO</p>
@@ -49,7 +50,7 @@
                             <!-- Fee & Net Display -->
                             <div class="mb-6 space-y-2">
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600">Conversion Fee (<span id="feeRateLabel">2%</span>)</span>
+                                    <span class="text-gray-600">Conversion Fee (<span id="feeRateLabel">2-5%</span>)</span>
                                     <span name= "feeEstimate" id="feeEstimate" class="font-semibold text-red-500">0 MPMO</span>
                                 </div>
                                 <div class="flex justify-between">
@@ -61,8 +62,8 @@
                             <!-- Conversion Form -->
                             <form id="convertForm">
                                 <div class="mb-2">
-                                    <label for="trxAmount" class="block text-gray-700 font-semibold mb-2">TRX Amount</label>
-                                    <input type="number" step="0.01" name="trxAmount" id="trxAmount" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="0.00" required />
+                                    <label for="trx_amount" class="block text-gray-700 font-semibold mb-2">TRX Amount</label>
+                                    <input type="number" step="0.01" name="trx_amount" id="trx_amount" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="0.00" required />
                                     <p id="inputError" class="text-red-500 text-sm mt-2 hidden">Insufficient TRX balance.</p>
                                 </div>
                                 <button id="convertBtn" type="submit" disabled class="w-full px-6 py-3 bg-purple-300 text-white font-semibold rounded-full shadow cursor-not-allowed transition">
@@ -76,10 +77,10 @@
                         <script>
                             const conversionRate = 3;
                             const feeRate = 0.02; // 2% fee
-                            const accountBalance = {{ $wallets[0]->trxbal ?? 0 }};
+                            const accountBalance = {{ $trxBalance ?? 0 }};
 
                             document.addEventListener('DOMContentLoaded', () => {
-                                const amountInput = document.getElementById('trxAmount');
+                                const amountInput = document.getElementById('trx_amount');
                                 const estimateDisplay = document.getElementById('mpmoEstimate');
                                 const feeEstimate = document.getElementById('feeEstimate');
                                 const netEstimate = document.getElementById('netEstimate');

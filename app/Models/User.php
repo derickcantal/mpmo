@@ -123,7 +123,8 @@ class User extends Authenticatable
 
     public function getCwaddressAttribute()
     {
-        return optional($this->wallets)->cwaddress;
+        return $this->wallets->pluck('cwaddress')->all();
+        // return optional($this->wallets)->cwaddress;
     }
 
     public function getTrxBalanceAttribute()

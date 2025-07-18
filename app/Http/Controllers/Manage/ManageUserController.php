@@ -133,7 +133,7 @@ class ManageUserController extends Controller
             $code = $code.$character;
         }
 
-        if (User::where('refid', $code)->exists() & temp_users::where('refid', $code)->exists()) {
+        if (User::where('referral_code', $code)->exists() & temp_users::where('referral_code', $code)->exists()) {
             $this->generateUniqueCode();
         }
 
@@ -291,13 +291,13 @@ class ManageUserController extends Controller
     {
         $user = User::where('userid', $userid)->first();
 
-        if(empty($user->refid))
+        if(empty($user->referral_code))
         {
-            $refid = $this->generateUniqueCode();
+            $referral_code = $this->generateUniqueCode();
         }
         else
         {
-            $refid = $user->refid;
+            $referral_code = $user->referral_code;
         }
 
 
@@ -327,7 +327,7 @@ class ManageUserController extends Controller
         }
         if(empty($request->password)){
             $user =User::where('userid',$user->userid)->update([
-                'refid' => $refid,
+                'referral_code' => $referral_code,
                 'username' => $request->email,
                 'email' => $request->email,
                 'fullname' => $request->fullname,

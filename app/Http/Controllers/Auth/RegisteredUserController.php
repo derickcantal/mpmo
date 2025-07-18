@@ -77,7 +77,7 @@ class RegisteredUserController extends Controller
             'username'     => $data['username'],
             'fullname'     => $data['fullname'],
             'accesstype'   => 'Temporary',
-            'role'         => 'Member',
+            'role'         => 'Temporary',
             'timerecorded' => now(),
             'created_by'   => 'Online',
             'mod'          => 0,

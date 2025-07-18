@@ -92,27 +92,15 @@ class ManageTempUsersController extends Controller
 
         $user = temp_users::where('userid', $userid)->first();
 
-        $fullname = $user->lastname . ', ' . $user->firstname . ' ' . $user->middlename;
-
-        $n1 = strtoupper($request->firstname[0]);
-        $n3 = strtoupper($request->lastname[0]);
-        $n4 = preg_replace('/[-]+/', '', $request->birthdate);
-
-        $newpassword = $n1 . $n3 . $n4;
-
-
         if($request->input('action') == "updateaccept") {
             // $this->show($userid);
             $user = temp_users::where('userid',$user->userid)->update([
                 'username' => $request->email,
                 'email' => $request->email,
-                'password' => Hash::make($newpassword),
-                'firstname' => $request->firstname,
-                'middlename' => $request->middlename,
-                'lastname' => $request->lastname,
+                'fullname' => $request->fullname,
                 'birthdate' => $request->birthdate,
                 'mobile_primary' => $request->mobile,
-                'rnotes' => $request->notes,
+                'notes' => $request->notes,
                 'updated_by' => auth()->user()->email,
                 'mod' => 0,
                 'status' => 'Active',
@@ -139,13 +127,10 @@ class ManageTempUsersController extends Controller
             $user =temp_users::where('userid',$user->userid)->update([
                     'username' => $request->email,
                     'email' => $request->email,
-                    'password' => Hash::make($newpassword),
-                    'firstname' => $request->firstname,
-                    'middlename' => $request->middlename,
-                    'lastname' => $request->lastname,
+                    'fullname' => $request->fullname,
                     'birthdate' => $request->birthdate,
                     'mobile_primary' => $request->mobile,
-                    'rnotes' => $request->notes,
+                    'notes' => $request->notes,
                     'updated_by' => auth()->user()->email,
                     'mod' => $mod + 1,
                 ]);

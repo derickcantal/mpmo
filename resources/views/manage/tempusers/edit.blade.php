@@ -57,21 +57,12 @@
                                 </div>
                             </div>
 
-                            <!-- firstname -->
+                            <!-- fullname -->
                             <div class="col-span-2 sm:col-span-1 px-4">
                                 <div class="form-group mt-4">
-                                    <x-input-label for="firstname" :value="__('First Name')" />
-                                    <x-text-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname', $user->firstname)" required autofocus/>
-                                    <x-input-error :messages="$errors->get('firstname')" class="mt-2" />
-                                </div>
-                            </div>
-
-                            <!-- lastname -->
-                            <div class="col-span-2 sm:col-span-1 px-4">
-                                <div class="form-group mt-4">
-                                    <x-input-label for="lastname" :value="__('Last Name')" />
-                                    <x-text-input id="lastname" class="block mt-1 w-full" type="text" name="lastname" :value="old('lastname', $user->lastname)" required />
-                                    <x-input-error :messages="$errors->get('lastname')" class="mt-2" />
+                                    <x-input-label for="fullname" :value="__('Full Name')" />
+                                    <x-text-input id="fullname" class="block mt-1 w-full" type="text" name="fullname" :value="old('fullname', $user->fullname)" required autofocus/>
+                                    <x-input-error :messages="$errors->get('fullname')" class="mt-2" />
                                 </div>
                             </div>
 
@@ -79,7 +70,7 @@
                             <div class="col-span-2 sm:col-span-1 px-4">
                                 <div class="form-group mt-4">
                                     <x-input-label for="birthdate" :value="__('Birth Date')" />
-                                    <x-text-input id="birthdate" class="block mt-1 w-full" type="date" name="birthdate" :value="date('Y-m-d',strtotime(old('birthdate', $user->birthdate)))" required autofocus autocomplete="bday" />
+                                    <x-text-input id="birthdate" class="block mt-1 w-full" type="date" name="birthdate" :value="date('Y-m-d',strtotime(old('birthdate', $user->birthdate)))" autofocus autocomplete="bday" />
                                     <x-input-error :messages="$errors->get('birthdate')" class="mt-2" />
                                 </div>
                             </div>
@@ -88,7 +79,7 @@
                             <div class="col-span-2 sm:col-span-1 px-4">
                                 <div class="form-group mt-4">
                                     <x-input-label for="mobile" :value="__('Mobile No.')" />
-                                    <x-text-input id="mobile" class="block mt-1 w-full" type="text" name="mobile" :value="old('mobile', $user->mobile_primary)" required autofocus />
+                                    <x-text-input id="mobile" class="block mt-1 w-full" type="text" name="mobile" :value="old('mobile', $user->mobile_primary)" autofocus />
                                     <x-input-error :messages="$errors->get('mobile')" class="mt-2" />
                                 </div>
                             </div>

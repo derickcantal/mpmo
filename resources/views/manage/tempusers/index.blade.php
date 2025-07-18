@@ -110,7 +110,7 @@
                                 <img class="w-10 h-10 rounded-full" src="{{ asset("/storage/$users->avatar") }}" alt="avatar">
                                 <div class="ps-3">
                                     
-                                    <x-input-label>{{ $users->lastname }}, {{ $users->firstname }} {{ $users->middlename }}</x-input-label>
+                                    <x-input-label>{{ $users->fullname }}</x-input-label>
                                     <x-input-label for="email" :value="$users->email"/>
                             </th>
                             <td class="px-6 py-4">

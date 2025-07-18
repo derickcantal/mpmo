@@ -142,7 +142,7 @@
                                 <x-input-label for="accesstype" :value="$transactions->txntype"/>
                             </td>
                             <td class="px-6 py-4">
-                                <x-input-label for="accesstype" :value="$transactions->amount"/>
+                                <x-input-label for="accesstype" :value="$transactions->trx_amount"/>
                             </td>
                             <td class="px-6 py-4">
                                 <x-input-label for="accesstype" :value="$transactions->addresssend"/>

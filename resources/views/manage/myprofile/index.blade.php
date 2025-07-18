@@ -69,7 +69,7 @@
                 <div class="relative bg-white rounded-lg dark:bg-gray-800 p-4">
                     <!-- Modal body -->
                     <div class="grid gap-4 mb-4 grid-cols-2">
-                        <!-- Email Address -->
+                        <!-- Referral Link -->
                         <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="reflink" :value="__('Referral Link')" />

@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('temp_users', function (Blueprint $table) {
             $table->increments('userid');
+            $table->string('referral_code')->unique()->nullable();
+            $table->unsignedBigInteger('referred_by')->nullable();
             $table->string('username');
             $table->string('avatar');
             $table->string('refid')->nullable();

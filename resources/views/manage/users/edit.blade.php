@@ -48,14 +48,23 @@
                     <!-- Modal body -->
                     <img width="100" height="100" class="rounded-full p-4" src="{{ asset("/storage/$user->avatar") }}" alt="user avatar" />
                     <div class="grid mb-4 grid-cols-2 p-4">
-                        <!-- refid -->
-                        <div class="col-span-2 sm:col-span-1 p-4">
-                            <div class="form-group">
-                                <x-input-label for="refid" :value="__('Referral Code')" />
-                                <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->refid }}
-                                </h5>
-                                <x-input-error :messages="$errors->get('refid')" class="mt-2" />
+                        <!-- Referral Link -->
+                        <div class="col-span-2 sm:col-span-1 px-4">
+                            <div class="form-group mt-4">
+                                <x-input-label for="reflink" :value="__('Referral Link')" />
+                                <a id="reflink" href="{{ url('/ref/'.$user->referral_code) }}" class="text-lg font-semibold text-blue-900 dark:text-white">
+                                    {{  url('/ref/'.$user->referral_code)  }}
+                                </a>
+                                <!-- 2. The copy‐to‐clipboard button -->
+                                <button type="button" class="ml-2 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" aria-label="Copy label text"
+                                    onclick="navigator.clipboard.writeText(
+                                    document.getElementById('reflink').innerText.trim()
+                                    )">
+                                    <!-- Heroicon: Document Duplicate (clipboard) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h6m4 4h2a2 2 0 012 2v8a2 2 0 01-2 2h-8m4-4V4m0 0H8m4 0h4" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                         <!-- username -->
@@ -70,7 +79,7 @@
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <div class="form-group">
                                 <x-input-label for="email" :value="__('Email')" />
-                                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $user->email)" required />
+                                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $user->email)" required readonly />
                                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
                             </div>
                         </div>

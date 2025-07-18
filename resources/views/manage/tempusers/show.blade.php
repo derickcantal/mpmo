@@ -64,32 +64,12 @@
                         </div>
                     </div>
 
-                    <!-- First  Name -->
+                    <!-- Full  Name -->
                     <div class="col-span-2 sm:col-span-1 px-4">
                         <div class="form-group mt-4">
-                            <x-input-label for="firstname" :value="__('First Name')" />
+                            <x-input-label for="fullname" :value="__('Full Name')" />
                             <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                {{ $user->firstname }}
-                            </h5>
-                        </div>
-                    </div>
-
-                    <!-- Middle Name -->
-                    <div class="col-span-2 sm:col-span-1 px-4">
-                        <div class="form-group mt-4">
-                            <x-input-label for="middlename" :value="__('Middle Name')" />
-                            <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                {{ $user->middlename }}
-                            </h5>
-                        </div>
-                    </div>
-            
-                    <!-- Last Name -->
-                    <div class="col-span-2 sm:col-span-1 px-4">
-                        <div class="form-group mt-4">
-                            <x-input-label for="lastname" :value="__('Last Name')" />
-                            <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                {{ $user->lastname }}
+                                {{ $user->fullname }}
                             </h5>
                         </div>
                     </div>

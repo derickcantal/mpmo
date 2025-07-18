@@ -13,11 +13,20 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
+use App\Models\TokenMetric;
+use App\Services\TokenService;
 
 use App\Http\Requests\TransactionSearchRequest;
 
 class ManageTransactionsController extends Controller
 {
+
+    protected TokenService $tokenService;
+
+    public function __construct(TokenService $tokenService)
+    {
+        $this->tokenService = $tokenService;
+    }
 
     public function generateUniqueCode()
     {
@@ -101,13 +110,11 @@ class ManageTransactionsController extends Controller
             'txnimg' => $path,
             'txntype' => 'DEPOSIT',
             'addresssend' => $request->walletsource,
-            'addressreceive' => auth()->user()->cwaddress,
-            'amount' => $request->amount,
-            'amountvalue' => 0,
-            'amountfee' => 0,
+            'addressreceive' => auth()->user()->wallets[0]->cwaddress,
+            'trx_amount' => $request->amount,
             'userid' => auth()->user()->userid,
             'cwid' => auth()->user()->cwid,
-            'created_by' => auth()->user()->email,
+            'created_by' => auth()->user()->userid,
             'updated_by' => 'Null',
             'timerecorded' => $timenow,
             'mod' => 0,
@@ -139,8 +146,41 @@ class ManageTransactionsController extends Controller
             return view('manage.transactions.deposit');
         }
     }
+    public function storeconvert(Request $request, TokenService $svc)
+    {
+        // dd('rer');
+        $user     = $request->user();
+        $maxTrx   = $user->trx_balance;
 
-    public function storeconvert(Request $request)
+        $data = $request->validate([
+            'trx_amount' => [
+                'required',
+                'numeric',
+                'gt:0',                       // must be > 0
+                'max:'.$maxTrx,               // not more than they have
+            ],
+        ], [
+            'trx_amount.max' => "You only have {$maxTrx} TRX available.",
+        ]);
+
+        $this->tokenService->convert($user, (float) $data['trx_amount']);
+        $user        = auth()->user();
+        $trxBalance  = $user->trx_balance;    // make sure this column exists on users
+        $mpmoBalance = $user->mpmox_balance; 
+
+        return redirect()
+            ->route('managetxn.convert')
+            ->with(['trxBalance','mpmoBalance'])
+            ->with('success', 'TRX successfully converted to MPMO');
+
+        $data = $request->validate(['trx_amount'=>'required|numeric|max:'.auth()->user()->trx_balance]);
+        $svc->convert(auth()->user(), $data['trx_amount']);
+        $user = auth()->user()->refresh();
+        return response()->json(['message'=>'Converted!',
+                                'trx_balance'=>$user->trx_balance,
+                                'mpmo_balance'=>$user->mpmo_balance]);
+    }
+    public function storeconvert1(Request $request)
     {
         $wallets = auth()->user()->wallets()->get();
         // dd($this->generateUniqueCode());
@@ -213,6 +253,11 @@ class ManageTransactionsController extends Controller
     public function convert(Request $request)
     {
         $wallets = auth()->user()->wallets()->get();
+
+        $user        = auth()->user();
+        $trxBalance  = $user->trx_balance;    // make sure this column exists on users
+        $mpmoBalance = $user->mpmo_balance;   // …and this one, too
+
         if(empty($wallets[0]->cwaddress))
         {
             return redirect()->route('managetxn.index')
@@ -220,7 +265,9 @@ class ManageTransactionsController extends Controller
         }
         else
         {
-            return view('manage.transactions.convert',compact('wallets'));
+            return view('manage.transactions.convert',compact('wallets',   
+                                                              'trxBalance',
+                                                              'mpmoBalance'));
         }
     }
 
@@ -262,9 +309,11 @@ class ManageTransactionsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($txnid)
     {
-        //
+        $transaction = transactions::where('txnid',$txnid)->first();
+
+        return view('manage.transactions.show',compact('transaction'));
     }
 
     /**

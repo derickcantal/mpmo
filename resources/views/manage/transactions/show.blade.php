@@ -9,71 +9,62 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                        User Profile Information
+                        Transaction Information
                     </h3>
                 </div>
                 <!-- Modal body -->
                     <div class="grid gap-4 mb-4 grid-cols-2">
-                        <!-- username -->
+                        <!-- txnhash -->
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <div class="form-group">
-                                <x-input-label for="username" :value="__('Username')" />
+                                <x-input-label for="txnhash" :value="__('Transaction Hash')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->username }}
+                                    {{ $transaction->txnhash }}
                                 </h5>
                             </div>
                         </div>
-                        <!-- Email Address -->
+                        <!-- to -->
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <div class="form-group">
-                                <x-input-label for="email" :value="__('Email')" />
+                                <x-input-label for="to" :value="__('To')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->email }}
+                                    {{ $transaction->addressreceive }}
                                 </h5>
                             </div>
                         </div>
-                        <!-- firstname -->
+                        <!-- from -->
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <div class="form-group">
-                                <x-input-label for="firstname" :value="__('First Name')" />
+                                <x-input-label for="from" :value="__('From')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->firstname }}
+                                    {{ $transaction->addresssend }}
                                 </h5>
                             </div>
                         </div>
-                        <!-- middlename -->
+                        <!-- txntype -->
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <div class="form-group">
-                                <x-input-label for="middlename" :value="__('Middle Name')" />
+                                <x-input-label for="txntype" :value="__('Type')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->middlename }}
+                                    {{ $transaction->txntype }}
                                 </h5>
                             </div>
                         </div>
-                        <!-- lastname -->
+                        <!-- trxamount -->
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <div class="form-group">
-                                <x-input-label for="lastname" :value="__('Last Name')" />
+                                <x-input-label for="trxamount" :value="__('TRX Amount')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->lastname }}
+                                    {{ $transaction->trx_amount }}
                                 </h5>
                             </div>
                         </div>
-                        <!-- birthdate -->
+                        <!-- status -->
                         <div class="col-span-2 sm:col-span-1 p-4">
                             <div class="form-group">
-                                <x-input-label for="birthdate" :value="__('Birth Date')" />
+                                <x-input-label for="status" :value="__('Status')" />
                                 <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->birthdate }}
-                                </h5>
-                            </div>
-                        </div>
-                        <!-- accesstype -->
-                        <div class="col-span-2 sm:col-span-1 p-4">
-                            <div class="form-group">
-                                <x-input-label for="accesstype" :value="__('Access Type')" />
-                                <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $user->accesstype }}
+                                    {{ $transaction->status }}
                                 </h5>
                             </div>
                         </div>
