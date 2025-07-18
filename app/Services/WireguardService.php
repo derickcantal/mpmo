@@ -91,7 +91,9 @@ class WireguardService
         );
 
         // 1) Extract the raw PNG bytes
-        $pngData = $qr->getString();        // raw binary
+        $writer = new WebPWriter();
+        $result = $writer->write($qr);
+        $pngData = $result->getString(); // raw binary
 
         // 2) Persist into your binary column
         $client->qr_code = $pngData;
