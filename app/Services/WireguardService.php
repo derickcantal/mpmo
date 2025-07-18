@@ -83,11 +83,12 @@ class WireguardService
     {
        $conf = $this->clientConfig($client);
 
-        $qr = Builder::create()
-            ->data($conf)
-            ->size(300)
-            ->margin(10)
-            ->build();
+       $qr = new QrCode(
+            data: $conf,
+            encoding: new Encoding('UTF-8'),
+            size: 300,
+            margin: 10
+        );
 
         // 1) Extract the raw PNG bytes
         $pngData = $qr->getString();        // raw binary
