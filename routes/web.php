@@ -14,6 +14,7 @@ use App\Http\Controllers\TokenController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ConvertController;
 use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\VpnClientController;
 
 
 Route::get('/', function () {
@@ -69,7 +70,11 @@ Route::middleware('auth','role:super-admin,member')->group(function () {
     Route::get('/scan', [QrController::class, 'scan'])->name('qr.scan');
     Route::post('/submit-scan', [QrController::class, 'submit'])->name('qr.submit');
 
-    
+    Route::get('/vpn', [VpnClientController::class, 'index'])->name('vpn.index');
+    Route::get('/vpn/create', [VpnClientController::class, 'create'])->name('vpn.create');
+    Route::get('/vpn/{vpnid}', [VpnClientController::class, 'show'])->name('vpn.show');
+    Route::post('/vpn/store', [VpnClientController::class, 'store'])->name('vpn.store');
+
 });
 
 Route::middleware('auth')->group(function () {

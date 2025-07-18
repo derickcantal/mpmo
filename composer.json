@@ -17,7 +17,8 @@
         "kornrunner/secp256k1": "^0.3.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "livewire/livewire": "^3.6"
+        "livewire/livewire": "^3.6",
+        "symfony/process": "^7.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
