@@ -4,6 +4,14 @@ namespace App\Services;
 
 use App\Models\VpnClient;
 use Symfony\Component\Process\Process;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\WebPWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\QrCodeInterface;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Builder\Builder;
 
 class WireguardService
 {

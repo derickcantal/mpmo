@@ -20,6 +20,7 @@ use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\QrCodeInterface;
 use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Builder\Builder;
 
 class ManageMyProfileController extends Controller
 {
