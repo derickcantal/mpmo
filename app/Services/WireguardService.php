@@ -83,7 +83,7 @@ class WireguardService
     {
        $conf = $this->clientConfig($client);
 
-        $qr = \Endroid\QrCode\Builder\Builder::create()
+        $qr = Builder::create()
             ->data($conf)
             ->size(300)
             ->margin(10)
