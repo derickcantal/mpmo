@@ -22,7 +22,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $client->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $client->address }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route('vpn-clients.show', $client) }}" class="text-blue-600 hover:text-blue-900">View</a>
+                                    <a href="{{ route('vpn.show', $client) }}" class="text-blue-600 hover:text-blue-900">View</a>
                                 </td>
                             </tr>
                             @endforeach
