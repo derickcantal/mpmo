@@ -22,7 +22,7 @@ class VpnClientController extends Controller
 
         $client = $wg->createClient($data['name'], $data['address']);
 
-        return redirect()->route('vpn-clients.show', $client);
+        return redirect()->route('vpn.show', $client);
     }
 
     // Add this method:
