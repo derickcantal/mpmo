@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('public_key');
             $table->text('private_key');
+            $table->longblob('qr_code')->nullable();
             $table->string('address');       // e.g. 10.0.0.2/32
             $table->timestamps();
         });

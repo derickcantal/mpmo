@@ -43,7 +43,16 @@ class WireguardService
         $publicKey = trim($pub->getOutput());
 
         // 3. Save to database (private_key is cast→encrypted)
-        return VpnClient::create(compact('name','publicKey','privateKey','address'));
+
+         $client = VpnClient::create([
+            'name'       => $name,
+            'public_key' => $publicKey,
+            'private_key'=> $privateKey,
+            'address'    => $address,
+        ]);
+
+
+        return $client;
     }
 
     public function clientConfig(VpnClient $client): string
@@ -64,14 +73,22 @@ class WireguardService
 
     public function clientQr(VpnClient $client): string
     {
-        $conf = $this->clientConfig($client);
+       $conf = $this->clientConfig($client);
 
-        $result = \Endroid\QrCode\Builder\Builder::create()
+        $qr = \Endroid\QrCode\Builder\Builder::create()
             ->data($conf)
             ->size(300)
             ->margin(10)
             ->build();
 
-        return $result->getDataUri();  // data:image/png;base64,...
+        // 1) Extract the raw PNG bytes
+        $pngData = $qr->getString();        // raw binary
+
+        // 2) Persist into your binary column
+        $client->qr_code = $pngData;
+        $client->save();
+
+        // 3) Still return a Data URI for immediate display
+        return $qr->getDataUri();
     }
 }

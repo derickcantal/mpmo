@@ -15,10 +15,13 @@ class VpnClient extends Model
         'name',
         'public_key',
         'private_key',
-        'address'];
+        'address',
+        'qr_code',
+    ];
 
     // Encrypt the private key at rest
     protected $casts = [
         'private_key' => 'encrypted',
+        'qr_code'     => 'encrypted:binary',
     ];
 }
