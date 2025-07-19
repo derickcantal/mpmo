@@ -9,8 +9,9 @@
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
         "@tailwindcss/vite": "^4.1.11",
+        "@vitejs/plugin-react": "^4.7.0",
         "alpinejs": "^3.4.2",
-        "autoprefixer": "^10.4.2",
+        "autoprefixer": "^10.4.21",
         "axios": "^1.8.2",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
@@ -28,7 +29,11 @@
         "@tailwindcss/postcss": "^4.1.11",
         "apexcharts": "^3.46.0",
         "flowbite": "^3.1.2",
+        "flowbite-react": "^0.11.9",
+        "framer-motion": "^12.23.6",
         "html5-qrcode": "^2.3.8",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
         "tronweb": "^6.0.3"
     }
 }
