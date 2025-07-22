@@ -22,42 +22,67 @@ class WireguardService
 
     public function __construct()
     {
-        $this->serverPublicKey = config('wireguard.server_public_key','SHGz63uFjSqVQgIR2UWX1gibrxzHZFlOqJqhSivOm3Q=');
+        $this->serverPublicKey = config('wireguard.server_public_key','yjU1vABHDd8NMpaK//yH80nwg0pm5ZCtP7HtZN9n8xM=');
         $this->endpoint        = config('wireguard.endpoint','31.97.61.228:51820');       // e.g. 31.97.61.228:51820
         $this->dns             = config('wireguard.dns', '1.1.1.1');
     }
 
+    public function addPeer(VpnClient $client): void
+    {
+        $proc = new Process([
+            'sudo','-n','/usr/bin/wg','set','wg0',
+            'peer', $client->public_key,
+            'allowed-ips', $client->address,
+        ]);
+        $proc->run();
+        if (! $proc->isSuccessful()) {
+            throw new \RuntimeException("wg set failed: " . $proc->getErrorOutput());
+        }
+    }
+    
     public function createClient(string $name, string $address): VpnClient
     {
-        $prv = new Process([$this->wgBin, 'genkey']);
-        $prv->run();
-        if (! $prv->isSuccessful()) {
-            throw new \RuntimeException(
-                'wg genkey failed: ' . $prv->getErrorOutput()
-            );
+        // 1. Generate keys
+        $prvProc = new Process(['wg','genkey']);
+        $prvProc->run();
+        $privateKey = trim($prvProc->getOutput());
+
+        $pubProc = new Process(['wg','pubkey']);
+        $pubProc->setInput($privateKey);
+        $pubProc->run();
+        $publicKey = trim($pubProc->getOutput());
+
+        // 2. Write them to a directory you own (e.g. /etc/wireguard/clients)
+        // $dir = '/etc/wireguard/clients';
+        // if (! is_dir($dir)) {
+        //     mkdir($dir, 0700, true);
+        //     chown($dir, 'www-data');  // or whatever your PHP user is
+        // }
+
+        $dir = storage_path('app/wireguard');
+        if (! is_dir($dir)) {
+            mkdir($dir, 0700, true);  // always works under storage/
         }
-        $privateKey = trim($prv->getOutput());
+        $base = "$dir/{$address}";  // or use $name, or an incremental ID
+        file_put_contents("{$base}.key", $privateKey);
+        chmod("{$base}.key", 0600);
+        file_put_contents("{$base}.pub", $publicKey);
+        chmod("{$base}.pub", 0644);
 
-        $pub = new Process([$this->wgBin, 'pubkey']);
-        $pub->setInput($privateKey);
-        $pub->run();
-        if (! $pub->isSuccessful()) {
-            throw new \RuntimeException(
-                'wg pubkey failed: ' . $pub->getErrorOutput()
-            );
-        }
-        $publicKey = trim($pub->getOutput());
-
-
+        // 3. Persist in the database
         $client = VpnClient::create([
-            'name'       => $name,
-            'public_key' => $publicKey,
-            'private_key'=> $privateKey,
-            'address'    => $address,
+            'name'        => $name,
+            'public_key'  => $publicKey,
+            'private_key' => $privateKey,
+            'address'     => $address,
         ]);
+
+        // 4. Inject into WireGuard (and persist to wg0.conf)
+        $this->addPeer($client);
 
         return $client;
     }
+
 
     public function clientConfig(VpnClient $client): string
     {

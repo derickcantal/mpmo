@@ -35,6 +35,12 @@ class VpnClientController extends Controller
             $request->input('address')
         );
 
+        // 1) Create & persist the client
+        $client = $wg->createClient($data['name'], $data['address']);
+
+        // 2) Inject and save the peer on the server
+        $wg->addPeer($client);
+
         return redirect()->route('vpn.show', $client->id);
     }
 
