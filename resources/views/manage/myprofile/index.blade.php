@@ -73,8 +73,8 @@
                         <div class="col-span-2 sm:col-span-1 px-4">
                             <div class="form-group mt-4">
                                 <x-input-label for="reflink" :value="__('Referral Link')" />
-                                <a id="reflink" href="http://mpmo.localhost/ref/{{$user->referral_code}}" class="text-lg font-semibold text-blue-900 dark:text-white">
-                                    http://mpmo.localhost/ref/{{ $user->referral_code }}
+                                <a id="reflink" href="{{ url('/ref/'.$user->referral_code) }}" class="text-lg font-semibold text-blue-900 dark:text-white">
+                                    {{ url('/ref/'.$user->referral_code) }}
                                 </a>
                                 <!-- 2. The copy‐to‐clipboard button -->
                                 <button type="button" class="ml-2 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" aria-label="Copy label text"
