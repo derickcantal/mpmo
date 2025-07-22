@@ -1,7 +1,7 @@
-@layer components {
-  @import 'flowbite';
-}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  @import 'flowbite';
+}

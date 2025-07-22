@@ -22,14 +22,13 @@ class WireguardService
 
     public function __construct()
     {
-        $this->serverPublicKey = config('wireguard.server_public_key');
-        $this->endpoint        = config('wireguard.endpoint','31.97.61.228');       // e.g. 31.97.61.228:51820
+        $this->serverPublicKey = config('wireguard.server_public_key','SHGz63uFjSqVQgIR2UWX1gibrxzHZFlOqJqhSivOm3Q=');
+        $this->endpoint        = config('wireguard.endpoint','31.97.61.228:51820');       // e.g. 31.97.61.228:51820
         $this->dns             = config('wireguard.dns', '1.1.1.1');
     }
 
     public function createClient(string $name, string $address): VpnClient
     {
-         // 1. Generate private key
         $prv = new Process([$this->wgBin, 'genkey']);
         $prv->run();
         if (! $prv->isSuccessful()) {
@@ -39,7 +38,6 @@ class WireguardService
         }
         $privateKey = trim($prv->getOutput());
 
-        // 2. Derive public key
         $pub = new Process([$this->wgBin, 'pubkey']);
         $pub->setInput($privateKey);
         $pub->run();
@@ -50,7 +48,6 @@ class WireguardService
         }
         $publicKey = trim($pub->getOutput());
 
-        // 3. Save to database (private_key is cast→encrypted)
 
         $client = VpnClient::create([
             'name'       => $name,
@@ -80,12 +77,7 @@ class WireguardService
 
     public function clientQr(VpnClient $client): string
     {
-        // 1) Ensure the client really exists
-        if (! $client->exists) {
-            throw new \InvalidArgumentException('Client must be persisted before generating QR.');
-        }
 
-        // 2) Build your config and QR code (as before)…
         $conf = $this->clientConfig($client);
 
         $qr = new QrCode(
@@ -95,16 +87,13 @@ class WireguardService
             margin: 10
         );
 
-        // 1) Extract the raw PNG bytes
         $writer = new WebPWriter();
-        $result = $writer->write($qrCode);
+        $result = $writer->write($qr);
 
-        // 3) Force an UPDATE so we don’t trigger INSERT
         $client->update([
             'qr_code' => $result->getString(),
         ]);
 
-        // 3) Still return a Data URI for immediate display
         return $result->getDataUri();
     }
 }

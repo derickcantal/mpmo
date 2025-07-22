@@ -29,9 +29,13 @@ class VpnClientController extends Controller
             'address' => 'required|ip|unique:vpn_clients,address',
         ]);
 
-        $client = $wg->createClient($data['name'], $data['address']);
+        // 1) Create & persist in one step
+        $client = $wg->createClient(
+            $request->input('name'),
+            $request->input('address')
+        );
 
-        return redirect()->route('vpn.show', $client);
+        return redirect()->route('vpn.show', $client->id);
     }
 
     // Add this method:
@@ -40,8 +44,10 @@ class VpnClientController extends Controller
         return view('vpn.create');
     }
 
-    public function show(VpnClient $vpnClient, WireguardService $wg)
+    public function show(VpnClient $vpnid, WireguardService $wg)
     {
+        // dd($vpnid);
+        $vpnClient = $vpnid;
         $qrDataUri = $wg->clientQr($vpnClient);
         $conf      = $wg->clientConfig($vpnClient);
 
