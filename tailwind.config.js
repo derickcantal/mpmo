@@ -16,6 +16,9 @@ export default {
     theme: {
         extend: {
             colors: {
+                'mpm-primary': '#FF7C7C',    // Adjust to your exact pink
+                'mpm-secondary': '#FFFB7D',  // Adjust to your exact yellow
+                'mpm-accent': '#FFFB7D',     // Replace with your accent
                 primary: {"50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","300":"#93c5fd","400":"#60a5fa","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8","800":"#1e40af","900":"#1e3a8a","950":"#172554"}
             },
             fontFamily: {

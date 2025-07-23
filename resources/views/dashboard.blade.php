@@ -1,9 +1,64 @@
 <x-app-layout>
     @include('layouts.home.navigation')
-    <div class="gradient-bg dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg py-4 flex-1 pb-16 sm:pb-safe">
-        <div class="mx-auto sm:px-6 lg:px-8">
-            <!-- Error & Success Notification -->
-            @include('layouts.notifications') 
+    <div class="gradient-bg min-h-screen dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg py-4 flex-1 pb-16 sm:pb-safe">
+        <!-- Error & Success Notification -->
+        @include('layouts.notifications') 
+        <div class="p-4 sm:hidden">
+            <!-- Balance Header -->
+            <div class="flex items-center justify-between bg-white rounded-lg mb-6 p-4">
+                <div>
+                <h2 class="text-lg font-medium text-yellow-500">Available Balance</h2>
+                <p class="text-2xl font-bold text-orange-600">MPMO: {{ number_format(Auth::user()->mpmo_balance, 2) }}</p>
+                <p class="text-2xl font-bold text-pink-500">TRX: {{ number_format(Auth::user()->trx_balance, 2) }}</p>
+                </div>
+                <button class="inline-flex items-center px-4 py-2 bg-pink-800 text-pink-300 font-bold rounded-full shadow-lg hover:bg-yellow-300 transition">
+                    <x-heroicon-o-arrow-path class="w-6 h-6 text-mpm-primary" /> Convert
+                </button>
+            </div>
+
+            <!-- Quick Action Grid -->
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <a href="#" class="flex flex-col items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-mpm-accent">
+                    <x-heroicon-o-qr-code class="w-6 h-6 text-mpm-primary" />
+                    <span class="mt-2 text-sm font-medium text-mpm-primary">Deposit</span>
+                </a>
+                <a href="#" class="flex flex-col items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-mpm-accent">
+                    <x-heroicon-o-arrow-up-tray class="w-6 h-6 text-mpm-primary" />
+                    <span class="mt-2 text-sm text-center font-medium text-mpm-primary">Send Money</span>
+                </a>
+                <a href="#" class="flex flex-col items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-mpm-accent">
+                    <x-heroicon-o-receipt-percent class="w-6 h-6 text-mpm-primary" />
+                    <span class="mt-2 text-sm font-medium text-mpm-primary">Pay Bills</span>
+                </a>
+                <a href="#" class="flex flex-col items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-mpm-accent">
+                    <x-heroicon-o-phone class="w-6 h-6 text-mpm-primary" />
+                    <span class="mt-2 text-sm font-medium text-mpm-primary">Buy Load</span>
+                </a>
+            </div>
+
+            <!-- Quick Action Grid -->
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <a href="#" class="flex flex-col items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-mpm-accent">
+                    <x-heroicon-o-currency-dollar class="w-6 h-6 text-mpm-primary" />
+                    <span class="mt-2 text-sm font-medium text-mpm-primary">Deposit</span>
+                </a>
+                <a href="#" class="flex flex-col items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-mpm-accent">
+                    <x-heroicon-o-arrow-up-tray class="w-6 h-6 text-mpm-primary" />
+                    <span class="mt-2 text-sm text-center font-medium text-mpm-primary">Send Money</span>
+                </a>
+                <a href="#" class="flex flex-col items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-mpm-accent">
+                    <x-heroicon-o-receipt-percent class="w-6 h-6 text-mpm-primary" />
+                    <span class="mt-2 text-sm font-medium text-mpm-primary">Pay Bills</span>
+                </a>
+                <a href="#" class="flex flex-col items-center justify-center p-3 bg-white rounded-lg shadow hover:bg-mpm-accent">
+                    <x-heroicon-o-phone class="w-6 h-6 text-mpm-primary" />
+                    <span class="mt-2 text-sm font-medium text-mpm-primary">Buy Load</span>
+                </a>
+            </div>
+
+            
+        </div>
+        <div class="hidden md:block lg:block mx-auto sm:px-6 lg:px-8">
             {{-- Content --}}
             <p class="lg:text-5xl sm:text-3xl font-bold text-pink mb-8 p-4">Welcome, {{ Auth::user()->fullname }}!</p>
 

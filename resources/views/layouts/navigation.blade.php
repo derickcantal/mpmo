@@ -11,7 +11,7 @@
             </div>
         <div class="flex items-center lg:order-2">
             <!-- Apps -->
-            <button type="button" data-dropdown-toggle="apps-dropdown" class="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+            <button type="button" data-dropdown-toggle="apps-dropdown" class="sm:hidden p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
                 <span class="sr-only">View notifications</span>
                 <!-- Icon -->
                 <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
@@ -130,65 +130,39 @@
     </div>
 </nav>
 
-
-<div class="sm:hidden fixed bottom-0 z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600">
-    <div class="grid h-full max-w-lg grid-cols-5 mx-auto">
-        <a href="{{ route('dashboard') }}" data-tooltip-target="tooltip-home" type="button" class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
-            <svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
-            </svg>
-            <span class="sr-only">Home</span>
-        </a>
-        <div id="tooltip-home" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-            Home
-            <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-
-        <a href="{{ route('managemyprofile.signature') }}" data-tooltip-target="tooltip-wallet" type="button" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
-            <svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M11.074 4 8.442.408A.95.95 0 0 0 7.014.254L2.926 4h8.148ZM9 13v-1a4 4 0 0 1 4-4h6V6a1 1 0 0 0-1-1H1a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h17a1 1 0 0 0 1-1v-2h-6a4 4 0 0 1-4-4Z"/>
-                <path d="M19 10h-6a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1Zm-4.5 3.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2ZM12.62 4h2.78L12.539.41a1.086 1.086 0 1 0-1.7 1.352L12.62 4Z"/>
-            </svg>
-            <span class="sr-only">Wallet</span>
-        </a>
-        <div id="tooltip-wallet" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-            Wallet
-            <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-
-        <a href="{{ route('managetxn.convert') }}" data-tooltip-target="tooltip-items" type="button" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
-            <svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
-            </svg>
-
-            <span class="sr-only">Convert</span>
-        </a>
-        <div id="tooltip-items" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-            Convert
-            <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-
-        <a href="{{ route('managetxn.deposit') }}" data-tooltip-target="tooltip-settings" type="button" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
-            <svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
-            </svg>
-   
-            <span class="sr-only">Deposit</span>
-        </a>
-        <div id="tooltip-settings" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-            Deposit
-            <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-
-        <a href="{{ route('managetxn.withdraw') }}" data-tooltip-target="tooltip-profile" type="button" class="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
-            <svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
-            </svg>
-            <span class="sr-only">Withdraw</span>
-        </a>
-        <div id="tooltip-profile" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-            Withdraw
-            <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-    </div>
+<div class="sm:hidden fixed bottom-0 z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-0 left-1/2 dark:bg-gray-700 dark:border-gray-600">
+    <nav class="fixed bottom-0 left-0 w-full bg-white border-t">
+        <ul class="flex justify-between">
+            <li class="flex-1 text-center py-2">
+                <a href="{{ route('dashboard') }}" class="block text-mpm-primary">
+                <x-heroicon-o-home class="w-6 h-6 mx-auto" />
+                <span class="text-xs">Wallet</span>
+                </a>
+            </li>
+            <li class="flex-1 text-center py-2">
+                <a href="#" class="block text-gray-600 hover:text-mpm-primary">
+                <x-heroicon-o-sparkles class="w-6 h-6 mx-auto" />
+                <span class="text-xs">Save</span>
+                </a>
+            </li>
+            <li class="flex-1 text-center py-2">
+                <a href="#" class="block text-gray-600 hover:text-mpm-primary">
+                <x-heroicon-o-credit-card class="w-6 h-6 mx-auto" />
+                <span class="text-xs">Borrow</span>
+                </a>
+            </li>
+            <li class="flex-1 text-center py-2">
+                <a href="#" class="block text-gray-600 hover:text-mpm-primary">
+                <x-heroicon-o-qr-code class="w-6 h-6 mx-auto" />
+                <span class="text-xs">Pay QR</span>
+                </a>
+            </li>
+            <li class="flex-1 text-center py-2">
+                <a href="#" class="block text-gray-600 hover:text-mpm-primary">
+                <x-heroicon-s-ellipsis-horizontal class="w-6 h-6 mx-auto" />
+                <span class="text-xs">More</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>

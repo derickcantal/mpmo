@@ -1,4 +1,4 @@
-<nav class="overflow-x-auto bg-white dark:bg-gray-700">
+<nav class="hidden md:block lg:block overflow-x-auto bg-white dark:bg-gray-700">
     <div class="px-4 py-3 mx-auto">
         <div class="flex items-center">
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
