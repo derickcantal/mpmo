@@ -15,7 +15,7 @@ class TronGridService
 
     public function __construct()
     {
-        $this->nodeUrl = config('services.tron.node_url', env('TRON_NODE_URL'));
+        $this->nodeUrl = config('tron.node_url');
     }
 
     // 1. Generate new wallet (private/public/address)
