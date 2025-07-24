@@ -9,7 +9,7 @@
                 <h1 class="text-4xl font-extrabold text-indigo-300">Welcome, {{ Auth::user()->fullname }}!</h1>
                 <div class="flex items-center space-x-4">
                     <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">{{ Auth::user()->accesstype }}</span>
-                    <img src="{{ Auth::user()->avatar_url ?? asset('storage/img/avatar-default.png') }}"
+                    <img src="{{ asset('storage/' . (auth()->user()->avatar ?? 'img/avatar-default.png')) }}"
                          alt="Avatar"
                          class="w-10 h-10 rounded-full border-2 border-indigo-400" />
                 </div>

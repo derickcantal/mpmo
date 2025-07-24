@@ -1,104 +1,105 @@
 <x-guest-layout>
-    <!-- Page Content -->
-    <div class="gradient-bg min-h-screen flex items-center justify-center">
-        <div class="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
-            <div class="text-center mb-6">
-                <img src="{{ asset("storage/img/logo.png") }}" alt="MPMO Logo" class="mx-auto h-16 w-16 mb-2">
-                <h1 class="text-3xl font-bold text-pink-500">Create Your Account</h1>
-                <p class="text-gray-600 mt-1">Join the MPMO adventure!</p>
-            </div>
-            @include('layouts.notifications') 
-            <!-- If you want the user to see where they came from: -->
-            @if($referrerId)
-                @php $referrer = \App\Models\User::find($referrerId); @endphp
-                <p class="text-sm text-gray-600">
-                    You were referred by {{ $referrer->name }} ({{ $referrer->referral_code }})
-                </p>
-            @endif
-            <form method="POST" action="{{ route('register') }}" class="space-y-4">
-                @csrf
-                <!-- show it to the user (readonly) -->
-                @if(session('referrer_code'))
-                <div class="mb-4 text-sm text-gray-700">
-                    You were referred by <strong>{{ session('referrer_code') }}</strong>
-                </div>
-                @endif
+  <div class="min-h-screen bg-gray-900 text-gray-200 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full bg-gray-800 rounded-2xl shadow-2xl p-8 space-y-6">
+      {{-- Logo & Heading --}}
+      <div class="text-center">
+        <img src="{{ asset('storage/img/logo.png') }}" alt="MPMO Logo" class="mx-auto h-16 w-16 mb-4">
+        <h2 class="text-3xl font-extrabold text-indigo-300">Create Your Account</h2>
+        <p class="text-gray-400 mt-1">Join the MPMO adventure!</p>
+      </div>
 
-                <!-- …and a hidden field for the DB: -->
-                <input
-                type="hidden"
-                name="referred_by"
-                value="{{ old('referred_by', session('referrer_id')) }}"
-                />
-                <!-- Name -->
-                <div>
-                    <label for="referral_code" class="block text-gray-700 font-semibold">Referral Code</label>
-                    <input id="referral_code" name="referral_code" type="text" value="{{ old('referrer_code', session('referrer_code')) }}" required readonly
-                           class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
-                    @error('referral_code')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
-                </div>
-                <!-- Name -->
-                <div>
-                    <label for="username" class="block text-gray-700 font-semibold">Username</label>
-                    <input id="username" name="username" type="text" value="{{ old('username') }}" required autofocus
-                           class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
-                    @error('username')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
-                </div>
-                <!-- Name -->
-                <div>
-                    <label for="fullname" class="block text-gray-700 font-semibold">Full Name</label>
-                    <input id="fullname" name="fullname" type="text" value="{{ old('fullname') }}" required autofocus
-                           class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
-                    @error('fullname')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
-                </div>
+      @include('layouts.notifications')
 
-                <!-- Email Address -->
-                <div>
-                    <label for="email" class="block text-gray-700 font-semibold">Email</label>
-                    <input id="email" name="email" type="email" value="{{ old('email') }}" required
-                           class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
-                    @error('email')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
-                </div>
+      @if($referrerId)
+        @php $referrer = \App\Models\User::find($referrerId); @endphp
+        <p class="text-sm text-gray-400">
+          Referred by {{ $referrer->fullname }} ({{ $referrer->referral_code }})
+        </p>
+      @endif
 
-                <!-- Password -->
-                <div>
-                    <label for="password" class="block text-gray-700 font-semibold">Password</label>
-                    <input id="password" name="password" type="password" required
-                           class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
-                    @error('password')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
-                </div>
+      <form method="POST" action="{{ route('register') }}" class="space-y-5">
+        @csrf
+        @if(session('referrer_code'))
+          <div class="text-sm text-gray-400">
+            You were referred by <strong class="text-indigo-300">{{ session('referrer_code') }}</strong>
+          </div>
+        @endif
+        <input type="hidden" name="referred_by" value="{{ old('referred_by', session('referrer_id')) }}"/>
 
-                <!-- Confirm Password -->
-                <div>
-                    <label for="password_confirmation" class="block text-gray-700 font-semibold">Confirm Password</label>
-                    <input id="password_confirmation" name="password_confirmation" type="password" required
-                           class="mt-1 block w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
-                </div>
-
-                <div class="pt-4">
-                    <button type="submit" class="w-full bg-pink-500 text-white py-3 rounded-full font-bold hover:bg-pink-600 transition">
-                        Register
-                    </button>
-                </div>
-            </form>
-
-            <p class="mt-6 text-center text-gray-600">
-                Already have an account?
-                <a href="{{ route('login') }}" class="text-pink-500 font-semibold hover:underline">Login here</a>
-            </p>
+        <div>
+          <label for="referral_code" class="block text-gray-200 font-semibold">Referral Code</label>
+          <input id="referral_code" name="referral_code" type="text"
+                 value="{{ old('referrer_code', session('referrer_code')) }}" readonly
+                 class="mt-1 w-full px-4 py-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600
+                        focus:outline-none focus:ring-2 focus:ring-indigo-300"/>
+          @error('referral_code')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
-        @push('scripts')
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                const params = new URLSearchParams(window.location.search);
-                if (params.has('ref')) {
-                    const ref = params.get('ref');
-                    const input = document.querySelector('input[name="referred_by"]');
-                    if (input) input.value = ref;
-                }
-                });
-            </script>
-        @endpush
-    </div>
-</x-guest-layout>
 
+        <div>
+          <label for="username" class="block text-gray-200 font-semibold">Username</label>
+          <input id="username" name="username" type="text" value="{{ old('username') }}" required autofocus
+                 class="mt-1 w-full px-4 py-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600
+                        focus:outline-none focus:ring-2 focus:ring-indigo-300"/>
+          @error('username')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+        </div>
+
+        <div>
+          <label for="fullname" class="block text-gray-200 font-semibold">Full Name</label>
+          <input id="fullname" name="fullname" type="text" value="{{ old('fullname') }}" required
+                 class="mt-1 w-full px-4 py-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600
+                        focus:outline-none focus:ring-2 focus:ring-indigo-300"/>
+          @error('fullname')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+        </div>
+
+        <div>
+          <label for="email" class="block text-gray-200 font-semibold">Email</label>
+          <input id="email" name="email" type="email" value="{{ old('email') }}" required
+                 class="mt-1 w-full px-4 py-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600
+                        focus:outline-none focus:ring-2 focus:ring-indigo-300"/>
+          @error('email')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+        </div>
+
+        <div>
+          <label for="password" class="block text-gray-200 font-semibold">Password</label>
+          <input id="password" name="password" type="password" required
+                 class="mt-1 w-full px-4 py-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600
+                        focus:outline-none focus:ring-2 focus:ring-indigo-300"/>
+          @error('password')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+        </div>
+
+        <div>
+          <label for="password_confirmation" class="block text-gray-200 font-semibold">Confirm Password</label>
+          <input id="password_confirmation" name="password_confirmation" type="password" required
+                 class="mt-1 w-full px-4 py-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600
+                        focus:outline-none focus:ring-2 focus:ring-indigo-300"/>
+        </div>
+
+        <div>
+          <x-button type="submit" class="w-full flex justify-center py-2 px-4">
+            Register
+          </x-button>
+        </div>
+      </form>
+
+      <p class="mt-6 text-center text-gray-400 text-sm">
+        Already have an account?
+        <a href="{{ route('login') }}" class="text-indigo-300 font-semibold hover:underline ml-1">
+          Log in
+        </a>
+      </p>
+    </div>
+  </div>
+
+  @push('scripts')
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('ref')) {
+          const ref = params.get('ref');
+          const input = document.querySelector('input[name="referred_by"]');
+          if (input) input.value = ref;
+        }
+      });
+    </script>
+  @endpush
+</x-guest-layout>
