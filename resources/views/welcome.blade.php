@@ -16,112 +16,142 @@
         </style>
        
     </head>
-    <body class="gradient-bg min-h-screen flex flex-col">
-        <!-- Navbar -->
-        <nav class="px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="{{ asset("storage/img/logo.png") }}" alt="MPMO Logo" class="h-12 w-12 mr-2">
-                <span class="text-2xl text-white font-bold">MPMO</span>
-            </div>
-            <div class="space-x-4">
-                <a href="#presale" class="text-white font-semibold hover:underline">Presale</a>
-                <a href="#eggs" class="text-white font-semibold hover:underline">Eggs</a>
-                <a href="#roadmap" class="text-white font-semibold hover:underline">Roadmap</a>
-                @guest
-                    <a href="{{ route('login') }}" class="text-white font-semibold hover:underline">Login</a>
-                    <a href="{{ route('register') }}" class="text-white font-semibold hover:underline">Register</a>
-                @else
-                    <a href="{{ route('dashboard') }}" class="text-white font-semibold hover:underline">Dashboard</a>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="text-white font-semibold hover:underline">Logout</button>
-                    </form>
-                @endguest
-            </div>
-        </nav>
+    {{-- Top Navigation --}}
+    <header class="bg-gray-800 text-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                {{-- Logo --}}
+                <div class="flex items-center">
+                    <img src="{{ asset('storage/img/logo.png') }}" alt="MPMO" class="h-8 w-8 mr-2">
+                    <span class="text-xl font-bold text-indigo-400">MPMO</span>
+                </div>
 
-        <!-- Hero Section -->
-        <section class="flex-grow flex flex-col justify-center items-center text-center p-4">
-            <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 animate-bounce">Hatch Your Adventure!</h1>
-            <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl">
-                Join the <span class="font-semibold">MPMO Token Presale</span> and collect adorable monster eggs on Tron— <br>1 TRX = 3 MPMO.
+                {{-- Desktop Links --}}
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#presale" class="hover:text-white">Presale</a>
+                    <a href="#eggs"    class="hover:text-white">Eggs</a>
+                    <a href="#roadmap" class="hover:text-white">Roadmap</a>
+                    @guest
+                        <a href="{{ route('login') }}"    class="hover:text-white">Login</a>
+                        <a href="{{ route('register') }}" class="hover:text-white">Register</a>
+                    @else
+                        <a href="{{ route('dashboard') }}" class="hover:text-white">Dashboard</a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="hover:text-white">Logout</button>
+                        </form>
+                    @endguest
+                </nav>
+
+                {{-- Mobile Hamburger --}}
+                <button id="mobile-menu-button" class="md:hidden p-2 focus:outline-none">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        {{-- Mobile Menu --}}
+        <div id="mobile-menu" class="md:hidden hidden bg-gray-700">
+            <a href="#presale" class="block px-4 py-2 hover:bg-gray-600">Presale</a>
+            <a href="#eggs"    class="block px-4 py-2 hover:bg-gray-600">Eggs</a>
+            <a href="#roadmap" class="block px-4 py-2 hover:bg-gray-600">Roadmap</a>
+            @guest
+                <a href="{{ route('login') }}"    class="block px-4 py-2 hover:bg-gray-600">Login</a>
+                <a href="{{ route('register') }}" class="block px-4 py-2 hover:bg-gray-600">Register</a>
+            @else
+                <a href="{{ route('dashboard') }}" class="block px-4 py-2 hover:bg-gray-600">Dashboard</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-600">Logout</button>
+                </form>
+            @endguest
+        </div>
+
+        {{-- Toggle Script --}}
+        <script>
+            const btn  = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        </script>
+    </header>
+
+    {{-- Main Content --}}
+    <main class="bg-gray-900 text-gray-200 flex-1 p-6">
+        {{-- Hero Section --}}
+        <section id="presale" class="flex flex-col items-center justify-center text-center py-16">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-indigo-300 mb-4 animate-pulse">
+                Hatch Your Adventure!
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
+                Join the <span class="font-semibold text-pink-400">MPMO Token Presale</span> and collect
+                adorable monster eggs on Tron —<br>1 TRX = 3 MPMO.
             </p>
             @guest
-                <a href="{{ route('register') }}" class="px-8 py-4 bg-white text-pink-500 font-bold rounded-full shadow-lg hover:bg-pink-100 transition">
+                <a href="{{ route('register') }}"
+                   class="px-8 py-4 bg-pink-500 text-white font-bold rounded-full shadow-lg hover:bg-pink-400 transition">
                     Get Started
                 </a>
             @else
-                <a href="{{ route('dashboard') }}" class="px-8 py-4 bg-white text-pink-500 font-bold rounded-full shadow-lg hover:bg-pink-100 transition">
+                <a href="{{ route('dashboard') }}"
+                   class="px-8 py-4 bg-indigo-500 text-white font-bold rounded-full shadow-lg hover:bg-indigo-400 transition">
                     Go to Dashboard
                 </a>
             @endguest
         </section>
 
-        <!-- Feature Cards -->
-        <section id="eggs" class="py-12 bg-white/80">
-            <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Common Egg -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:scale-105 transition">
-                    <h3 class="text-2xl font-bold text-pink-500 mb-2">Common Egg</h3>
-                    <p class="text-gray-600 mb-4">300 MPMO (100 TRX)</p>
-                    <ul class="text-left text-gray-700 mb-6 space-y-1">
-                        <li>✅ 70% Common</li>
-                        <li>✨ 25% Rare</li>
-                        <li>🌟 5% Elite</li>
-                    </ul>
-                    <a href="{{ route('register') }}" class="px-4 py-2 bg-pink-500 text-white rounded-full">Buy Now</a>
-                </div>
-                <!-- Rare Egg -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:scale-105 transition">
-                    <h3 class="text-2xl font-bold text-yellow-500 mb-2">Rare Egg</h3>
-                    <p class="text-gray-600 mb-4">800 MPMO (266.7 TRX)</p>
-                    <ul class="text-left text-gray-700 mb-6 space-y-1">
-                        <li>✨ 50% Rare</li>
-                        <li>🌟 40% Common</li>
-                        <li>💎 10% Elite</li>
-                    </ul>
-                    <a href="{{ route('register') }}" class="px-4 py-2 bg-yellow-500 text-white rounded-full">Buy Now</a>
-                </div>
-                <!-- Elite Egg -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:scale-105 transition">
-                    <h3 class="text-2xl font-bold text-purple-500 mb-2">Elite Egg</h3>
-                    <p class="text-gray-600 mb-4">1600 MPMO (533.4 TRX)</p>
-                    <ul class="text-left text-gray-700 mb-6 space-y-1">
-                        <li>✨ 50% Elite</li>
-                        <li>🌟 40% Rare</li>
-                        <li>💎 10% Epic</li>
-                    </ul>
-                    <a href="{{ route('register') }}" class="px-4 py-2 bg-purple-500 text-white rounded-full">Buy Now</a>
-                </div>
+        {{-- Feature Cards --}}
+        <section id="eggs" class="mb-16">
+            <h2 class="text-3xl font-bold text-indigo-300 mb-6 text-center">Egg Marketplace</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+                @foreach ([
+                    ['title'=>'Common Egg','price'=>'100 TRX','mpmo'=>'300 MPMO','color'=>'text-pink-400','rates'=>['70% Common','25% Rare','5% Elite']],
+                    ['title'=>'Rare Egg','price'=>'266.7 TRX','mpmo'=>'800 MPMO','color'=>'text-yellow-400','rates'=>['50% Rare','40% Common','10% Elite']],
+                    ['title'=>'Elite Egg','price'=>'533.4 TRX','mpmo'=>'1600 MPMO','color'=>'text-purple-400','rates'=>['50% Elite','40% Rare','10% Epic']],
+                ] as $egg)
+                    <div class="bg-gray-800 rounded-2xl shadow-xl border-2 border-transparent hover:border-pink-500 transition p-6 text-center">
+                        <h3 class="text-2xl font-bold {{ $egg['color'] }} mb-2">
+                            {{ $egg['title'] }}
+                        </h3>
+                        <p class="text-gray-300 mb-4">{{ $egg['mpmo'] }} ({{ $egg['price'] }})</p>
+                        <ul class="text-left text-gray-400 mb-6 space-y-1">
+                            @foreach($egg['rates'] as $rate)
+                                <li>• {{ $rate }}</li>
+                            @endforeach
+                        </ul>
+                        <a href="{{ route('register') }}"
+                           class="px-4 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-400 transition">
+                            Buy Now
+                        </a>
+                    </div>
+                @endforeach
             </div>
         </section>
 
-        <!-- Roadmap -->
-        <section id="roadmap" class="py-12 text-center">
-            <h2 class="text-4xl font-bold text-white mb-6">Roadmap</h2>
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
-                <div class="bg-white/90 rounded-2xl p-6 shadow">
-                    <h3 class="text-2xl font-semibold text-pink-600 mb-2">Q4 2025</h3>
-                    <p>Tron presale, testnet launch, egg mint beta.</p>
-                </div>
-                <div class="bg-white/90 rounded-2xl p-6 shadow">
-                    <h3 class="text-2xl font-semibold text-yellow-600 mb-2">Q1 2026</h3>
-                    <p>Mainnet launch, staking dashboard.</p>
-                </div>
-                <div class="bg-white/90 rounded-2xl p-6 shadow">
-                    <h3 class="text-2xl font-semibold text-purple-600 mb-2">Q2 2026+</h3>
-                    <p>More features. To be announced.</p>
-                </div>
+        {{-- Roadmap --}}
+        <section id="roadmap" class="mb-16 text-center">
+            <h2 class="text-3xl font-bold text-indigo-300 mb-6">Roadmap</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+                @foreach ([
+                    ['quarter'=>'Q4 2025','color'=>'text-pink-400','desc'=>'Tron presale, testnet launch, egg mint beta.'],
+                    ['quarter'=>'Q1 2026','color'=>'text-yellow-400','desc'=>'Mainnet launch, staking dashboard.'],
+                    ['quarter'=>'Q2 2026+','color'=>'text-purple-400','desc'=>'More features. To be announced.'],
+                ] as $phase)
+                    <div class="bg-gray-800/80 rounded-2xl p-6 shadow-xl">
+                        <h3 class="text-2xl font-semibold {{ $phase['color'] }} mb-2">
+                            {{ $phase['quarter'] }}
+                        </h3>
+                        <p class="text-gray-300">{{ $phase['desc'] }}</p>
+                    </div>
+                @endforeach
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="py-6 text-center bg-white/80">
-            <p class="text-gray-700">© 2025 MPMO Token. All rights reserved.</p>
+        {{-- Footer --}}
+        <footer class="py-6 text-center bg-gray-800 border-t border-gray-700">
+            <p class="text-gray-500 text-sm">© 2025 MPMO Token. All rights reserved.</p>
         </footer>
-
-        <!-- Vite Scripts -->
-        @vite(['resources/js/app.js'])
-    </body>
-    
+    </main>
 </html>

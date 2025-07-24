@@ -18,24 +18,32 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+    <body class="font-sans antialiased bg-gray-900 text-gray-200">
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+        {{-- 1) Fixed navbar --}}
+        @include('layouts.navigation')
 
-            <!-- Page Content -->
-            <main class="flex-1 pb-16 sm:pb-safe">
-                {{ $slot }}
+        {{-- 2) Content wrapper: pushes everything below the 4rem‑high nav, and over the sidebar on md+ --}}
+        <div class="flex pt-16">
+
+            {{-- Main content --}}
+            <main class="flex-1 px-6 pt-6">
+                <div class="max-w-7xl mx-auto">
+                    {{-- Optional page header slot --}}
+                    @isset($header)
+                        <header class="mb-6">
+                            <div class="text-2xl font-bold text-indigo-300 dark:text-indigo-200">
+                                {{ $header }}
+                            </div>
+                        </header>
+                    @endisset
+
+                    {{-- Page slot --}}
+                    {{ $slot }}
+                </div>
             </main>
         </div>
+
         @stack('scripts')
     </body>
 </html>

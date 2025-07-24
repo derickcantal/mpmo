@@ -16,6 +16,9 @@ use App\Http\Controllers\ConvertController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\VpnClientController;
 
+use App\Models\transactions;
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,8 +26,12 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $wallets = Auth::user()->wallets()->get();
-    
-    return view('dashboard',compact('wallets'));
+    $recentTxns = transactions::with('user')           // eager‑load the related user, if you need it
+                               ->orderBy('created_at', 'desc')
+                               ->limit(10)
+                               ->get();
+
+    return view('dashboard',compact('wallets','recentTxns'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/ref/{code}', [ReferralController::class, 'handle'])->name('referral.handle');

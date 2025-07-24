@@ -1,5 +1,136 @@
 <x-app-layout>
-    @include('layouts.home.navigation')
+  <div class="flex h-screen bg-gray-900 text-gray-200">
+
+    {{-- Mobile sidebar overlay --}}
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 hidden md:hidden"></div>
+
+    {{-- Main area --}}
+    <main class="flex-1 pt-16 md:pl-64 overflow-y-auto p-6">
+
+      {{-- Breadcrumb --}}
+      <nav class="flex items-center text-gray-400 mb-6">
+        <a href="{{ route('manageuser.index') }}" class="flex items-center hover:text-indigo-300">
+          <x-heroicon-o-home class="w-5 h-5 mr-2"/> Dashboard
+        </a>
+        <x-heroicon-o-chevron-right class="w-5 h-5 mx-2"/>
+        <span>Manage Users</span>
+      </nav>
+
+      {{-- Card --}}
+      <div class="bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+
+        {{-- Card Header: Search & Actions --}}
+        <div class="bg-gray-800 border-b border-gray-700 p-4 flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+          {{-- New User --}}
+          <a href="{{ route('manageuser.create') }}"
+             class="inline-flex items-center px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full shadow">
+            <x-heroicon-o-plus class="w-5 h-5 mr-2"/> New User
+          </a>
+
+          {{-- Filters --}}
+          <form action="{{ route('manageuser.search') }}" method="get" class="flex flex-wrap items-center space-y-3 md:space-y-0 md:space-x-3">
+            <select name="pagerow"
+                    class="px-3 py-2 bg-gray-700 text-gray-200 rounded-lg focus:ring-indigo-300 focus:border-indigo-300">
+              <option>10</option><option>25</option><option>50</option><option>100</option><option>250</option>
+            </select>
+            <select name="orderrow"
+                    class="px-3 py-2 bg-gray-700 text-gray-200 rounded-lg focus:ring-indigo-300 focus:border-indigo-300">
+              <option value="asc">A–Z</option>
+              <option value="desc">Z–A</option>
+            </select>
+            <div class="relative flex-1 min-w-[150px]">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <x-heroicon-o-magnifying-glass class="w-5 h-5 text-gray-500"/>
+              </div>
+              <input type="text" name="search" placeholder="Search users…"
+                     class="w-full pl-10 pr-4 py-2 bg-gray-700 text-gray-200 rounded-lg focus:ring-indigo-300 focus:border-indigo-300"/>
+            </div>
+            <button type="submit"
+                    class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-full shadow">
+              <x-heroicon-o-magnifying-glass class="w-5 h-5 mr-2"/> Search
+            </button>
+          </form>
+        </div>
+
+        {{-- Card Body: Table --}}
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-700">
+            <thead class="bg-gray-700 text-gray-300 sticky top-0">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-semibold uppercase">No</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Profile</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Address</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Type</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-gray-800 divide-y divide-gray-700">
+              @forelse($user as $u)
+                <tr class="hover:bg-gray-700">
+                  <td class="px-6 py-4">{{ $loop->iteration }}</td>
+                  <td class="px-6 py-4 flex items-center space-x-3">
+                    <img src="{{ asset("storage/{$u->avatar}") }}" class="w-10 h-10 rounded-full" alt="Avatar">
+                    <div>
+                      <div class="font-semibold text-gray-200">{{ $u->fullname }}</div>
+                      <div class="text-xs text-gray-500">{{ $u->email }}</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-gray-300">
+                    @forelse($u->wallets as $w)
+                      {{ $w->cwaddress }}<br>
+                    @empty
+                      <span class="italic">—</span>
+                    @endforelse
+                  </td>
+                  <td class="px-6 py-4">
+                    <span class="px-2 py-1 rounded-full text-xs {{ $u->accesstype==='super-admin' ? 'bg-indigo-600' : 'bg-gray-700' }}">
+                      {{ $u->accesstype }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span class="inline-block px-2 py-1 rounded-full text-xs {{ $u->status==='Active' ? 'bg-green-600' : 'bg-red-600' }}">
+                      {{ $u->status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 space-x-2">
+                    <a href="{{ route('manageuser.edit',$u->userid) }}"
+                       class="px-3 py-1 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs">
+                      Edit
+                    </a>
+                    <a href="{{ route('manageuser.show',$u->userid) }}"
+                       class="px-3 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full text-xs">
+                      View
+                    </a>
+                    <form action="{{ route('manageuser.destroy',$u->userid) }}" method="POST" class="inline">
+                      @csrf @method('DELETE')
+                      <button type="submit"
+                              class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs">
+                        {{ $u->status==='Active' ? 'Deactivate' : 'Activate' }}
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="6" class="px-6 py-4 text-center text-gray-500">No users found.</td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
+        </div>
+
+        {{-- Pagination --}}
+        <div class="px-6 py-4 bg-gray-800">
+          {{ $user->appends(request()->query())->links() }}
+        </div>
+      </div>
+    </main>
+  </div>
+</x-app-layout>
+
+
+<x-app-layout>
     <div class="gradient-bg min-h-screen dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg py-2  flex-1 pb-16 sm:pb-safe">
         <div class="mx-auto sm:px-6 lg:px-8">
             <!-- Breadcrumb -->
