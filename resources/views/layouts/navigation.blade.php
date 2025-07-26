@@ -18,8 +18,8 @@
 </nav>
 
 {{-- Sidebar (desktop & drawer) --}}
-<aside id="sidebar" class="fixed top-14 bottom-0 left-0 z-20 w-64 transform -translate-x-full md:translate-x-0 transition-transform bg-gray-800 border-r border-gray-700 p-6 flex flex-col">
-  <h2 class="text-2xl font-extrabold text-indigo-400 mb-6">Admin Panel</h2>
+<aside x-data="{ openUsers: false }" id="sidebar" class="fixed top-14 bottom-0 left-0 z-20 w-64 transform -translate-x-full md:translate-x-0 transition-transform bg-gray-800 border-r border-gray-700 p-6 flex flex-col">
+  <h2 class="text-2xl font-extrabold text-indigo-400 mb-6">Control Panel</h2>
 
   <nav class="flex-1 space-y-2">
     <a href="{{ route('dashboard') }}"
@@ -30,6 +30,35 @@
        class="flex items-center px-3 py-2 rounded-lg hover:bg-indigo-500 hover:text-white transition">
       <x-heroicon-o-users class="w-5 h-5 mr-2"/> Users
     </a>
+    {{-- USERS with dropdown toggle --}}
+    <div>
+      <button
+        @click="openUsers = !openUsers"
+        class="w-full flex items-center px-3 py-2 rounded-lg hover:bg-indigo-500 hover:text-white transition focus:outline-none"
+      >
+        <x-heroicon-o-users class="w-5 h-5 mr-2"/>
+        <span>Users</span>
+        <x-heroicon-o-chevron-down
+          :class="{'rotate-180': openUsers}"
+          class="w-4 h-4 ml-auto transition-transform"
+        />
+      </button>
+
+      <div
+        x-show="openUsers"
+        x-collapse
+        class="mt-1 space-y-1 pl-8"
+      >
+        <a href="{{ route('manageuser.index') }}"
+           class="block px-3 py-1 rounded-lg hover:bg-indigo-600 hover:text-white transition">
+          All Users
+        </a>
+        <a href="{{ route('manageuser.create') }}"
+           class="block px-3 py-1 rounded-lg hover:bg-indigo-600 hover:text-white transition">
+          New User
+        </a>
+      </div>
+    </div>
     <a href="{{ route('managetxn.index') }}"
        class="flex items-center px-3 py-2 rounded-lg hover:bg-indigo-500 hover:text-white transition">
       <x-heroicon-o-currency-dollar class="w-5 h-5 mr-2"/> Transactions

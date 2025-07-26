@@ -1,131 +1,198 @@
 <x-app-layout>
-    
-  <div class="flex h-screen bg-gray-900 text-gray-200">
-    
-      {{-- Mobile sidebar overlay --}}
-      <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 hidden md:hidden"></div>
-      {{-- Main area --}}
-      <main class="flex-1 md:pl-64 overflow-y-auto px-6">
-        <header class="mb-3">
-        <h1 class="text-4xl font-extrabold text-indigo-300">Users</h1>
-    </header>
-          {{-- Breadcrumb --}}
-          <nav class="flex items-center text-gray-400 mb-6">
-            <a href="{{ route('manageuser.index') }}" class="flex items-center hover:text-indigo-300">
-              <x-heroicon-o-home class="w-5 h-5 mr-2"/> Dashboard
-            </a>
-            <x-heroicon-o-chevron-right class="w-5 h-5 mx-2"/>
-            <span>Manage Users</span>
-          </nav>
-          {{-- Card --}}
-          <div class="bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-              {{-- Card Header: Search & Actions --}}
-              <div class="bg-gray-800 border-b border-gray-700 p-4 flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-                  {{-- New User --}}
-                  <a href="{{ route('manageuser.create') }}"
-                    class="inline-flex items-center px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full shadow">
-                    <x-heroicon-o-plus class="w-5 h-5 mr-2"/> New User
-                  </a>
+    <div class="flex h-screen bg-gray-900 text-gray-200">
+        {{-- Mobile sidebar overlay --}}
+        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 hidden md:hidden"></div>
+        {{-- Main area --}}
+        <main class="flex-1 md:pl-64 overflow-y-auto px-6 rounded-lg">
+            <header class="mb-3">
+                <h1 class="text-4xl font-extrabold text-indigo-300">Users</h1>
+            </header>
+            {{-- Breadcrumb --}}
+            <nav class="flex items-center text-gray-400 mb-6">
+                <a href="{{ route('manageuser.index') }}" class="flex items-center hover:text-indigo-300">
+                <x-heroicon-o-home class="w-5 h-5 mr-2"/> Dashboard
+                </a>
+                <x-heroicon-o-chevron-right class="w-5 h-5 mx-2"/>
+                <span>Manage Users</span>
+            </nav>
+            <!-- Search & Actions Bar -->
+            <div class="bg-gray-800 rounded-2xl shadow-lg overflow-hidden mb-4">
+                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between p-4 space-y-4 md:space-y-0 md:space-x-4">
+                    
+                    {{-- Create New User --}}
+                    <a href="{{ route('manageuser.create') }}"
+                    class="w-full md:w-auto inline-flex justify-center items-center px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full shadow transition">
+                    <x-heroicon-o-plus class="w-5 h-5 mr-2"/> Create New User
+                    </a>
 
-                  {{-- Filters --}}
-                  <form action="{{ route('manageuser.search') }}" method="get" class="flex flex-wrap items-center space-y-3 md:space-y-0 md:space-x-3">
-                      <select name="pagerow" class="px-3 py-2 bg-gray-700 text-gray-200 rounded-lg focus:ring-indigo-300 focus:border-indigo-300">
-                          <option>10</option>
-                          <option>25</option>
-                          <option>50</option>
-                          <option>100</option>
-                          <option>250</option>
-                      </select>
-                      <select name="orderrow" class="px-3 py-2 bg-gray-700 text-gray-200 rounded-lg focus:ring-indigo-300 focus:border-indigo-300">
-                          <option value="asc">A–Z</option>
-                          <option value="desc">Z–A</option>
-                      </select>
-                      <div class="relative flex-1 min-w-[150px]">
-                          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                              <x-heroicon-o-magnifying-glass class="w-5 h-5 text-gray-500"/>
-                          </div>
-                          <input type="text" name="search" placeholder="Search users…" class="w-full pl-10 pr-4 py-2 bg-gray-700 text-gray-200 rounded-lg focus:ring-indigo-300 focus:border-indigo-300"/>
-                      </div>
-                      <button type="submit" class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-full shadow">
-                          <x-heroicon-o-magnifying-glass class="w-5 h-5 mr-2"/> Search
-                      </button>
-                  </form>
-              </div>
+                    {{-- Filters & Search --}}
+                    <form action="{{ route('manageuser.search') }}" method="get"
+                        class="w-full md:w-auto flex flex-col md:flex-row items-stretch md:items-center space-y-3 md:space-y-0 md:space-x-3">
+                    
+                    {{-- Page Size --}}
+                    <select name="pagerow"
+                            class="w-full md:w-auto px-4 py-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+                        <option>10</option><option>25</option><option>50</option><option>100</option><option>250</option>
+                    </select>
 
-              {{-- Card Body: Table --}}
-              <div class="overflow-x-auto">
-                  <table class="min-w-full divide-y divide-gray-700">
-                      <thead class="bg-gray-700 text-gray-300 sticky top-0">
-                          <tr>
-                              <th class="px-6 py-3 text-left text-xs font-semibold uppercase">No</th>
-                              <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Profile</th>
-                              <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Address</th>
-                              <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Type</th>
-                              <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Status</th>
-                              <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Actions</th>
-                          </tr>
-                      </thead>
-                      <tbody class="bg-gray-800 divide-y divide-gray-700">
-                          @forelse($user as $u)
-                              <tr class="hover:bg-gray-700">
-                                  <td class="px-6 py-4">{{ $loop->iteration }}</td>
-                                  <td class="px-6 py-4 flex items-center space-x-3">
-                                      <img src="{{ asset("storage/{$u->avatar}") }}" class="w-10 h-10 rounded-full" alt="Avatar">
-                                      <div>
-                                          <div class="font-semibold text-gray-200">{{ $u->fullname }}</div>
-                                          <div class="text-xs text-gray-500">{{ $u->email }}</div>
-                                      </div>
-                                  </td>
-                                  <td class="px-6 py-4 text-gray-300">
-                                      @forelse($u->wallets as $w)
-                                        {{ $w->cwaddress }}<br>
-                                      @empty
-                                        <span class="italic">—</span>
-                                      @endforelse
-                                  </td>
-                                  <td class="px-6 py-4">
-                                    <span class="px-2 py-1 rounded-full text-xs {{ $u->accesstype==='super-admin' ? 'bg-indigo-600' : 'bg-gray-700' }}">
-                                      {{ $u->accesstype }}
-                                    </span>
-                                  </td>
-                                  <td class="px-6 py-4">
-                                    <span class="inline-block px-2 py-1 rounded-full text-xs {{ $u->status==='Active' ? 'bg-green-600' : 'bg-red-600' }}">
-                                      {{ $u->status }}
-                                    </span>
-                                  </td>
-                                  <td class="px-6 py-4 space-x-2">
-                                    <a href="{{ route('manageuser.edit',$u->userid) }}"
-                                      class="px-3 py-1 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs">
-                                      Edit
+                    {{-- Sort Order --}}
+                    <select name="orderrow"
+                            class="w-full md:w-auto px-4 py-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+                        <option value="asc">A–Z</option>
+                        <option value="desc">Z–A</option>
+                    </select>
+
+                    {{-- Search Input --}}
+                    <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <x-heroicon-o-magnifying-glass class="w-5 h-5 text-gray-500"/>
+                        </div>
+                        <input type="text" name="search" placeholder="Search users…"
+                            class="w-full pl-10 pr-4 py-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-300"/>
+                    </div>
+
+                    {{-- Search Button --}}
+                    <button type="submit"
+                            class="w-full md:w-auto inline-flex justify-center items-center px-5 py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-full shadow transition">
+                        <x-heroicon-o-magnifying-glass class="w-5 h-5 mr-2"/> Search
+                    </button>
+                    </form>
+                </div>
+            </div>
+             <!-- Error & Success Notification -->
+            @include('layouts.notifications')
+
+            {{-- Desktop Table --}}
+            <div class="hidden sm:block rounded-2xl overflow-visible shadow-lg">
+                <table class="min-w-full table-auto divide-y divide-gray-700">
+                    <thead class="bg-gray-700 text-gray-300 sticky top-0">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-semibold uppercase whitespace-nowrap w-auto">No</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold uppercase whitespace-nowrap w-auto">Profile</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold uppercase whitespace-nowrap w-auto">Access Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold uppercase whitespace-nowrap w-auto">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold uppercase whitespace-nowrap w-auto">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-gray-800 divide-y divide-gray-700">
+                        @forelse($user as $u)
+                        <tr class="hover:bg-gray-700">
+                            <td class="px-6 py-4">{{ $loop->iteration }}</td>
+                            <td class="px-6 py-4 flex items-center space-x-3">
+                                <img src="{{ asset("storage/{$u->avatar}") }}" class="w-10 h-10 rounded-full" alt="Avatar">
+                                <div>
+                                    <div class="font-semibold text-gray-200">{{ $u->fullname }}</div>
+                                    <div class="text-xs text-gray-500">{{ $u->email }}</div>
+                                    <div class="text-xs text-gray-500">@forelse($u->wallets as $w) {{ $w->cwaddress }}<br> @empty <span class="italic">—</span> @endforelse</div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="inline-block px-2 py-1 rounded-full text-xs {{ $u->status==='super-admin' ? 'bg-green-600' : 'bg-red-600' }}">
+                                    {{ $u->accesstype }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="inline-block px-2 py-1 rounded-full text-xs {{ $u->status==='Active' ? 'bg-green-600' : 'bg-red-600' }}">
+                                    {{ $u->status }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-right relative">
+                            {{-- Dropdown toggle button --}}
+                            <button data-dropdown-toggle="actionsDropdown{{ $u->userid }}" class="p-1 rounded-full hover:bg-gray-700 text-gray-400 hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" aria-expanded="false">
+                                <x-heroicon-s-ellipsis-horizontal class="w-6 h-6"/>
+                                <span class="sr-only">Open actions menu</span>
+                            </button>
+
+                            {{-- Dropdown menu --}}
+                            <div id="actionsDropdown{{ $u->userid }}" class="hidden items-start bg-gray-800 divide-y divide-gray-700 rounded-lg shadow-lg w-48 absolute right-0 mt-2 z-20">
+                                <div class="py-1">
+                                    @if(empty($u->first_cwaddress))
+                                        <form action="{{ route('manageuser.destroy',$u->userid) }}" method="POST" class="block">
+                                            @csrf 
+                                            @method('DELETE')
+                                            <button type="submit" name="action" value="save" class="w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 transition">
+                                                Activate Wallet
+                                            </button>
+                                        </form>
+                                    @endif
+
+                                    <a href="{{ route('manageuser.edit',$u->userid) }}" class="block w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 transition">
+                                        Modify
                                     </a>
-                                    <a href="{{ route('manageuser.show',$u->userid) }}"
-                                      class="px-3 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full text-xs">
-                                      View
+
+                                    <a href="{{ route('manageuser.show',$u->userid) }}" class="block w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 transition">
+                                        Show
                                     </a>
-                                    <form action="{{ route('manageuser.destroy',$u->userid) }}" method="POST" class="inline">
-                                      @csrf @method('DELETE')
-                                      <button type="submit"
-                                              class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs">
+                                </div>
+                                <div class="py-1">
+                                    <form action="{{ route('manageuser.destroy',$u->userid) }}" method="POST" class="block">
+                                        @csrf 
+                                        @method('DELETE')
+                                        <button type="submit" name="action" value="delete"
+                                                class="w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 transition">
                                         {{ $u->status==='Active' ? 'Deactivate' : 'Activate' }}
-                                      </button>
+                                        </button>
                                     </form>
-                                  </td>
-                              </tr>
-                          @empty
-                              <tr>
-                                <td colspan="6" class="px-6 py-4 text-center text-gray-500">No users found.</td>
-                              </tr>
-                          @endforelse
-                      </tbody>
-                  </table>
-              </div>
+                                </div>
+                            </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">No users found.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
 
-              {{-- Pagination --}}
-              <div class="px-6 py-4 bg-gray-800">
+            {{-- Mobile Cards --}}
+            <div class="sm:hidden divide-y divide-gray-700 rounded-lg py-4">
+                @forelse($user as $u)
+                <div class="p-4 hover:bg-gray-700 rounded-lg">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-semibold text-gray-200">{{ $loop->iteration }}.</span>
+                            <img src="{{ asset("storage/{$u->avatar}") }}" class="w-8 h-8 rounded-full" alt="Avatar">
+                            <div>
+                                <div class="font-semibold text-gray-200">{{ $u->fullname }}</div>
+                                <div class="text-xs text-gray-500">{{ $u->email }}</div>
+                                <div class="text-xs text-gray-500">@forelse($u->wallets as $w) {{ $w->cwaddress }}<br> @empty — @endforelse</div>
+                                <div class="text-xs text-gray-500">{{ $u->accesstype }}</div>
+                            </div>
+                        </div>
+                        <span class="p-2 rounded-full text-xs {{ $u->status==='Active' ? 'bg-green-600' : 'bg-red-600' }}"></span>
+                    </div>
+                   
+                    <div class="mt-2 flex flex-wrap items-center space-x-2">
+                        @if(empty($users->first_cwaddress))
+                        <a href="{{ route('manageuser.show',$u->userid) }}"
+                            class="px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white rounded-full text-xs">Activate Wallet</a>
+                        @endif
+                        <a href="{{ route('manageuser.show',$u->userid) }}"
+                            class="px-3 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full text-xs">View</a>
+                        <a href="{{ route('manageuser.edit',$u->userid) }}"
+                            class="px-3 py-1 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs">Edit</a>
+                        <form action="{{ route('manageuser.destroy',$u->userid) }}" method="POST" class="inline">
+                            @csrf @method('DELETE')
+                            <button type="submit"
+                                    class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs">
+                            {{ $u->status==='Active' ? 'Deactivate' : 'Activate' }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                @empty
+                <div class="p-4 text-center text-gray-500">No users found.</div>
+                @endforelse
+            </div>
+
+            {{-- Pagination --}}
+            <div class="px-6 bg-gray-800">
                 {{ $user->appends(request()->query())->links() }}
-              </div>
-          </div>
-      </main>
+            </div>
+            </div>
+        </main>
   </div>
 </x-app-layout>
 
